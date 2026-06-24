@@ -84,7 +84,11 @@
     font-size: 19px;
     font-weight: 700;
     letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: inline-block;
   }
+  .brand:hover { opacity: 0.7; }
   .brand .dot { color: var(--jujube); }
   .nav-cta {
     font-size: 14px;
@@ -748,6 +752,118 @@
     text-align: center;
   }
 
+  /* ---------- Premium card (심층 심리분석) ---------- */
+  .premium-card {
+    position: relative;
+    margin-top: 44px;
+    background: linear-gradient(150deg, #2b2521 0%, #3b322b 60%, #4a3c2e 100%);
+    border-radius: 22px;
+    padding: 48px 52px;
+    color: var(--paper);
+    overflow: hidden;
+  }
+  .premium-deco {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 220px;
+    font-weight: 700;
+    color: rgba(243,237,226,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .premium-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .premium-tag::before {
+    content: "◆";
+    font-size: 9px;
+  }
+  .premium-card h3 {
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .premium-desc {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: rgba(243,237,226,0.78);
+    max-width: 600px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 2;
+  }
+  .premium-amount {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--paper);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .premium-amount span {
+    font-size: 17px;
+    font-weight: 500;
+    color: rgba(243,237,226,0.6);
+    margin-left: 3px;
+  }
+  .premium-features {
+    list-style: none;
+    max-width: 560px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+  }
+  .premium-features li {
+    font-size: 13.5px;
+    color: rgba(243,237,226,0.75);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .premium-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .premium-cta {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 15px 36px;
+    border-radius: 100px;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+  }
+  .premium-cta:hover { transform: translateY(-2px); }
+  .premium-note {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: rgba(243,237,226,0.55);
+    position: relative;
+    z-index: 2;
+  }
+
   /* ---------- Form ---------- */
   .apply { background: var(--paper-deep); }
   .apply-grid {
@@ -1093,6 +1209,9 @@
     .who-row { grid-template-columns: 1fr; gap: 6px; }
     .channel-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
+    .premium-card { padding: 32px 26px; }
+    .premium-deco { display: none; }
+    .premium-amount { font-size: 32px; }
     .mindmodel-grid { grid-template-columns: 1fr; gap: 36px; }
     .mindmodel-visual { flex-direction: column; }
     .mv-card { width: 100%; }
@@ -1115,7 +1234,7 @@
 
 <nav>
   <div class="nav-inner">
-    <div class="brand">사주, 다시 읽다<span class="dot">.</span></div>
+    <a href="." class="brand" aria-label="처음으로 새로고침">사주, 다시 읽다<span class="dot">.</span></a>
     <div class="nav-actions">
       <a href="http://pf.kakao.com/_xkaIvG" target="_blank" rel="noopener" class="nav-kakao" aria-label="카카오톡 채널 바로가기">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.86 5.34 4.66 6.78-.2.74-.73 2.71-.84 3.13-.13.52.19.51.4.37.16-.11 2.6-1.77 3.66-2.49.68.1 1.39.15 2.12.15 5.52 0 10-3.58 10-8s-4.48-8-10-8z" fill="#391b1b"/></svg>
@@ -1431,6 +1550,26 @@
     </div>
 
     <p class="pricing-foot">모든 유료 풀이는 무료 풀이를 먼저 받아보신 분께 우선 안내드립니다. 신청서 하단에서 원하시는 방식을 선택해 주세요.</p>
+
+    <div class="premium-card">
+      <div class="premium-deco" aria-hidden="true">深</div>
+      <div class="premium-tag">단 하나의 사주만, 가장 깊게</div>
+      <h3 class="serif">심층 심리분석 &amp; 솔루션</h3>
+      <p class="premium-desc">
+        겉으로 드러난 사주 풀이를 넘어, 그 사람의 무의식과 행동 패턴까지 들여다보는 가장 정교한 분석입니다.
+        "이 사람은 왜 이럴까?"라는 질문에서 시작해, 심리와 명리를 함께 포개어 원인을 짚고 실질적인 해결책까지 제시합니다.
+      </p>
+      <div class="premium-amount">99,000<span>원</span></div>
+      <ul class="premium-features">
+        <li>무의식 · 행동 패턴 심층 분석 (심리상담 관점 + 명리 관점 결합)</li>
+        <li>상황별 구체적인 해결책(솔루션) 제시</li>
+        <li>관계 갈등 패턴 분석 포함 (예: 반복되는 갈등 구조 짚어드림)</li>
+        <li>추가 질문 1건당 1,000원 (분석 범위를 벗어나는 세부 질문 시)</li>
+        <li>상담가 1:1 직접 분석 · 5~7일 소요</li>
+      </ul>
+      <a href="#apply" class="premium-cta" data-product="심층 심리분석 솔루션">심층 분석 신청하기</a>
+      <p class="premium-note">분석 범위가 넓고 깊은 만큼, 다른 풀이보다 시간이 더 걸립니다. 신청 전 카카오톡 채널로 먼저 문의 주셔도 좋습니다.</p>
+    </div>
   </div>
 </section>
 
@@ -1502,6 +1641,7 @@
               <option value="정밀풀이 PLUS">정밀풀이 PLUS (29,900원)</option>
               <option value="실시간 채팅 10분">실시간 채팅 상담 10분 (24,900원)</option>
               <option value="실시간 채팅 20분">실시간 채팅 상담 20분 (39,900원)</option>
+              <option value="심층 심리분석 솔루션">심층 심리분석 &amp; 솔루션 (99,000원)</option>
             </select>
             <p class="birth-hint">유료 풀이를 선택하셔도 결제는 신청 확인 후 별도로 안내드립니다. 지금 결제되지 않습니다.</p>
           </div>
@@ -1808,6 +1948,29 @@
     return { pillarsHTML: pillarsHTML, bodyHTML: bodyHTML };
   }
 
+  /* =========================================================
+     구글시트 전송 설정
+     - 아래 GOOGLE_SHEET_WEBAPP_URL에 Google Apps Script 웹앱 URL을
+       붙여넣으면, 유료 풀이 신청 시 그 시트로 신청 내용이 전송됩니다.
+     - URL이 비어있으면 전송을 건너뛰고 화면 안내만 보여줍니다.
+     - 설정 방법은 함께 드린 안내 문서를 참고해 주세요.
+     ========================================================= */
+  var GOOGLE_SHEET_WEBAPP_URL = ''; // 예: 'https://script.google.com/macros/s/AKfycb.../exec'
+
+  function sendToGoogleSheet(data) {
+    if (!GOOGLE_SHEET_WEBAPP_URL) return; // URL 미설정 시 조용히 건너뜀
+    try {
+      fetch(GOOGLE_SHEET_WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Apps Script 웹앱 특성상 no-cors로 전송
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      console.error('구글시트 전송 중 오류:', err);
+    }
+  }
+
   document.getElementById('sajuForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var form = this;
@@ -1852,7 +2015,23 @@
       }, 1800);
 
     } else {
-      // ---- 유료 옵션: 신청 접수만 (실제 결제·전송 기능 없음) ----
+      // ---- 유료 옵션: 신청 접수 + 구글시트로 전송 ----
+      var payload = {
+        timestamp: new Date().toLocaleString('ko-KR'),
+        product: product,
+        name: fd.get('name'),
+        gender: fd.get('gender'),
+        calendar: fd.get('calendar'),
+        year: fd.get('year'),
+        month: fd.get('month'),
+        day: fd.get('day'),
+        birthtime: fd.get('birthtime'),
+        timeUnknown: fd.get('timeUnknown'),
+        contact: fd.get('contact'),
+        question: fd.get('question')
+      };
+      sendToGoogleSheet(payload);
+
       form.style.display = 'none';
       document.getElementById('formSuccess').classList.add('show');
       document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1860,7 +2039,7 @@
   });
 
   // 가격 카드의 신청 버튼을 누르면 신청폼의 '원하시는 방식'이 자동으로 선택됩니다.
-  document.querySelectorAll('.price-cta[data-product]').forEach(function(btn) {
+  document.querySelectorAll('.price-cta[data-product], .premium-cta[data-product]').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var select = document.querySelector('select[name="product"]');
       if (select) { select.value = this.getAttribute('data-product'); }
