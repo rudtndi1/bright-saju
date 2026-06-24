@@ -324,6 +324,151 @@
     color: var(--ink-soft);
   }
 
+  /* ---------- Mind model (사주=심리) ---------- */
+  .mindmodel { background: var(--paper); }
+  .mindmodel-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .mindmodel-text .section-sub { max-width: 100%; }
+  .mindmodel-list {
+    list-style: none;
+    margin-top: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .mindmodel-list li {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .mindmodel-list li::before {
+    content: "·";
+    position: absolute;
+    left: 4px;
+    color: var(--jujube);
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .mindmodel-list li b { color: var(--ink); font-weight: 700; }
+
+  .mindmodel-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .mv-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px 18px;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    box-shadow: 0 14px 30px -16px rgba(43,37,33,0.15);
+  }
+  .mv-icon {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--jujube);
+    margin-bottom: 8px;
+  }
+  .mv-card-2 .mv-icon { color: var(--indigo); }
+  .mv-card-3 .mv-icon { color: var(--gold); }
+  .mv-label {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .mv-card p {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .mv-plus, .mv-equals {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Counselor profile ---------- */
+  .counselor { background: var(--paper-deep); }
+  .counselor-card {
+    margin-top: 56px;
+    display: flex;
+    gap: 40px;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 44px;
+    align-items: flex-start;
+  }
+  .counselor-photo {
+    width: 152px;
+    height: 152px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .counselor-photo-glyph {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--jujube-soft);
+    opacity: 0.7;
+  }
+  .counselor-info { flex: 1; }
+  .counselor-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--jujube);
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+  .counselor-desc {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    margin-bottom: 22px;
+  }
+  .counselor-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .c-badge {
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 100px;
+  }
+  .counselor-quote {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px;
+    color: var(--ink);
+    line-height: 1.7;
+    padding-left: 18px;
+    border-left: 3px solid var(--gold);
+  }
+
   /* ---------- Who reads ---------- */
   .who { background: var(--paper); }
   .who-list {
@@ -948,6 +1093,13 @@
     .who-row { grid-template-columns: 1fr; gap: 6px; }
     .channel-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
+    .mindmodel-grid { grid-template-columns: 1fr; gap: 36px; }
+    .mindmodel-visual { flex-direction: column; }
+    .mv-card { width: 100%; }
+    .mv-plus, .mv-equals { transform: none; }
+    .counselor-card { flex-direction: column; align-items: center; text-align: center; padding: 32px 24px; }
+    .counselor-badges { justify-content: center; }
+    .counselor-quote { text-align: left; }
     .price-card.highlight { order: -1; }
     .channel-card { padding: 20px; }
     .section-title { font-size: 27px; }
@@ -1025,14 +1177,14 @@
 <section class="about section-pad">
   <div class="wrap">
     <div class="kicker">WHY US</div>
-    <h2 class="section-title serif">점집이 아니라, 상담실입니다</h2>
-    <p class="section-sub">사주는 미래를 단정하는 도구가 아니라, 나를 이해하는 언어라고 생각합니다. 그 언어를 지금 시대에 맞게 옮기는 일을 합니다.</p>
+    <h2 class="section-title serif">점집이 아니라, 심리상담실입니다</h2>
+    <p class="section-sub">사주는 미래를 단정하는 도구가 아니라, 그 사람의 심리를 읽는 언어라고 생각합니다. 명리와 심리학, 두 가지 시선으로 함께 풀어드립니다.</p>
 
     <div class="about-grid">
       <div class="about-cell">
         <div class="num serif">壹</div>
-        <h3>전문가의 검토</h3>
-        <p>명리학 자격을 갖춘 상담가가 모든 풀이를 직접 확인합니다. 기계가 혼자 내놓는 결과가 아닙니다.</p>
+        <h3>명리 1급 + 심리상담 자격</h3>
+        <p>명리학 1급 자격과 아동심리상담사 자격을 함께 갖춘 상담가가 모든 풀이를 직접 확인합니다. 기계가 혼자 내놓는 결과가 아닙니다.</p>
       </div>
       <div class="about-cell">
         <div class="num serif">貳</div>
@@ -1048,6 +1200,76 @@
         <div class="num serif">四</div>
         <h3>지금은 무료</h3>
         <p>더 많은 분들의 이야기를 만나고 싶어 무료로 운영합니다. 부담 없이 신청해 주세요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENTAL MODEL: 사주 = 심리를 읽는 언어 ============ -->
+<section class="mindmodel section-pad">
+  <div class="wrap">
+    <div class="mindmodel-grid">
+      <div class="mindmodel-text">
+        <div class="kicker">THE IDEA</div>
+        <h2 class="section-title serif">사주를 알면,<br>그 사람의 마음이 보입니다</h2>
+        <p class="section-sub">
+          사주는 단순히 길흉을 점치는 도구가 아니라, 태어날 때부터 타고난 기질과 마음의 패턴을 보여주는 심리 지도에 가깝습니다.
+          같은 상황에서도 사람마다 다르게 반응하는 이유, 반복되는 관계의 패턴, 스스로도 설명하기 어려운 선택의 순간들 — 그 답이 사주 안에 있는 경우가 많습니다.
+        </p>
+        <ul class="mindmodel-list">
+          <li><b>오행</b>은 기질과 에너지의 방향을, <b>십성</b>은 관계와 욕구의 패턴을 보여줍니다.</li>
+          <li>아동심리상담 현장에서 보던 행동·정서 패턴이, 명리의 구조와 자주 겹쳐 보였습니다.</li>
+          <li>그래서 명리만으로 끝내지 않고, 심리학의 언어로 한 번 더 짚어드립니다.</li>
+        </ul>
+      </div>
+
+      <div class="mindmodel-visual">
+        <div class="mv-card mv-card-1">
+          <div class="mv-icon">心</div>
+          <div class="mv-label">심리</div>
+          <p>기질·정서·관계 패턴</p>
+        </div>
+        <div class="mv-plus">+</div>
+        <div class="mv-card mv-card-2">
+          <div class="mv-icon">命</div>
+          <div class="mv-label">명리</div>
+          <p>오행·십성·사주 구조</p>
+        </div>
+        <div class="mv-equals">=</div>
+        <div class="mv-card mv-card-3">
+          <div class="mv-icon">解</div>
+          <div class="mv-label">현대해석</div>
+          <p>지금 언어로 다시 쓴 풀이</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COUNSELOR PROFILE ============ -->
+<section class="counselor section-pad">
+  <div class="wrap">
+    <div class="kicker">WHO READS YOU</div>
+    <h2 class="section-title serif">아동심리상담사가 읽어주는<br>현대 해석 사주</h2>
+    <p class="section-sub">두 가지 전문성을 가진 한 사람이, 사주와 마음을 함께 들여다봅니다.</p>
+
+    <div class="counselor-card">
+      <div class="counselor-photo" aria-hidden="true">
+        <span class="counselor-photo-glyph serif">命</span>
+      </div>
+      <div class="counselor-info">
+        <div class="counselor-name">사주, 다시 읽다 상담가</div>
+        <p class="counselor-desc">
+          아동심리상담사로 아이와 가족의 마음을 들여다보던 시간, 그리고 명리학 1급으로 사람의 사주를 읽어온 시간이 만나
+          지금의 상담 방식이 되었습니다. 사주를 통해 그 사람의 기질과 심리적 패턴을 함께 짚어드립니다.
+        </p>
+        <div class="counselor-badges">
+          <span class="c-badge">아동심리상담사 자격</span>
+          <span class="c-badge">명리학 1급 자격</span>
+        </div>
+        <div class="counselor-quote">
+          "사주는 결국, 그 사람이 어떤 마음으로 세상을 살아가는지를 보여주는 지도라고 생각해요."
+        </div>
       </div>
     </div>
   </div>
