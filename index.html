@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>밝은명리 | 사주, 다시 읽다</title>
+<title>사주, 다시 읽다</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -749,6 +749,155 @@
   .form-success h3 { font-size: 21px; margin-bottom: 10px; }
   .form-success p { color: var(--ink-soft); font-size: 14.5px; }
 
+  /* ---------- AI Demo Loading & Result ---------- */
+  .ai-loading {
+    display: none;
+    text-align: center;
+    padding: 70px 30px;
+  }
+  .ai-loading.show { display: block; }
+  .ai-loading .saju-spin {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .ai-loading .saju-spin span {
+    width: 34px;
+    height: 56px;
+    border-radius: 6px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: var(--jujube-soft);
+    animation: sajuPulse 1.1s ease-in-out infinite;
+  }
+  .ai-loading .saju-spin span:nth-child(2) { animation-delay: 0.15s; }
+  .ai-loading .saju-spin span:nth-child(3) { animation-delay: 0.3s; }
+  .ai-loading .saju-spin span:nth-child(4) { animation-delay: 0.45s; }
+  @keyframes sajuPulse {
+    0%, 100% { opacity: 0.35; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-6px); }
+  }
+  .ai-loading .loading-text {
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .ai-loading .loading-sub {
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    opacity: 0.65;
+  }
+
+  .ai-result {
+    display: none;
+    padding: 8px;
+  }
+  .ai-result.show { display: block; }
+  .ai-result-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .ai-result-name {
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .ai-result-name span {
+    font-weight: 400;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin-left: 6px;
+  }
+  .demo-badge {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--jujube);
+    background: rgba(140,59,46,0.1);
+    padding: 5px 12px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .ai-result-pillars {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .ai-result-pillars .rp {
+    flex: 1;
+    text-align: center;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 4px;
+  }
+  .ai-result-pillars .rp .rp-label {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .ai-result-pillars .rp .rp-glyph {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .ai-result-body {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px 24px;
+    font-size: 14.5px;
+    line-height: 1.85;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  .ai-result-body .rb-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--jujube);
+    margin-top: 18px;
+    margin-bottom: 4px;
+  }
+  .ai-result-body .rb-tag:first-child { margin-top: 0; }
+  .ai-result-foot {
+    margin-top: 22px;
+    padding: 16px 18px;
+    background: rgba(176,140,63,0.1);
+    border: 1px solid rgba(176,140,63,0.3);
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .ai-result-cta {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ai-result-cta a {
+    flex: 1;
+    text-align: center;
+    padding: 14px 0;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 160px;
+  }
+  .ai-result-cta .primary { background: var(--jujube); color: var(--paper-card); }
+  .ai-result-cta .ghost { border: 1.5px solid var(--ink); color: var(--ink); }
+
   /* ---------- Footer ---------- */
   footer {
     padding: 50px 0;
@@ -814,7 +963,7 @@
 
 <nav>
   <div class="nav-inner">
-    <div class="brand">밝은명리 | 사주, 다시 읽다<span class="dot">.</span></div>
+    <div class="brand">사주, 다시 읽다<span class="dot">.</span></div>
     <div class="nav-actions">
       <a href="http://pf.kakao.com/_xkaIvG" target="_blank" rel="noopener" class="nav-kakao" aria-label="카카오톡 채널 바로가기">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.86 5.34 4.66 6.78-.2.74-.73 2.71-.84 3.13-.13.52.19.51.4.37.16-.11 2.6-1.77 3.66-2.49.68.1 1.39.15 2.12.15 5.52 0 10-3.58 10-8s-4.48-8-10-8z" fill="#391b1b"/></svg>
@@ -829,16 +978,15 @@
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow">지금은 무료로 열어두었습니다</div>
- <h1 class="serif">
-  사주를 알면,<br>
-  <span class="accent">그 사람의 심리를 이해할 수 있습니다</span>
-</h1>
-
-<p class="lead">
-  아동심리상담가가 읽어주는 현대해석 사주.
-  타고난 기질과 감정의 흐름, 관계의 패턴을 심리학적 관점과 함께 풀어드립니다.
-  미래를 단정하기보다 나와 타인을 이해하기 위한 사주를 전합니다.
-</p>
+      <h1 class="serif">
+        태어난 네 글자를,<br>
+        <span class="accent">오늘의 언어</span>로 풀어드립니다
+      </h1>
+      <p class="lead">
+        명리학 자격을 갖춘 상담가가 직접 검토하고,
+        어려운 한자말 대신 일상의 언어로 다시 쓴 사주풀이.
+        생년월일시만 남겨주시면 됩니다.
+      </p>
       <div class="hero-ctas">
         <a href="#apply" class="btn-primary">무료로 풀이 받기 →</a>
         <a href="#process" class="btn-ghost">어떻게 진행되나요</a>
@@ -1155,6 +1303,30 @@
           <h3 class="serif">신청이 접수되었습니다</h3>
           <p>남겨주신 연락처로 풀이 결과를 보내드릴게요.<br>조금만 기다려 주세요.</p>
         </div>
+
+        <div class="ai-loading" id="aiLoading">
+          <div class="saju-spin">
+            <span>甲</span><span>丁</span><span>庚</span><span>乙</span>
+          </div>
+          <div class="loading-text">사주 원국을 분석하고 있어요…</div>
+          <div class="loading-sub">잠시만 기다려 주세요</div>
+        </div>
+
+        <div class="ai-result" id="aiResult">
+          <div class="ai-result-head">
+            <div class="ai-result-name" id="resultName">님의 사주 <span>무료 맛보기 풀이</span></div>
+            <div class="demo-badge">AI 데모 · 맛보기</div>
+          </div>
+          <div class="ai-result-pillars" id="resultPillars"></div>
+          <div class="ai-result-body" id="resultBody"></div>
+          <div class="ai-result-foot">
+            이 풀이는 무료 맛보기를 위해 AI가 간단히 생성한 데모입니다. 실제 절기·시간 보정을 거친 정확한 사주 원국과 상담가의 직접 검토는 정밀풀이에서 제공됩니다.
+          </div>
+          <div class="ai-result-cta">
+            <a href="#pricing" class="primary">정밀풀이 자세히 보기</a>
+            <a href="http://pf.kakao.com/_xkaIvG" target="_blank" rel="noopener" class="ghost">카카오톡 채널 추가</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1175,12 +1347,294 @@
 </footer>
 
 <script>
+  /* =========================================================
+     사주 맛보기 AI 데모 엔진
+     - 외부 API를 호출하지 않습니다. 모든 문장은 미리 준비된
+       풀(pool)에서 사주 계산 결과에 맞춰 코드로 조합합니다.
+     - 연주는 60갑자 공식으로 정확히 계산하지만, 월주/일주/시주는
+       절기·진태양시 보정이 없는 간략 계산이라 실제 사주와 다를 수
+       있습니다. (정확한 원국은 정밀풀이에서 제공)
+     ========================================================= */
+
+  var CHEONGAN = ['갑','을','병','정','무','기','경','신','임','계'];
+  var CHEONGAN_HANJA = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+  var JIJI = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+  var JIJI_HANJA = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+  // 천간 인덱스 → 오행(0목 1화 2토 3금 4수)
+  var GAN_TO_OHANG = [0,0,1,1,2,2,3,3,4,4];
+  var OHANG_NAME = ['목(木)','화(火)','토(土)','금(金)','수(水)'];
+
+  function getYearPillar(year) {
+    // 연주 60갑자: 1984년=갑자년 기준으로 보정
+    var idx = ((year - 1984) % 60 + 60) % 60;
+    var gan = idx % 10;
+    var ji = idx % 12;
+    return { gan: gan, ji: ji };
+  }
+
+  function getMonthPillar(year, month) {
+    // 간략 계산(데모용): 연간에 따른 월간 시작점 + 월 순서
+    // 실제로는 절기(입춘 등) 기준이라 다를 수 있음을 명시
+    var yearGan = getYearPillar(year).gan;
+    var monthGanStart = (yearGan % 5) * 2 + 2; // 단순 패턴화
+    var gan = (monthGanStart + (month - 1)) % 10;
+    var ji = (month + 1) % 12; // 인월(寅)을 1월 기준 근사로 매핑
+    return { gan: gan, ji: ji };
+  }
+
+  function getDayPillar(year, month, day) {
+    // 간략 일주 계산(데모용): 날짜를 일련번호로 변환 후 60갑자 순환
+    var d = new Date(year, month - 1, day);
+    var base = new Date(1900, 0, 31); // 1900-01-31 = 갑자일(근사 기준)
+    var diffDays = Math.floor((d - base) / 86400000);
+    var idx = ((diffDays % 60) + 60) % 60;
+    return { gan: idx % 10, ji: idx % 12 };
+  }
+
+  function getHourPillar(hour) {
+    if (hour === null || hour === undefined || isNaN(hour)) return null;
+    // 자시(23~01)부터 2시간 단위로 12지지 순환
+    var adjusted = (hour + 1) % 24;
+    var ji = Math.floor(adjusted / 2) % 12;
+    var gan = ji % 10; // 간략화
+    return { gan: gan, ji: ji };
+  }
+
+  // ---------- 문장 풀 ----------
+  var POOL = {
+    0: { // 목
+      trait: [
+        "성장하고 뻗어나가려는 기운이 강해서, 한 곳에 머무르기보다 새로운 걸 시도할 때 생기가 도는 편이에요.",
+        "곧고 솔직한 기질이 두드러져서, 돌려 말하기보다 직진하는 쪽을 택하는 경우가 많아요.",
+        "유연하면서도 줄기처럼 자기 중심을 잃지 않는, 생각보다 단단한 면이 있는 사주예요."
+      ],
+      job: [
+        "기획·교육·콘텐츠처럼 무언가를 키워내고 성장시키는 일에서 만족감을 크게 느낄 가능성이 높아요.",
+        "처음 판을 짜고 방향을 잡는 역할, 즉 기획이나 신사업 쪽에 잘 맞는 기운이에요.",
+        "사람을 가르치거나 이끄는 일, 혹은 식물·환경처럼 '키우는' 영역과 잘 맞아떨어져요."
+      ],
+      love: [
+        "마음이 가면 직진하는 편이라, 좋아하는 사람한테 표현이 빠른 대신 거절에 의외로 크게 휘청일 수 있어요.",
+        "관계에서도 '성장'을 중요하게 여겨서, 서로 발전이 없다고 느끼면 빨리 지치는 편이에요.",
+        "처음엔 다가가는 속도가 빠르지만, 진짜 마음을 여는 데는 시간이 좀 걸리는 타입이에요."
+      ],
+      money: [
+        "돈을 불리는 것보다 '쓸 곳'을 먼저 정하고 버는 스타일이라, 계획 없이 모이면 오히려 불안해하는 편이에요.",
+        "투자도 단기보다 길게 심어두고 키우는 방식이 체질적으로 더 잘 맞아요.",
+        "버는 속도보다 쓰는 속도가 빨라질 때가 있어서, 통장을 나눠두는 습관이 도움이 될 수 있어요."
+      ],
+      caution: [
+        "너무 빨리 뻗어나가려다 기초를 다지는 시간을 건너뛰는 경향이 있으니, 속도를 한 번 늦춰보는 것도 좋아요.",
+        "주변과 부딪힐 때 정면으로만 돌파하려는 습관이 있다면, 가끔은 우회하는 것도 나쁘지 않아요."
+      ]
+    },
+    1: { // 화
+      trait: [
+        "표현력이 풍부하고 에너지가 겉으로 잘 드러나는 편이라, 분위기를 밝게 만드는 역할을 자주 맡게 돼요.",
+        "순간적인 판단과 직감이 빠른 사주라, 망설이기보다 일단 움직이고 보는 쪽이에요.",
+        "주목받는 자리에서 오히려 힘이 나는, 무대 체질에 가까운 기운이 있어요."
+      ],
+      job: [
+        "사람을 직접 상대하는 일, 영업·홍보·방송처럼 즉각적인 반응이 오는 일에서 빛을 발해요.",
+        "아이디어를 빠르게 실행에 옮기는 역할, 즉 스타트업이나 신규 프로젝트 쪽 기운이 강해요.",
+        "예술·디자인처럼 감각과 직관을 그대로 표현하는 분야와도 잘 맞아요."
+      ],
+      love: [
+        "호감을 숨기지 못하는 편이라 상대도 마음을 빨리 알아채는 경우가 많아요. 그만큼 시작은 빠른 타입이에요.",
+        "관계가 단조로워지면 금방 답답함을 느껴서, 변화나 이벤트가 있는 연애를 더 좋아해요.",
+        "감정 기복이 관계에 그대로 드러나는 편이라, 컨디션 좋을 때와 안 좋을 때의 온도차가 클 수 있어요."
+      ],
+      money: [
+        "벌이가 들어오는 만큼 쓰는 것도 화끈한 편이라, 모으는 재미보다 쓰는 재미를 더 크게 느껴요.",
+        "직관적으로 들어오는 기회를 잘 잡는 편이지만, 그만큼 충동적인 지출도 주의가 필요해요.",
+        "돈이 들어오는 시기와 나가는 시기의 흐름이 뚜렷한 편이라, 여유 있을 때 일부를 묶어두는 게 도움이 돼요."
+      ],
+      caution: [
+        "타오르는 만큼 꺼지는 속도도 빨라서, 초반 열정을 끝까지 끌고 가는 연습이 필요할 수 있어요.",
+        "감정이 앞설 때 말이 먼저 나가는 편이라, 중요한 순간엔 한 번 더 생각하고 말하는 게 좋아요."
+      ]
+    },
+    2: { // 토
+      trait: [
+        "묵묵하고 안정적인 기운이 중심에 있어서, 주변 사람들이 의지하고 싶어지는 든든한 인상을 줘요.",
+        "쉽게 흔들리지 않는 중심을 가진 사주라, 위기 상황에서 오히려 더 차분해지는 편이에요.",
+        "신뢰를 쌓는 데 시간은 걸리지만, 한 번 쌓인 믿음은 잘 무너지지 않는 타입이에요."
+      ],
+      job: [
+        "관리·운영·중재처럼 여러 사람과 일을 묶어서 굴러가게 만드는 역할에서 강점이 나와요.",
+        "부동산, 자산관리처럼 '쌓고 지키는' 영역과 기운이 잘 맞아요.",
+        "조직 안에서 신뢰를 바탕으로 중심을 잡아주는 역할, 즉 운영·총무·HR 쪽도 잘 어울려요."
+      ],
+      love: [
+        "표현은 서툴러도 행동으로 꾸준함을 보여주는 타입이라, 오래 지켜본 사람일수록 진심을 알아채요.",
+        "관계에서 안정감을 가장 중요하게 여겨서, 불안정한 관계는 본능적으로 피하려는 경향이 있어요.",
+        "한 사람에게 깊게, 오래 마음을 쏟는 편이라 가벼운 만남보다 진지한 관계에 더 끌려요."
+      ],
+      money: [
+        "차근차근 모으는 데 강점이 있는 사주라, 단기 수익보다 꾸준한 적립이 체질에 맞아요.",
+        "위험한 투자보다 안전한 자산을 선호하는 편이라, 큰 손실 없이 천천히 불려가는 스타일이에요.",
+        "돈 관리에 있어서는 주변에서 가장 믿을 만한 사람으로 꼽히는 경우가 많아요."
+      ],
+      caution: [
+        "변화가 필요한 시점에도 익숙한 것을 놓지 못해서 타이밍을 놓칠 수 있으니, 가끔은 결단이 필요해요.",
+        "너무 많은 걸 혼자 짊어지려는 경향이 있다면, 일부는 주변에 나눠주는 연습도 필요해요."
+      ]
+    },
+    3: { // 금
+      trait: [
+        "원칙과 기준이 분명한 사주라, 맺고 끊는 것이 명확하고 결단력이 좋은 편이에요.",
+        "겉으로는 단단해 보여도 속은 의외로 섬세하게 따지는, 디테일에 강한 기운이 있어요.",
+        "한번 정한 방향은 끝까지 밀고 나가는 추진력이 사주 전체에 흐르고 있어요."
+      ],
+      job: [
+        "법률, 회계, 품질관리처럼 정확함과 기준이 중요한 분야에서 능력이 두드러져요.",
+        "분석하고 판단하는 역할, 즉 전략·컨설팅 쪽과 기운이 잘 맞아요.",
+        "맺고 끊음이 필요한 협상이나 계약 관련 업무에서도 강점을 보여요."
+      ],
+      love: [
+        "기준이 명확해서 아닌 사람에게는 마음을 잘 안 주지만, 한번 정하면 의리로 끝까지 가는 타입이에요.",
+        "감정 표현이 직설적이고 솔직한 편이라, 상대가 처음엔 차갑다고 느낄 수도 있어요.",
+        "관계에서도 공정함을 중요하게 여겨서, 한쪽으로 기우는 관계는 오래 못 견디는 편이에요."
+      ],
+      money: [
+        "숫자에 밝고 계산이 빠른 편이라, 가계부나 자산 정리를 의외로 깔끔하게 해내는 타입이에요.",
+        "투자 결정을 내릴 때 냉정하게 끊는 힘이 있어서, 손절 타이밍을 비교적 잘 잡는 편이에요.",
+        "원칙 없이 흘러가는 돈 관리는 못 견디는 편이라, 규칙을 정해두면 오히려 편해져요."
+      ],
+      caution: [
+        "기준이 너무 엄격해지면 주변 사람들이 부담을 느낄 수 있으니, 가끔은 여유를 두는 것도 좋아요.",
+        "맺고 끊는 게 분명한 만큼, 관계를 정리할 때 조금 더 부드럽게 가는 연습이 필요할 수 있어요."
+      ]
+    },
+    4: { // 수
+      trait: [
+        "생각이 깊고 유연한 사주라, 상황에 따라 다르게 흐르는 적응력이 가장 큰 강점이에요.",
+        "겉으로 드러내지 않아도 속에서 끊임없이 생각이 흘러가는, 사색적인 기운이 강해요.",
+        "막히면 돌아가는 지혜가 있어서, 정면 돌파보다 영리하게 우회하는 쪽을 택해요."
+      ],
+      job: [
+        "연구, 분석, 기획처럼 깊게 파고드는 일에서 두드러진 성과를 내는 편이에요.",
+        "변화가 많은 환경에서도 잘 적응하는 기운이라, 다양한 산업을 넘나드는 일도 잘 맞아요.",
+        "글쓰기, 상담처럼 생각과 감정을 흐르듯 풀어내는 일과도 기운이 통해요."
+      ],
+      love: [
+        "겉으로 표현은 적어도 속으로는 깊게 생각하는 타입이라, 상대가 마음을 알아채는 데 시간이 걸려요.",
+        "관계의 흐름을 직감적으로 잘 읽는 편이라, 상대의 변화를 먼저 알아채는 경우가 많아요.",
+        "한 사람에게 빠지면 생각이 끊이지 않는 편이라, 거리를 두는 연습이 필요할 때도 있어요."
+      ],
+      money: [
+        "흐름을 읽는 감각이 좋아서, 트렌드를 빠르게 캐치하는 투자 감각이 있는 편이에요.",
+        "한 곳에 고이기보다 여러 곳으로 흘러가는 걸 선호해서, 분산 투자 체질에 가까워요.",
+        "필요할 때 유연하게 움직이는 자금 운용이 강점이지만, 너무 자주 옮기면 오히려 손해를 볼 수 있어요."
+      ],
+      caution: [
+        "생각이 너무 많아져서 정작 행동으로 옮기는 타이밍을 놓치는 경우가 있으니, 결단의 순간을 정해두면 좋아요.",
+        "감정의 흐름이 깊은 만큼, 한번 가라앉으면 회복하는 데 시간이 걸릴 수 있어 스스로를 잘 돌보는 게 중요해요."
+      ]
+    }
+  };
+
+  function pick(arr, seed) {
+    return arr[seed % arr.length];
+  }
+
+  function pillarGlyph(p) {
+    return CHEONGAN_HANJA[p.gan] + JIJI_HANJA[p.ji];
+  }
+  function pillarReading(p) {
+    return CHEONGAN[p.gan] + JIJI[p.ji];
+  }
+
+  function buildResultHTML(name, gender, year, month, day, hour, question) {
+    var yearP = getYearPillar(year);
+    var monthP = getMonthPillar(year, month);
+    var dayP = getDayPillar(year, month, day);
+    var hourP = getHourPillar(hour);
+
+    var dayOhang = GAN_TO_OHANG[dayP.gan];
+    var pool = POOL[dayOhang];
+    var seed = year + month * 31 + day * 7 + (name ? name.length : 0);
+
+    // 사주패 렌더링
+    var pillarsHTML = '';
+    var pillarsData = [
+      { label: '年', p: yearP },
+      { label: '月', p: monthP },
+      { label: '日', p: dayP }
+    ];
+    if (hourP) pillarsData.push({ label: '時', p: hourP });
+
+    pillarsData.forEach(function(pd) {
+      pillarsHTML += '<div class="rp"><div class="rp-label">' + pd.label + '</div>' +
+        '<div class="rp-glyph">' + pillarReading(pd.p) + '<br>' + pillarGlyph(pd.p) + '</div></div>';
+    });
+
+    var bodyHTML =
+      '<span class="rb-tag">총평</span>\n' +
+      '일주가 ' + pillarReading(dayP) + '(' + pillarGlyph(dayP) + ')로, 오행상 ' + OHANG_NAME[dayOhang] + ' 기운이 중심에 있는 사주예요. ' + pick(pool.trait, seed) + '\n\n' +
+      '<span class="rb-tag">적성·직업운</span>\n' + pick(pool.job, seed + 1) + '\n\n' +
+      '<span class="rb-tag">연애·관계 경향</span>\n' + pick(pool.love, seed + 2) + '\n\n' +
+      '<span class="rb-tag">재물운 경향</span>\n' + pick(pool.money, seed + 3) + '\n\n' +
+      '<span class="rb-tag">주의하면 좋은 부분</span>\n' + pick(pool.caution, seed + 4);
+
+    if (question && question.trim().length > 0) {
+      bodyHTML += '\n\n<span class="rb-tag">남겨주신 질문에 대해</span>\n' +
+        '"' + question.trim() + '"에 대해서는, 위 기운의 흐름을 참고하시면 좋을 것 같아요. 다만 구체적인 시기나 디테일까지는 정밀풀이에서 더 자세히 짚어드릴 수 있어요.';
+    }
+
+    return { pillarsHTML: pillarsHTML, bodyHTML: bodyHTML };
+  }
+
   document.getElementById('sajuForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    // 지금 단계에서는 실제 접수/전송 없이, 화면상으로만 완료 상태를 보여줍니다.
-    this.style.display = 'none';
-    document.getElementById('formSuccess').classList.add('show');
-    document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var form = this;
+    var fd = new FormData(form);
+    var product = fd.get('product');
+
+    if (product === '무료 맛보기') {
+      // ---- AI 데모 맛보기 흐름 ----
+      var name = fd.get('name') || '고객';
+      var gender = fd.get('gender');
+      var year = parseInt(fd.get('year'), 10);
+      var month = parseInt(fd.get('month'), 10);
+      var day = parseInt(fd.get('day'), 10);
+      var timeStr = fd.get('birthtime');
+      var hour = null;
+      if (timeStr) {
+        var parts = timeStr.split(':');
+        if (parts.length === 2) hour = parseInt(parts[0], 10);
+      }
+      var question = fd.get('question');
+
+      if (!year || !month || !day) {
+        alert('생년월일을 정확히 입력해 주세요.');
+        return;
+      }
+
+      form.style.display = 'none';
+      var loadingEl = document.getElementById('aiLoading');
+      loadingEl.classList.add('show');
+      loadingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(function() {
+        var result = buildResultHTML(name, gender, year, month, day, hour, question);
+        document.getElementById('resultName').innerHTML = name + '님의 사주 <span>무료 맛보기 풀이</span>';
+        document.getElementById('resultPillars').innerHTML = result.pillarsHTML;
+        document.getElementById('resultBody').innerHTML = result.bodyHTML;
+
+        loadingEl.classList.remove('show');
+        var resultEl = document.getElementById('aiResult');
+        resultEl.classList.add('show');
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 1800);
+
+    } else {
+      // ---- 유료 옵션: 신청 접수만 (실제 결제·전송 기능 없음) ----
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   });
 
   // 가격 카드의 신청 버튼을 누르면 신청폼의 '원하시는 방식'이 자동으로 선택됩니다.
