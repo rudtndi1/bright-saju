@@ -316,6 +316,135 @@
   .price-card.highlight .price-cta { background: var(--gold); color: var(--ink); }
   .pricing-foot { margin-top: 32px; font-size: 13.5px; color: var(--ink-soft); text-align: center; }
 
+  /* ---------- Premium card (심층 심리분석 솔루션, 99,000원) ---------- */
+  .premium-card {
+    position: relative;
+    margin-top: 28px;
+    background: linear-gradient(150deg, #241f1c 0%, #2b2521 55%, #1f2530 100%);
+    border: 1px solid rgba(176,140,63,0.35);
+    border-radius: 22px;
+    padding: 48px 52px;
+    color: var(--paper);
+    overflow: hidden;
+    box-shadow: 0 30px 70px -28px rgba(0,0,0,0.45);
+  }
+  .premium-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(176,140,63,0.18) 0, transparent 45%),
+      radial-gradient(circle at 8% 92%, rgba(140,59,46,0.16) 0, transparent 50%);
+    pointer-events: none;
+  }
+  .premium-deco {
+    position: absolute;
+    top: -10px;
+    right: 36px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 150px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(243,237,226,0.05);
+    pointer-events: none;
+    user-select: none;
+  }
+  .premium-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .premium-tag::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .premium-card h3.serif {
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+  }
+  .premium-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(243,237,226,0.72);
+    max-width: 560px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+  .premium-amount {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 26px;
+    position: relative;
+    z-index: 1;
+  }
+  .premium-amount span {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(243,237,226,0.6);
+    margin-left: 4px;
+  }
+  .premium-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 32px;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+  .premium-features li {
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(243,237,226,0.82);
+    padding-left: 22px;
+    position: relative;
+  }
+  .premium-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .premium-cta {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 15px 34px;
+    border-radius: 100px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 10px 26px -10px rgba(176,140,63,0.5);
+  }
+  .premium-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(176,140,63,0.55); }
+  .premium-note {
+    margin-top: 18px;
+    font-size: 13px;
+    color: rgba(243,237,226,0.55);
+    max-width: 520px;
+    position: relative;
+    z-index: 1;
+  }
+
   /* ---------- Form ---------- */
   .apply { background: var(--paper-deep); }
   .apply-grid { margin-top: 56px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px; }
@@ -449,6 +578,10 @@
     .who-row { grid-template-columns: 1fr; gap: 6px; }
     .channel-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
+    .premium-card { padding: 34px 26px; }
+    .premium-deco { font-size: 90px; top: -6px; right: 18px; }
+    .premium-card h3.serif { font-size: 22px; }
+    .premium-cta { width: 100%; text-align: center; }
     .mindmodel-grid { grid-template-columns: 1fr; gap: 36px; }
     .mindmodel-visual { flex-direction: column; }
     .mv-card { width: 100%; }
@@ -786,8 +919,8 @@
     </div>
 
     <p class="pricing-foot">모든 유료 풀이는 무료 풀이를 먼저 받아보신 분께 우선 안내드립니다. 신청서 하단에서 원하시는 방식을 선택해 주세요.</p>
-  </div>
-  <div class="premium-card">
+
+    <div class="premium-card">
       <div class="premium-deco" aria-hidden="true">深</div>
       <div class="premium-tag">단 하나의 사주만, 가장 깊게</div>
       <h3 class="serif">심층 심리분석 &amp; 솔루션</h3>
@@ -807,7 +940,6 @@
       <p class="premium-note">분석 범위가 넓고 깊은 만큼, 다른 풀이보다 시간이 더 걸립니다. 신청 전 카카오톡 채널로 먼저 문의 주셔도 좋습니다.</p>
     </div>
   </div>
-
 </section>
 
 <!-- ============ APPLY FORM ============ -->
@@ -881,6 +1013,7 @@
               <option value="정밀풀이 PLUS">정밀풀이 PLUS (29,900원)</option>
               <option value="실시간 채팅 10분">실시간 채팅 상담 10분 (24,900원)</option>
               <option value="실시간 채팅 20분">실시간 채팅 상담 20분 (39,900원)</option>
+              <option value="심층 심리분석 솔루션">심층 심리분석 &amp; 솔루션 (99,000원)</option>
             </select>
             <p class="birth-hint">유료 풀이를 선택하셔도 결제는 신청 확인 후 별도로 안내드립니다. 지금 결제되지 않습니다.</p>
           </div>
