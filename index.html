@@ -3,245 +3,488 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>무료상담</title>
+  <title>사주, 다시 읽다</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --paper:#f3ede2;
-      --paper-deep:#e9dfc9;
-      --ink:#2b2521;
-      --ink-soft:#5b5249;
-      --jujube:#8c3b2e;
-      --jujube-soft:#a85440;
-      --indigo:#2f3b4c;
-      --gold:#b08c3f;
-      --line:rgba(43,37,33,.14);
-      --paper-card:#faf6ec;
-      --kakao:#fee500;
-      --kakao-ink:#391b1b;
-      --yt:#c4302b;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --paper: #f3ede2;
+      --paper-deep: #e9dfc9;
+      --ink: #2b2521;
+      --ink-soft: #5b5249;
+      --jujube: #8c3b2e;
+      --jujube-soft: #a85440;
+      --indigo: #2f3b4c;
+      --gold: #b08c3f;
+      --line: rgba(43, 37, 33, 0.14);
+      --paper-card: #faf6ec;
+      --kakao: #fee500;
+      --kakao-ink: #391b1b;
+      --yt: #c4302b;
     }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Pretendard, sans-serif;
-      background:var(--paper);
-      color:var(--ink);
-      line-height:1.6;
-      overflow-x:hidden;
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    body:before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:1;
-      opacity:.5;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.5;
       background-image:
-        radial-gradient(circle at 20% 30%, rgba(43,37,33,.025) 0, transparent 45%),
-        radial-gradient(circle at 80% 70%, rgba(43,37,33,.02) 0, transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(43,37,33,0.025) 0, transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(43,37,33,0.02) 0, transparent 50%);
     }
-    .serif{font-family:"Noto Serif KR", serif}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
-    section,header,footer{position:relative;z-index:2}
-    nav{
-      position:fixed;top:0;left:0;right:0;z-index:50;
-      backdrop-filter:blur(10px);
-      background:rgba(243,237,226,.78);
-      border-bottom:1px solid var(--line);
+    .serif { font-family: 'Noto Serif KR', serif; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+    section { position: relative; z-index: 2; }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(243, 237, 226, 0.78);
+      border-bottom: 1px solid var(--line);
     }
-    .nav-inner{
-      max-width:1080px;margin:0 auto;padding:18px 28px;
-      display:flex;justify-content:space-between;align-items:center;
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .brand{font-size:19px;font-weight:700;letter-spacing:.02em}
-    .brand .dot{color:var(--jujube)}
-    .nav-actions{display:flex;align-items:center;gap:10px}
-    .nav-cta{
-      font-size:14px;font-weight:600;padding:9px 20px;border:1px solid var(--ink);
-      border-radius:100px;transition:.25s;
+    .brand {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
-    .nav-cta:hover{background:var(--ink);color:var(--paper)}
-    .hero{
-      min-height:100vh;display:flex;align-items:center;padding-top:90px;position:relative;
+    .brand .dot { color: var(--jujube); }
+    .nav-cta {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border: 1px solid var(--ink);
+      border-radius: 100px;
+      transition: all 0.25s ease;
     }
-    .hero-grid{
-      display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;width:100%;
+    .nav-cta:hover { background: var(--ink); color: var(--paper); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 90px;
+      position: relative;
     }
-    .eyebrow{
-      display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
-      letter-spacing:.12em;color:var(--jujube);margin-bottom:28px;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
     }
-    .eyebrow:before{content:"";width:28px;height:1px;background:var(--jujube)}
-    .hero h1{
-      font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.01em;margin:0 0 26px;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--jujube);
+      margin-bottom: 28px;
     }
-    .hero h1 .accent{color:var(--jujube)}
-    .lead{font-size:17px;color:var(--ink-soft);max-width:460px;margin:0 0 38px}
-    .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
-    .btn-primary,.btn-ghost,.submit-btn{
-      border:0;cursor:pointer;font-family:inherit;transition:.25s;
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--jujube);
     }
-    .btn-primary{
-      background:var(--jujube);color:var(--paper-card);padding:16px 32px;
-      border-radius:100px;font-weight:600;font-size:15.5px;display:inline-flex;align-items:center;gap:8px;
-      box-shadow:0 8px 24px -8px rgba(140,59,46,.5)
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.28;
+      letter-spacing: -0.01em;
+      margin-bottom: 26px;
     }
-    .btn-primary:hover{transform:translateY(-2px)}
-    .btn-ghost{
-      padding:16px 28px;border-radius:100px;font-weight:600;font-size:15.5px;
-      border:1px solid var(--line);color:var(--ink-soft);background:transparent;
+    .hero h1 .accent { color: var(--jujube); }
+    .lead {
+      font-size: 17px;
+      color: var(--ink-soft);
+      max-width: 460px;
+      margin-bottom: 38px;
     }
-    .btn-ghost:hover{background:rgba(255,255,255,.35)}
-    .sajupae{
-      position:relative;height:480px;display:flex;align-items:center;justify-content:center;
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost, .submit-btn {
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.25s;
     }
-    .pillars{display:flex;gap:14px}
-    .pillar{
-      width:78px;height:380px;background:var(--paper-card);border:1px solid var(--line);
-      border-radius:6px;box-shadow:0 18px 40px -16px rgba(43,37,33,.25);
-      display:flex;flex-direction:column;align-items:center;padding:22px 0;position:relative;
+    .btn-primary {
+      background: var(--jujube);
+      color: var(--paper-card);
+      padding: 16px 32px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 15.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px -8px rgba(140, 59, 46, 0.5);
     }
-    .pillar .label{font-size:11px;color:var(--ink-soft);letter-spacing:.1em;margin-bottom:18px}
-    .pillar .glyph{font-family:"Noto Serif KR", serif;font-size:30px;font-weight:700;color:var(--ink);line-height:1.5}
-    .pillar .tag{margin-top:auto;font-size:10.5px;color:var(--ink-soft);opacity:.7}
-    .section-pad{padding:120px 0}
-    .kicker{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--jujube);margin-bottom:14px}
-    .section-title{font-size:34px;font-weight:700;line-height:1.4;max-width:640px;margin:0}
-    .section-sub{margin-top:16px;font-size:16px;color:var(--ink-soft);max-width:560px}
-    .about{background:var(--paper-deep)}
-    .about-grid{
-      margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
-      background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      padding: 16px 28px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 15.5px;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      background: transparent;
     }
-    .about-cell{background:var(--paper-deep);padding:36px 26px}
-    .about-cell .num{font-family:"Noto Serif KR", serif;font-size:13px;color:var(--ink-soft);margin-bottom:22px}
-    .about-cell h3{font-size:18px;font-weight:700;margin:0 0 10px}
-    .about-cell p{font-size:14px;color:var(--ink-soft);margin:0}
-    .process{background:var(--ink);color:var(--paper)}
-    .process .kicker{color:var(--gold)}
-    .process .section-title{color:var(--paper)}
-    .process .section-sub{color:rgba(243,237,226,.65)}
-    .steps{
-      margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+
+    .sajupae {
+      position: relative;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .step{
-      padding:28px 22px;border:1px solid rgba(243,237,226,.16);border-radius:14px;position:relative;
+    .pillars { display: flex; gap: 14px; }
+    .pillar {
+      width: 78px;
+      height: 380px;
+      background: var(--paper-card);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 0 18px 40px -16px rgba(43,37,33,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 0;
+      position: relative;
+      transform: translateY(0);
+      animation: rise 1.1s ease both;
     }
-    .step .step-num{font-family:"Noto Serif KR", serif;font-size:28px;color:var(--gold);margin-bottom:18px}
-    .step h4{font-size:16px;font-weight:600;margin:0 0 8px}
-    .step p{font-size:13.5px;color:rgba(243,237,226,.6);margin:0}
-    .free-note{
-      margin-top:40px;display:inline-flex;align-items:center;gap:10px;font-size:14px;
-      color:rgba(243,237,226,.75);padding:12px 20px;border:1px solid rgba(176,140,63,.4);border-radius:100px;
+    .pillar:nth-child(1) { animation-delay: 0.05s; }
+    .pillar:nth-child(2) { animation-delay: 0.18s; transform: translateY(-14px); }
+    .pillar:nth-child(3) { animation-delay: 0.31s; transform: translateY(-22px); }
+    .pillar:nth-child(4) { animation-delay: 0.44s; transform: translateY(-10px); }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(var(--ty, 0px)); }
     }
-    .free-note .badge{
-      background:var(--gold);color:var(--ink);font-weight:700;font-size:12px;padding:3px 10px;border-radius:100px;
+    .pillar:nth-child(1) { --ty: 0px; }
+    .pillar:nth-child(2) { --ty: -14px; }
+    .pillar:nth-child(3) { --ty: -22px; }
+    .pillar:nth-child(4) { --ty: -10px; }
+    .pillar .label {
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
     }
-    .pricing{background:var(--paper)}
-    .pricing-grid{
-      margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch;
+    .pillar .glyph {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.5;
     }
-    .price-card{
-      position:relative;background:var(--paper-card);border:1px solid var(--line);border-radius:18px;
-      padding:34px 28px;display:flex;flex-direction:column;
+    .pillar:nth-child(2) .glyph { color: var(--jujube-soft); }
+    .pillar:nth-child(3) .glyph { color: var(--indigo); }
+    .pillar:nth-child(4) .glyph { color: var(--gold); }
+    .pillar .tag {
+      margin-top: auto;
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      opacity: 0.7;
     }
-    .price-card.highlight{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-    .price-tag{font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--jujube);margin-bottom:12px}
-    .price-card.highlight .price-tag{color:var(--gold)}
-    .price-card-head h3{font-size:24px;font-weight:700;margin:0 0 12px}
-    .price-card-head p{font-size:14px;color:var(--ink-soft);line-height:1.55;margin:0}
-    .price-card.highlight .price-card-head p{color:rgba(243,237,226,.7)}
-    .price-amount{margin-top:26px;font-size:38px;font-weight:800;font-family:"Noto Serif KR", serif}
-    .price-features{list-style:none;margin:22px 0 28px;padding:0;flex:1;display:flex;flex-direction:column;gap:11px}
-    .price-features li{font-size:13.5px;color:var(--ink-soft);padding-left:20px;position:relative}
-    .price-features li:before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--jujube)}
-    .price-card.highlight .price-features li{color:rgba(243,237,226,.75)}
-    .price-card.highlight .price-features li:before{background:var(--gold)}
-    .price-cta{
-      display:block;text-align:center;padding:14px 0;border-radius:100px;font-weight:700;font-size:14.5px;
-      background:var(--jujube);color:var(--paper-card)
+    .sajupae-caption {
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      text-align: center;
+      width: 100%;
     }
-    .price-card.highlight .price-cta{background:var(--gold);color:var(--ink)}
-    .apply{background:var(--paper-deep)}
-    .apply-grid{margin-top:56px;display:grid;grid-template-columns:.85fr 1.15fr;gap:56px}
-    .apply-side h3{font-size:22px;font-weight:700;margin:0 0 16px}
-    .apply-side p{font-size:15px;color:var(--ink-soft);margin:0 0 28px}
-    .apply-points{display:flex;flex-direction:column;gap:16px}
-    .apply-point{display:flex;gap:12px;font-size:14.5px;color:var(--ink-soft)}
-    .apply-point .mark{color:var(--jujube);font-weight:700;flex-shrink:0}
-    form{
-      background:var(--paper-card);border-radius:18px;padding:40px;border:1px solid var(--line);
-      box-shadow:0 24px 60px -24px rgba(43,37,33,.18)
+
+    .section-pad { padding: 120px 0; }
+    .kicker {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--jujube);
+      margin-bottom: 14px;
     }
-    .form-row{margin-bottom:22px}
-    .form-row label{display:block;font-size:13.5px;font-weight:600;color:var(--ink-soft);margin-bottom:9px}
-    .form-row input,.form-row select,.form-row textarea{
-      width:100%;border:1px solid var(--line);background:var(--paper);border-radius:10px;
-      padding:13px 15px;font-size:15px;font-family:inherit;color:var(--ink)
+    .section-title {
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.4;
+      max-width: 640px;
     }
-    .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .form-4col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    textarea{resize:vertical;min-height:90px}
-    .radio-pills{display:flex;gap:10px}
-    .radio-pills input{display:none}
-    .radio-pills label{
-      flex:1;text-align:center;padding:12px 0;border:1px solid var(--line);border-radius:10px;
-      font-size:14px;font-weight:500;color:var(--ink-soft);cursor:pointer;margin-bottom:0;
+    .section-sub {
+      margin-top: 16px;
+      font-size: 16px;
+      color: var(--ink-soft);
+      max-width: 560px;
     }
-    .submit-btn{
-      width:100%;background:var(--jujube);color:var(--paper-card);border:none;border-radius:100px;
-      padding:17px 0;font-size:16px;font-weight:700;margin-top:8px
+
+    .about { background: var(--paper-deep); }
+    .about-grid {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
     }
-    .submit-btn:hover{transform:translateY(-2px)}
-    .submit-note{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:14px;opacity:.75}
-    .ai-loading,.ai-result{display:none}
-    .show{display:block}
-    .ai-loading{text-align:center;padding:70px 30px}
-    .ai-result{padding:8px}
-    .ai-result-head{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap
+    .about-cell { background: var(--paper-deep); padding: 36px 26px; }
+    .about-cell:hover { background: var(--paper-card); }
+    .about-cell .num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 22px;
     }
-    .ai-result-name{font-size:19px;font-weight:700}
-    .ai-result-name span{font-weight:400;font-size:13.5px;color:var(--ink-soft);margin-left:6px}
-    .demo-badge{font-size:11.5px;font-weight:700;color:var(--jujube);background:rgba(140,59,46,.1);padding:5px 12px;border-radius:100px}
-    .ai-result-pillars{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
-    .ai-result-pillars .rp{flex:1;min-width:120px;text-align:center;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 4px}
-    .ai-result-pillars .rp-label{font-size:10.5px;color:var(--ink-soft);margin-bottom:4px}
-    .ai-result-pillars .rp-glyph{font-family:"Noto Serif KR", serif;font-size:17px;font-weight:700;line-height:1.3}
-    .ai-result-body{
-      background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 24px;
-      font-size:14.5px;line-height:1.85;color:var(--ink);white-space:pre-line
+    .about-cell h3 { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+    .about-cell p { font-size: 14px; color: var(--ink-soft); margin: 0; }
+
+    .apply { background: var(--paper-deep); }
+    .apply-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 56px;
     }
-    .ai-result-foot{
-      margin-top:22px;padding:16px 18px;background:rgba(176,140,63,.1);border:1px solid rgba(176,140,63,.3);
-      border-radius:10px;font-size:12.5px;color:var(--ink-soft);line-height:1.6
+    .apply-side h3 { font-size: 22px; font-weight: 700; margin: 0 0 16px; }
+    .apply-side p { font-size: 15px; color: var(--ink-soft); margin: 0 0 28px; }
+    .apply-points { display: flex; flex-direction: column; gap: 16px; }
+    .apply-point { display: flex; gap: 12px; font-size: 14.5px; color: var(--ink-soft); }
+    .apply-point .mark { color: var(--jujube); font-weight: 700; flex-shrink: 0; }
+
+    form {
+      background: var(--paper-card);
+      border-radius: 18px;
+      padding: 40px;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 60px -24px rgba(43,37,33,0.18);
     }
-    footer{padding:50px 0;border-top:1px solid var(--line);background:var(--paper)}
-    .footer-inner{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}
-    .footer-left{display:flex;flex-direction:column;gap:10px}
-    .fine{font-size:12.5px;color:var(--ink-soft);opacity:.7;max-width:360px;text-align:right}
-    @media (max-width: 860px){
-      .hero-grid,.apply-grid{grid-template-columns:1fr;gap:36px}
-      .hero h1{font-size:38px}
-      .sajupae{height:360px}
-      .pillar{width:64px;height:280px}
-      .about-grid,.steps,.pricing-grid{grid-template-columns:1fr 1fr}
-      .section-title{font-size:27px}
-      form{padding:28px}
-      .form-2col,.form-4col{grid-template-columns:1fr 1fr}
-      .fine{text-align:left}
+    .form-row { margin-bottom: 22px; }
+    .form-row label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 9px;
     }
-    @media (max-width: 560px){
-      .about-grid,.steps,.pricing-grid,.form-2col,.form-4col{grid-template-columns:1fr}
-      .hero h1{font-size:32px}
-      .nav-inner,.wrap{padding-left:18px;padding-right:18px}
-      .hero-ctas{flex-direction:column}
-      .btn-primary,.btn-ghost{justify-content:center}
+    .form-row input, .form-row select, .form-row textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 10px;
+      padding: 13px 15px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--ink);
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      outline: none;
+      border-color: var(--jujube-soft);
+      background: var(--paper-card);
+    }
+    .form-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    .radio-pills { display: flex; gap: 10px; }
+    .radio-pills input { display: none; }
+    .radio-pills label {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      cursor: pointer;
+      margin-bottom: 0;
+    }
+    .radio-pills input:checked + label {
+      border-color: var(--jujube);
+      background: var(--jujube);
+      color: var(--paper-card);
+      font-weight: 600;
+    }
+    .submit-btn {
+      width: 100%;
+      background: var(--jujube);
+      color: var(--paper-card);
+      border: none;
+      border-radius: 100px;
+      padding: 17px 0;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { transform: translateY(-2px); }
+    .submit-note {
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      margin-top: 14px;
+      opacity: 0.75;
+    }
+
+    .ai-loading, .ai-result { display: none; }
+    .show { display: block; }
+    .ai-loading {
+      text-align: center;
+      padding: 70px 30px;
+    }
+    .ai-loading .loading-text {
+      font-size: 15px;
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+    .ai-loading .loading-sub {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      opacity: 0.65;
+    }
+    .ai-result { padding: 8px; }
+    .ai-result-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .ai-result-name { font-size: 19px; font-weight: 700; }
+    .ai-result-name span {
+      font-weight: 400;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      margin-left: 6px;
+    }
+    .demo-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--jujube);
+      background: rgba(140,59,46,0.1);
+      padding: 5px 12px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .ai-result-pillars {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .ai-result-pillars .rp {
+      flex: 1;
+      text-align: center;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 4px;
+    }
+    .ai-result-pillars .rp-label {
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+    .ai-result-pillars .rp-glyph {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .ai-result-body {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px 24px;
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: var(--ink);
+      white-space: pre-line;
+    }
+    .ai-result-foot {
+      margin-top: 22px;
+      padding: 16px 18px;
+      background: rgba(176,140,63,0.1);
+      border: 1px solid rgba(176,140,63,0.3);
+      border-radius: 10px;
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 50px 0;
+      border-top: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left { display: flex; flex-direction: column; gap: 10px; }
+    footer .brand { font-size: 15px; }
+    .fine {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      opacity: 0.7;
+      max-width: 360px;
+      text-align: right;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid, .apply-grid { grid-template-columns: 1fr; gap: 36px; }
+      .hero h1 { font-size: 38px; }
+      .sajupae { height: 360px; }
+      .pillar { width: 64px; height: 280px; }
+      .about-grid { grid-template-columns: 1fr 1fr; }
+      .section-title { font-size: 27px; }
+      form { padding: 28px; }
+      .form-2col, .form-4col { grid-template-columns: 1fr 1fr; }
+      .fine { text-align: left; }
+    }
+    @media (max-width: 560px) {
+      .about-grid, .form-2col, .form-4col { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 32px; }
+      .nav-inner, .wrap { padding-left: 18px; padding-right: 18px; }
+      .hero-ctas { flex-direction: column; }
+      .btn-primary, .btn-ghost { justify-content: center; }
     }
   </style>
 </head>
@@ -249,9 +492,7 @@
   <nav>
     <div class="nav-inner">
       <div class="brand serif">사주<span class="dot">.</span></div>
-      <div class="nav-actions">
-        <a href="#apply" class="nav-cta">무료상담</a>
-      </div>
+      <a href="#apply" class="nav-cta">무료 신청하기</a>
     </div>
   </nav>
 
@@ -259,35 +500,19 @@
     <div class="wrap hero-grid">
       <div>
         <div class="eyebrow">FREE CONSULT</div>
-        <h1 class="serif">풀 방식 대신 <span class="accent">AI 답변</span>으로<br>더 자연스럽게 보여주세요</h1>
-        <p class="lead">질문을 이해해서 답하는 방식으로 바꾸면, 같은 입력이라도 훨씬 덜 뻔하고 더 설득력 있는 상담처럼 보입니다.</p>
+        <h1 class="serif">태어난 네 글자를,<br><span class="accent">오늘의 언어</span>로 풀어드립니다</h1>
+        <p class="lead">질문을 읽고 답하는 방식으로 바꾼 무료상담 페이지입니다. 키만 넣으면 OpenRouter 무료 모델로 답변을 생성합니다.</p>
         <div class="hero-ctas">
           <a href="#apply" class="btn-primary">무료상담 시작</a>
-          <a href="#process" class="btn-ghost">진행 방식 보기</a>
+          <a href="#apply" class="btn-ghost">바로 입력하기</a>
         </div>
       </div>
       <div class="sajupae" aria-hidden="true">
         <div class="pillars">
-          <div class="pillar">
-            <div class="label">YEAR</div>
-            <div class="glyph">年</div>
-            <div class="tag">기초 정보</div>
-          </div>
-          <div class="pillar">
-            <div class="label">MONTH</div>
-            <div class="glyph">月</div>
-            <div class="tag">흐름</div>
-          </div>
-          <div class="pillar">
-            <div class="label">DAY</div>
-            <div class="glyph">日</div>
-            <div class="tag">핵심</div>
-          </div>
-          <div class="pillar">
-            <div class="label">TIME</div>
-            <div class="glyph">時</div>
-            <div class="tag">세부</div>
-          </div>
+          <div class="pillar"><div class="label">年</div><div class="glyph">甲<br>子</div><div class="tag">년주</div></div>
+          <div class="pillar"><div class="label">月</div><div class="glyph">丁<br>未</div><div class="tag">월주</div></div>
+          <div class="pillar"><div class="label">日</div><div class="glyph">庚<br>申</div><div class="tag">일주</div></div>
+          <div class="pillar"><div class="label">時</div><div class="glyph">乙<br>巳</div><div class="tag">시주</div></div>
         </div>
       </div>
     </div>
@@ -296,29 +521,14 @@
   <section class="about section-pad">
     <div class="wrap">
       <div class="kicker">WHY THIS</div>
-      <h2 class="section-title serif">랜덤 풀 문구보다<br>질문을 읽는 답변이 낫습니다</h2>
-      <p class="section-sub">지금 구조는 미리 정해둔 문장을 조합해서 보여주는 방식이라 질문 대응력이 떨어집니다.</p>
+      <h2 class="section-title serif">랜덤 풀 문구보다 질문을 읽는 답변이 낫습니다</h2>
+      <p class="section-sub">지금은 OpenRouter 무료 모델을 불러서 답변을 생성합니다. 만약 실패하면 기존 풀 방식 문구로 fallback 됩니다.</p>
       <div class="about-grid">
         <div class="about-cell"><div class="num">01</div><h3>질문 반영</h3><p>연애, 직장, 재회, 금전처럼 사용자가 실제로 묻는 내용을 중심으로 답합니다.</p></div>
-        <div class="about-cell"><div class="num">02</div><h3>톤 통일</h3><p>사주 상담처럼 보이도록 말투와 구조를 고정할 수 있습니다.</p></div>
-        <div class="about-cell"><div class="num">03</div><h3>fallback 가능</h3><p>API가 안 되면 기존 풀 문구를 대신 띄우는 안전장치도 넣을 수 있습니다.</p></div>
+        <div class="about-cell"><div class="num">02</div><h3>AI 답변</h3><p>OpenRouter의 무료 모델을 호출해서 답변을 생성합니다.</p></div>
+        <div class="about-cell"><div class="num">03</div><h3>fallback 가능</h3><p>API가 안 되면 기존 풀 문구가 대신 출력됩니다.</p></div>
         <div class="about-cell"><div class="num">04</div><h3>HTML 1개로 운영</h3><p>GitHub Pages에서는 단일 HTML 파일로 먼저 테스트하는 게 가장 쉽습니다.</p></div>
       </div>
-    </div>
-  </section>
-
-  <section class="process section-pad" id="process">
-    <div class="wrap">
-      <div class="kicker">HOW IT WORKS</div>
-      <h2 class="section-title serif">지금은 단순하지만<br>방향은 충분히 바꿀 수 있습니다</h2>
-      <p class="section-sub">현재 코드는 폼 제출 → 로딩 → 결과 출력 구조입니다. AI로 바꾸려면 결과 생성 부분만 교체하면 됩니다.</p>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><h4>폼 입력</h4><p>이름, 생년월일, 출생시간, 질문을 받습니다.</p></div>
-        <div class="step"><div class="step-num">2</div><h4>AI 요청</h4><p>질문과 정보를 프롬프트로 묶어서 외부 AI에 보냅니다.</p></div>
-        <div class="step"><div class="step-num">3</div><h4>답변 생성</h4><p>AI가 상담형 문장으로 답변을 만듭니다.</p></div>
-        <div class="step"><div class="step-num">4</div><h4>화면 표시</h4><p>생성된 텍스트를 결과 영역에 넣어 보여줍니다.</p></div>
-      </div>
-      <div class="free-note"><span class="badge">TIP</span> GitHub Pages만 쓰면 API 키를 숨길 수 없어서, 진짜 운영은 서버 프록시가 더 안전합니다.</div>
     </div>
   </section>
 
@@ -326,16 +536,16 @@
     <div class="wrap">
       <div class="kicker">FREE REQUEST</div>
       <h2 class="section-title serif">무료상담 폼</h2>
-      <p class="section-sub">아래 코드는 바로 쓸 수 있는 완성본입니다. API 키가 없으면 자동으로 기존 풀 문구로 돌아갑니다.</p>
+      <p class="section-sub">API 키가 있으면 AI 답변이 뜨고, 없거나 실패하면 fallback 문구가 뜹니다.</p>
 
       <div class="apply-grid">
         <div class="apply-side">
           <h3 class="serif">사용 포인트</h3>
-          <p>이 페이지는 GitHub Pages에 그대로 올릴 수 있는 정적 HTML입니다.</p>
+          <p>GitHub Pages에서 바로 테스트할 수 있습니다. 다만 키를 프론트에 넣는 방식은 공개 저장소에서 노출될 수 있다는 점을 기억해 주세요.</p>
           <div class="apply-points">
-            <div class="apply-point"><span class="mark">•</span><span>OpenRouter API 키가 있으면 AI 답변을 사용합니다.</span></div>
-            <div class="apply-point"><span class="mark">•</span><span>키가 없으면 풀 방식 문구가 대신 출력됩니다.</span></div>
-            <div class="apply-point"><span class="mark">•</span><span>나중에 서버가 생기면 API 키를 서버로 옮기면 됩니다.</span></div>
+            <div class="apply-point"><span class="mark">•</span><span>OpenRouter 키가 있으면 AI 답변을 사용합니다.</span></div>
+            <div class="apply-point"><span class="mark">•</span><span>키가 없으면 자동으로 랜덤 풀 문구가 대신 나옵니다.</span></div>
+            <div class="apply-point"><span class="mark">•</span><span>정식 운영은 서버 프록시가 더 안전합니다.</span></div>
           </div>
         </div>
 
@@ -395,12 +605,12 @@
             </div>
 
             <button type="submit" class="submit-btn">무료상담 받기</button>
-            <p class="submit-note">API 키가 없으면 이 화면은 자동으로 fallback 문구를 보여줍니다.</p>
+            <p class="submit-note">AI가 실패하면 fallback 문구가 대신 출력됩니다.</p>
           </form>
 
           <div class="ai-loading" id="aiLoading">
-            <div class="serif" style="font-size:40px;color:var(--jujube);margin-bottom:18px;">사</div>
-            <div style="font-size:15px;color:var(--ink-soft);font-weight:500;">AI가 답변을 생성 중입니다...</div>
+            <div class="loading-text">AI가 답변을 생성 중입니다...</div>
+            <div class="loading-sub">조금만 기다려 주세요.</div>
           </div>
 
           <div class="ai-result" id="aiResult">
@@ -410,7 +620,7 @@
             </div>
             <div class="ai-result-pillars" id="resultPillars"></div>
             <div class="ai-result-body" id="resultBody"></div>
-            <div class="ai-result-foot">실제 운영에서는 이 답변을 서버 API로 생성하는 방식이 가장 안전합니다. GitHub Pages만 쓰는 경우 API 키를 숨길 수 없다는 점은 꼭 기억해 주세요.</div>
+            <div class="ai-result-foot">GitHub Pages만 쓰는 경우 API 키를 숨길 수 없습니다. 공개 운영이면 서버 프록시를 권장합니다.</div>
           </div>
         </div>
       </div>
@@ -423,50 +633,24 @@
         <div class="brand serif">사주<span class="dot">.</span></div>
         <div style="font-size:13px;color:var(--ink-soft)">무료상담 데모</div>
       </div>
-      <div class="fine">GitHub Pages에서는 정적 HTML만 안전하게 운영할 수 있습니다. AI 키를 직접 넣는 방식은 노출 위험이 큽니다.</div>
+      <div class="fine">OpenRouter는 Bearer 토큰으로 인증하며, 무료 모델 변형을 사용할 수 있습니다 [web:40][web:14][web:44].</div>
     </div>
   </footer>
 
   <script>
-    const OPENROUTER_API_KEY = "";
+    const OPENROUTER_API_KEY = "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";
     const OPENROUTER_MODEL = "openrouter/free";
 
     const POOL = [
-      {
-        trait: "사람을 편하게 만드는 편이라 첫인상은 부드럽고 친근하게 느껴지기 쉽습니다.",
-        job: "일은 속도보다 완성도를 챙길 때 성과가 더 잘 나는 흐름입니다.",
-        love: "연애는 감정만 보기보다 신뢰와 타이밍이 맞을 때 오래 갑니다.",
-        money: "금전은 들어오는 흐름보다 나가는 흐름을 먼저 점검하는 게 유리합니다.",
-        caution: "무리하게 결론을 빨리 내리면 후회가 남을 수 있습니다."
-      },
-      {
-        trait: "겉으로는 차분해도 안쪽으로는 생각이 많은 타입으로 보입니다.",
-        job: "일은 혼자 정리한 뒤 움직일 때 실수가 줄어듭니다.",
-        love: "관계에서는 밀당보다 솔직한 말 한마디가 더 크게 작용합니다.",
-        money: "돈은 한 번에 크게 보기보다 작은 지출을 관리하는 것이 중요합니다.",
-        caution: "감정이 쌓이면 말보다 행동으로 먼저 드러날 수 있습니다."
-      },
-      {
-        trait: "기준이 분명해서 좋고 싫음이 비교적 선명하게 나타나는 편입니다.",
-        job: "직장운은 역할이 분명할수록 안정감이 생기는 흐름입니다.",
-        love: "연애에서는 상대를 바꾸려 하기보다 이해의 폭을 넓히는 쪽이 낫습니다.",
-        money: "금전운은 계획성은 좋지만, 갑작스런 지출만 조심하면 무난합니다.",
-        caution: "고집이 지나치면 좋은 기회도 스스로 밀어낼 수 있습니다."
-      },
-      {
-        trait: "주변 분위기를 잘 읽고 상황에 맞게 대응하는 감각이 있습니다.",
-        job: "일은 한 번에 밀기보다 우선순위를 나눠 처리하면 효율이 올라갑니다.",
-        love: "관계는 서두르지 않을수록 오히려 신뢰가 쌓입니다.",
-        money: "돈은 기회가 와도 바로 쓰기보다 검토 후 움직이는 편이 좋습니다.",
-        caution: "남의 기대를 다 맞추려 하면 스스로 지칠 수 있습니다."
-      }
+      { trait:"사람을 편하게 만드는 편이라 첫인상은 부드럽고 친근하게 느껴지기 쉽습니다.", job:"일은 속도보다 완성도를 챙길 때 성과가 더 잘 나는 흐름입니다.", love:"연애는 감정만 보기보다 신뢰와 타이밍이 맞을 때 오래 갑니다.", money:"금전은 들어오는 흐름보다 나가는 흐름을 먼저 점검하는 게 유리합니다.", caution:"무리하게 결론을 빨리 내리면 후회가 남을 수 있습니다." },
+      { trait:"겉으로는 차분해도 안쪽으로는 생각이 많은 타입으로 보입니다.", job:"일은 혼자 정리한 뒤 움직일 때 실수가 줄어듭니다.", love:"관계에서는 밀당보다 솔직한 말 한마디가 더 크게 작용합니다.", money:"돈은 한 번에 크게 보기보다 작은 지출을 관리하는 것이 중요합니다.", caution:"감정이 쌓이면 말보다 행동으로 먼저 드러날 수 있습니다." },
+      { trait:"기준이 분명해서 좋고 싫음이 비교적 선명하게 나타나는 편입니다.", job:"직장운은 역할이 분명할수록 안정감이 생기는 흐름입니다.", love:"연애에서는 상대를 바꾸려 하기보다 이해의 폭을 넓히는 쪽이 낫습니다.", money:"금전운은 계획성은 좋지만, 갑작스런 지출만 조심하면 무난합니다.", caution:"고집이 지나치면 좋은 기회도 스스로 밀어낼 수 있습니다." },
+      { trait:"주변 분위기를 잘 읽고 상황에 맞게 대응하는 감각이 있습니다.", job:"일은 한 번에 밀기보다 우선순위를 나눠 처리하면 효율이 올라갑니다.", love:"관계는 서두르지 않을수록 오히려 신뢰가 쌓입니다.", money:"돈은 기회가 와도 바로 쓰기보다 검토 후 움직이는 편이 좋습니다.", caution:"남의 기대를 다 맞추려 하면 스스로 지칠 수 있습니다." }
     ];
 
-    function pick(arr, seed){
-      return arr[seed % arr.length];
-    }
+    function pick(arr, seed){ return arr[seed % arr.length]; }
 
-    function buildFallbackResult(name, year, month, day, birthtime, question){
+    function buildFallbackResult(name, year, month, day, birthtime, question) {
       const seed = (String(name).length + Number(year) + Number(month) + Number(day) + String(question || "").length) || 1;
       const pool = pick(POOL, seed);
       const pillarsHTML = `
@@ -486,12 +670,11 @@
       return { pillarsHTML, bodyHTML };
     }
 
-    async function getAIResult(payload){
+    async function getAIResult(payload) {
       if (!OPENROUTER_API_KEY) return null;
 
       const birth = `${payload.calendar || "양력"} ${payload.year}-${String(payload.month).padStart(2,"0")}-${String(payload.day).padStart(2,"0")}`;
       const timeText = payload.timeUnknown || payload.birthtime || "미상";
-
       const prompt = `
 당신은 한국 사주 상담가입니다.
 아래 정보를 바탕으로 무료상담 답변을 자연스럽고 신뢰감 있게 작성하세요.
@@ -553,41 +736,47 @@
       };
     }
 
-    const form = document.getElementById("sajuForm");
-    const loading = document.getElementById("aiLoading");
-    const result = document.getElementById("aiResult");
-    const resultName = document.getElementById("resultName");
-    const resultPillars = document.getElementById("resultPillars");
-    const resultBody = document.getElementById("resultBody");
-
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("sajuForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
+      const form = this;
       const fd = new FormData(form);
       const payload = Object.fromEntries(fd.entries());
 
+      const year = parseInt(payload.year, 10);
+      const month = parseInt(payload.month, 10);
+      const day = parseInt(payload.day, 10);
+      const hour = payload.birthtime || payload.timeUnknown || "";
+
+      if (!year || !month || !day) {
+        alert("생년월일을 입력해주세요.");
+        return;
+      }
+
       form.style.display = "none";
-      loading.classList.add("show");
-      result.classList.remove("show");
+      const loadingEl = document.getElementById("aiLoading");
+      loadingEl.classList.add("show");
+      document.getElementById("aiResult").classList.remove("show");
 
       try {
         const ai = await getAIResult(payload);
-        const output = ai || buildFallbackResult(payload.name, payload.year, payload.month, payload.day, payload.birthtime || payload.timeUnknown, payload.question);
+        const output = ai || buildFallbackResult(payload.name, year, month, day, hour, payload.question);
 
-        resultName.innerHTML = `${payload.name}<span>님의 상담</span>`;
-        resultPillars.innerHTML = output.pillarsHTML;
-        resultBody.innerHTML = output.bodyHTML;
+        document.getElementById("resultName").innerHTML = `${payload.name}<span>님의 상담</span>`;
+        document.getElementById("resultPillars").innerHTML = output.pillarsHTML;
+        document.getElementById("resultBody").innerHTML = output.bodyHTML;
 
-        loading.classList.remove("show");
-        result.classList.add("show");
+        loadingEl.classList.remove("show");
+        document.getElementById("aiResult").classList.add("show");
       } catch (err) {
-        const output = buildFallbackResult(payload.name, payload.year, payload.month, payload.day, payload.birthtime || payload.timeUnknown, payload.question);
-        resultName.innerHTML = `${payload.name}<span>님의 상담</span>`;
-        resultPillars.innerHTML = output.pillarsHTML;
-        resultBody.innerHTML = output.bodyHTML;
+        const output = buildFallbackResult(payload.name, year, month, day, hour, payload.question);
 
-        loading.classList.remove("show");
-        result.classList.add("show");
+        document.getElementById("resultName").innerHTML = `${payload.name}<span>님의 상담</span>`;
+        document.getElementById("resultPillars").innerHTML = output.pillarsHTML;
+        document.getElementById("resultBody").innerHTML = output.bodyHTML;
+
+        loadingEl.classList.remove("show");
+        document.getElementById("aiResult").classList.add("show");
       }
     });
   </script>
