@@ -1569,17 +1569,8 @@
 </footer>
 
 <script>
- <script>
   const OPENROUTER_API_KEY = "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";
   const OPENROUTER_MODEL = "openrouter/free";
-
-  function pillarGlyph(p) {
-    return CHEONGANHANJA[p.gan] + "<br>" + JIJIHANJA[p.ji];
-  }
-
-  function pillarReading(p) {
-    return CHEONGAN[p.gan] + JIJI[p.ji];
-  }
 
   async function getAIResult(name, gender, year, month, day, hour, question) {
     const yearP = getYearPillar(year);
@@ -1589,27 +1580,20 @@
 
     const prompt = `
 당신은 한국 사주 상담가입니다.
-아래 정보를 바탕으로 무료상담 답변을 자연스럽고 신뢰감 있게 작성하세요.
+아래 정보를 바탕으로 답변을 작성하세요.
 
-사용자 정보:
-- 이름: ${name || "미입력"}
-- 성별: ${gender || "미입력"}
-- 생년월일: ${year}년 ${month}월 ${day}일
-- 출생시간: ${hour === null ? "미상" : hour + "시"}
-- 질문: ${question || "미입력"}
+이름: ${name || "미입력"}
+성별: ${gender || "미입력"}
+생년월일: ${year}년 ${month}월 ${day}일
+출생시간: ${hour === null ? "미상" : hour + "시"}
+질문: ${question || "미입력"}
 
 작성 규칙:
-- 과장하지 말고 상담 톤으로 작성
-- 단정 대신 경향, 가능성, 조언 중심
-- 구조는 아래 순서로:
-1. 전체 흐름
-2. 성향
-3. 연애/대인관계
-4. 일/금전
-5. 주의점
-6. 한줄 조언
-- 한국어로 700자 내외
-- 너무 딱딱하지 않게, 하지만 전문적으로
+- 한국어
+- 사주 상담 톤
+- 전체 흐름, 성향, 연애/대인관계, 일/금전, 주의점, 한줄 조언 순서
+- 700자 내외
+- 과장하지 말 것
 `.trim();
 
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -1631,9 +1615,7 @@
       })
     });
 
-    if (!res.ok) {
-      throw new Error(await res.text());
-    }
+    if (!res.ok) throw new Error(await res.text());
 
     const data = await res.json();
     const content = data?.choices?.[0]?.message?.content;
@@ -1706,7 +1688,7 @@
       } catch (err) {
         loadingEl.classList.remove("show");
         form.style.display = "block";
-        alert("AI 호출에 실패했습니다. 키 또는 모델명을 확인해주세요.");
+        alert("AI 호출에 실패했습니다.");
         console.error(err);
       }
     } else {
