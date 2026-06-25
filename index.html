@@ -1727,13 +1727,7 @@
   var GAN_TO_OHANG = [0,0,1,1,2,2,3,3,4,4];
   var OHANG_NAME = ['목(木)','화(火)','토(土)','금(金)','수(水)'];
 
-  function getYearPillar(year) {
-    // 연주 60갑자: 1984년=갑자년 기준으로 보정
-    var idx = ((year - 1984) % 60 + 60) % 60;
-    var gan = idx % 10;
-    var ji = idx % 12;
-    return { gan: gan, ji: ji };
-  }
+
 
 function toJDN(y, m, d) {
   var a = Math.floor((14 - m) / 12);
@@ -1743,37 +1737,8 @@ function toJDN(y, m, d) {
          Math.floor(y2 / 4) - Math.floor(y2 / 100) +
          Math.floor(y2 / 400) - 32045;
 }
-  function getMonthPillar(year, month) {
-    // 간략 계산(데모용): 연간에 따른 월간 시작점 + 월 순서
-    // 실제로는 절기(입춘 등) 기준이라 다를 수 있음을 명시
-    var yearGan = getYearPillar(year).gan;
-    var monthGanStart = (yearGan % 5) * 2 + 2; // 단순 패턴화
-    var gan = (monthGanStart + (month - 1)) % 10;
-    var ji = (month + 1) % 12; // 인월(寅)을 1월 기준 근사로 매핑
-    return { gan: gan, ji: ji };
-  }
+ 
 
-function getDayPillar(year, month, day) {
-  var base = toJDN(1984, 2, 2);
-  var target = toJDN(year, month, day);
-
-  var diff = target - base;
-  var idx = ((diff % 60) + 60) % 60;
-
-  return {
-    gan: idx % 10,
-    ji: idx % 12
-  };
-}
-
-  function getHourPillar(hour) {
-    if (hour === null || hour === undefined || isNaN(hour)) return null;
-    // 자시(23~01)부터 2시간 단위로 12지지 순환
-    var adjusted = (hour + 1) % 24;
-    var ji = Math.floor(adjusted / 2) % 12;
-    var gan = ji % 10; // 간략화
-    return { gan: gan, ji: ji };
-  }
 
   // ---------- 문장 풀 ----------
   var POOL = {
@@ -1909,6 +1874,23 @@ function getDayPillar(year, month, day) {
     }
   };
 
+async function getSajuFromAPI(year, month, day, hour) {
+  const res = await fetch("https://YOUR_API_URL", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_API_KEY"
+    },
+    body: JSON.stringify({
+      year,
+      month,
+      day,
+      hour
+    })
+  });
+
+  return await res.json();
+}
 function getHourPillar(hour, dayGan) {
   if (hour === null || hour === undefined || isNaN(hour)) return null;
 
@@ -1930,11 +1912,13 @@ function getHourPillar(hour, dayGan) {
     return CHEONGAN[p.gan] + JIJI[p.ji];
   }
 
-  function buildResultHTML(name, gender, year, month, day, hour, question) {
-    var yearP = getYearPillar(year);
-    var monthP = getMonthPillar(year, month);
-    var dayP = getDayPillar(year, month, day);
-   var hourP = getHourPillar(hour, dayP.gan);
+async function buildResultHTML(name, gender, year, month, day, hour, question) {
+var saju = await getSajuFromAPI(year, month, day, hour);
+
+var yearP = saju.year;
+var monthP = saju.month;
+var dayP = saju.day;
+var hourP = saju.hour;
 
     var dayOhang = GAN_TO_OHANG[dayP.gan];
     var pool = POOL[dayOhang];
@@ -2025,7 +2009,7 @@ function getHourPillar(hour, dayGan) {
       loadingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       setTimeout(function() {
-        var result = buildResultHTML(name, gender, year, month, day, hour, question);
+var result = await buildResultHTML(name, gender, year, month, day, hour, question);
         document.getElementById('resultName').innerHTML = name + '님의 사주 <span>무료 맛보기 풀이</span>';
         document.getElementById('resultPillars').innerHTML = result.pillarsHTML;
         document.getElementById('resultBody').innerHTML = result.bodyHTML;
@@ -2065,7 +2049,7 @@ function getHourPillar(hour, dayGan) {
     btn.addEventListener('click', function() {
       var select = document.querySelector('select[name="product"]');
       if (select) { select.value = this.getAttribute('data-product'); }
-    });
+    });a
   });
 </script>
 
