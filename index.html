@@ -1735,6 +1735,14 @@
     return { gan: gan, ji: ji };
   }
 
+function toJDN(y, m, d) {
+  var a = Math.floor((14 - m) / 12);
+  var y2 = y + 4800 - a;
+  var m2 = m + 12 * a - 3;
+  return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 +
+         Math.floor(y2 / 4) - Math.floor(y2 / 100) +
+         Math.floor(y2 / 400) - 32045;
+}
   function getMonthPillar(year, month) {
     // 간략 계산(데모용): 연간에 따른 월간 시작점 + 월 순서
     // 실제로는 절기(입춘 등) 기준이라 다를 수 있음을 명시
@@ -1745,14 +1753,18 @@
     return { gan: gan, ji: ji };
   }
 
-  function getDayPillar(year, month, day) {
-    // 간략 일주 계산(데모용): 날짜를 일련번호로 변환 후 60갑자 순환
-    var d = new Date(year, month - 1, day);
-    var base = new Date(1900, 0, 31); // 1900-01-31 = 갑자일(근사 기준)
-    var diffDays = Math.floor((d - base) / 86400000);
-    var idx = ((diffDays % 60) + 60) % 60;
-    return { gan: idx % 10, ji: idx % 12 };
-  }
+function getDayPillar(year, month, day) {
+  var base = toJDN(1984, 2, 2);
+  var target = toJDN(year, month, day);
+
+  var diff = target - base;
+  var idx = ((diff % 60) + 60) % 60;
+
+  return {
+    gan: idx % 10,
+    ji: idx % 12
+  };
+}
 
   function getHourPillar(hour) {
     if (hour === null || hour === undefined || isNaN(hour)) return null;
@@ -1897,6 +1909,16 @@
     }
   };
 
+function getHourPillar(hour, dayGan) {
+  if (hour === null || hour === undefined || isNaN(hour)) return null;
+
+  var ji = Math.floor(((hour + 1) % 24) / 2) % 12;
+
+  var base = [0,2,4,6,8,0,2,4,6,8];
+  var gan = (base[dayGan] + ji) % 10;
+
+  return { gan: gan, ji: ji };
+}
   function pick(arr, seed) {
     return arr[seed % arr.length];
   }
@@ -1912,7 +1934,7 @@
     var yearP = getYearPillar(year);
     var monthP = getMonthPillar(year, month);
     var dayP = getDayPillar(year, month, day);
-    var hourP = getHourPillar(hour);
+   var hourP = getHourPillar(hour, dayP.gan);
 
     var dayOhang = GAN_TO_OHANG[dayP.gan];
     var pool = POOL[dayOhang];
