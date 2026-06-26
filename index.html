@@ -1129,8 +1129,6 @@
 
   function computeSaju(year, month, day, hour, minute, isLunar) {
     const M = window.Manseryeok;
-    if (!M) throw new Error("MANSERYEOK_NOT_LOADED");
-
     const birthInfo = {
       year: Number(year),
       month: Number(month),
@@ -1139,6 +1137,55 @@
       minute: (minute === null || minute === undefined || minute === "" || isNaN(minute)) ? 0 : Number(minute),
       isLunar: Boolean(isLunar)
     };
+
+    function pair(gan, zhi) {
+      return { gan: ((gan % 10) + 10) % 10, zhi: ((zhi % 12) + 12) % 12 };
+    }
+
+    function makeFallbackResult() {
+      const y = birthInfo.year;
+      const m = birthInfo.month;
+      const d = birthInfo.day;
+      const h = birthInfo.hour;
+      const hasHour = !(hour === null || hour === undefined || hour === "" || isNaN(hour));
+      const yearP = pair(y - 4, y - 4);
+      const monthBranch = (m + 1) % 12;
+      const tigerStemByYearStem = [2, 4, 6, 8, 0, 2, 4, 6, 8, 0];
+      const monthP = pair(tigerStemByYearStem[yearP.gan] + m - 2, monthBranch);
+      const utc = Date.UTC(y, m - 1, d);
+      const days = Math.floor(utc / 86400000);
+      const dayP = pair(days + 4, days + 2);
+      const hourBranch = Math.floor((h + 1) / 2) % 12;
+      const hourP = pair((dayP.gan % 5) * 2 + hourBranch, hourBranch);
+
+      return {
+        raw: { tenGods: null, voidBranches: null, fallback: true },
+        year: yearP,
+        month: monthP,
+        day: dayP,
+        hour: hasHour ? hourP : null,
+        yearString: CHEONGAN[yearP.gan] + JIJI[yearP.zhi],
+        monthString: CHEONGAN[monthP.gan] + JIJI[monthP.zhi],
+        dayString: CHEONGAN[dayP.gan] + JIJI[dayP.zhi],
+        hourString: hasHour ? CHEONGAN[hourP.gan] + JIJI[hourP.zhi] : "",
+        yearHanja: CHEONGAN_HANJA[yearP.gan] + JIJI_HANJA[yearP.zhi],
+        monthHanja: CHEONGAN_HANJA[monthP.gan] + JIJI_HANJA[monthP.zhi],
+        dayHanja: CHEONGAN_HANJA[dayP.gan] + JIJI_HANJA[dayP.zhi],
+        hourHanja: hasHour ? CHEONGAN_HANJA[hourP.gan] + JIJI_HANJA[hourP.zhi] : "",
+        toString() {
+          return [
+            `${this.yearString}연주`,
+            `${this.monthString}월주`,
+            `${this.dayString}일주`,
+            this.hourString ? `${this.hourString}시주` : null
+          ].filter(Boolean).join(", ");
+        }
+      };
+    }
+
+    if (!M || typeof M.calculateFourPillars !== "function") {
+      return makeFallbackResult();
+    }
 
     const result = M.calculateFourPillars(birthInfo);
 
@@ -1251,7 +1298,7 @@
       "- 성별: " + (gender || "미입력"),
       "- 생년월일: " + year + "년 " + month + "월 " + day + "일",
       "- 출생시간: " + hourText,
-      "- 산출된 사주: " + pillarsText + " (manseryeok 라이브러리로 절기 기준 정확히 계산됨)" + extraInfo,
+      "- 산출된 사주: " + pillarsText + (saju.raw && saju.raw.fallback ? " (간이 계산 기준, 정밀 풀이에서는 상담가가 재확인)" : " (manseryeok 라이브러리 기준)") + extraInfo,
       "- 질문: " + (question || "미입력"),
       "",
       "작성 규칙:",
@@ -1265,9 +1312,10 @@
   }
 
   async function callAI(prompt) {
-if (!SAJU_CONFIG.apiKey) {
-  console.warn("API key missing");
-}
+    if (!SAJU_CONFIG.apiKey) {
+      const e = new Error("NO_API_KEY");
+      e.code = "NO_API_KEY";
+      throw e;
     }
 
     const headers = { "Content-Type": "application/json" };
