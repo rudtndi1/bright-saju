@@ -1265,10 +1265,9 @@
   }
 
   async function callAI(prompt) {
-    if (!SAJU_CONFIG.apiKey && SAJU_CONFIG.endpoint.indexOf("openrouter.ai") !== -1) {
-      const e = new Error("NO_API_KEY");
-      e.code = "NO_API_KEY";
-      throw e;
+if (!SAJU_CONFIG.apiKey) {
+  console.warn("API key missing");
+}
     }
 
     const headers = { "Content-Type": "application/json" };
