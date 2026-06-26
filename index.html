@@ -1087,7 +1087,15 @@
     <div class="fine">이 페이지는 준비 중인 서비스의 소개 페이지입니다. 신청 내용은 상담 목적 외에는 사용되지 않습니다.<br>사주 계산: <a href="https://github.com/yhj1024/manseryeok" target="_blank" rel="noopener">manseryeok</a> (MIT License) © Yoohyojun</div>
   </div>
 </footer>
+<script>
+(function () {
+  "use strict";
 
+  const SAJU_CONFIG = {
+    endpoint: "https://openrouter.ai/api/v1/chat/completions",
+    apiKey: "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",
+    model: "openrouter/auto"
+  };
 <script>
 /*
  * manseryeok (https://github.com/yhj1024/manseryeok)
