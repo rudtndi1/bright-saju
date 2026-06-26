@@ -552,6 +552,46 @@
   .ai-result-cta a { flex: 1; text-align: center; padding: 14px 0; border-radius: 100px; font-weight: 700; font-size: 14px; min-width: 160px; }
   .ai-result-cta .primary { background: var(--jujube); color: var(--paper-card); }
   .ai-result-cta .ghost { border: 1.5px solid var(--ink); color: var(--ink); }
+  .ai-insight { margin: 22px 0 24px; }
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .insight-card { background: linear-gradient(135deg, rgba(250,246,236,0.96), rgba(232,224,244,0.74)); border: 1px solid rgba(43,37,33,0.12); border-radius: 14px; padding: 20px; box-shadow: 0 16px 34px -24px rgba(43,37,33,0.34); }
+  .insight-title { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+  .insight-icon { width: 30px; height: 30px; border-radius: 9px; background: rgba(140,59,46,0.12); display: inline-flex; align-items: center; justify-content: center; color: var(--jujube); font-size: 15px; }
+  .core-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .core-box { min-height: 100px; border: 1px solid var(--line); border-radius: 12px; background: rgba(243,237,226,0.58); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 12px 8px; }
+  .core-label { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .core-main { font-size: 20px; font-weight: 800; color: var(--ink); }
+  .core-sub { margin-top: 7px; font-family: 'Noto Serif KR', serif; color: var(--ink-soft); font-size: 13px; }
+  .insight-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+  .balance-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .score-pill { font-size: 11px; color: var(--ink-soft); background: rgba(255,255,255,0.56); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; }
+  .score-pill b { color: #1f9b56; margin-left: 5px; }
+  .balance-body { display: grid; grid-template-columns: 112px 1fr; gap: 16px; align-items: center; }
+  .donut { width: 112px; height: 112px; border-radius: 50%; background: conic-gradient(#25b879 0deg, #25b879 360deg); position: relative; }
+  .donut::after { content: ''; position: absolute; inset: 26px; background: var(--paper-card); border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line); }
+  .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; font-size: 10px; color: var(--ink-soft); }
+  .donut-center b { display: block; font-size: 17px; color: var(--ink); line-height: 1.1; }
+  .balance-list { display: flex; flex-direction: column; gap: 7px; }
+  .balance-row { display: grid; grid-template-columns: 48px 1fr 38px; gap: 8px; align-items: center; font-size: 12px; color: var(--ink-soft); }
+  .balance-name { font-weight: 800; }
+  .balance-bar { height: 7px; background: rgba(43,37,33,0.08); border-radius: 100px; overflow: hidden; }
+  .balance-fill { height: 100%; border-radius: inherit; }
+  .balance-percent { text-align: right; font-variant-numeric: tabular-nums; }
+  .element-wood { color: #1f9b56; } .bg-wood { background: #25b879; }
+  .element-fire { color: #d34235; } .bg-fire { background: #e25547; }
+  .element-earth { color: #b98122; } .bg-earth { background: #e0a93a; }
+  .element-metal { color: #7d8491; } .bg-metal { background: #aeb4be; }
+  .element-water { color: #2f74d0; } .bg-water { background: #3c83e6; }
+  .special-card { margin-top: 14px; background: rgba(232,224,244,0.56); border: 1px solid rgba(43,37,33,0.12); border-radius: 14px; overflow: hidden; }
+  .special-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .special-head h4 { font-size: 15px; font-weight: 800; }
+  .special-legend { display: flex; gap: 12px; font-size: 11px; color: var(--ink-soft); }
+  .special-legend span::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+  .special-legend .good::before { background: #18a66a; } .special-legend .note::before { background: #e2a529; }
+  .special-tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; }
+  .special-tag { border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700; border: 1px solid transparent; }
+  .special-tag.good { color: #11845b; background: rgba(37,184,121,0.13); border-color: rgba(37,184,121,0.28); }
+  .special-tag.note { color: #ad6d14; background: rgba(224,169,58,0.16); border-color: rgba(224,169,58,0.32); }
 
   /* ---------- Footer ---------- */
   footer { padding: 50px 0; border-top: 1px solid var(--line); background: var(--paper); }
@@ -592,6 +632,9 @@
     .channel-card { padding: 20px; }
     .section-title { font-size: 27px; }
     form { padding: 28px; }
+    .insight-grid { grid-template-columns: 1fr; }
+    .balance-body { grid-template-columns: 1fr; justify-items: center; }
+    .balance-list { width: 100%; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1060,6 +1103,7 @@
             <div class="demo-badge">AI 데모 · 맛보기</div>
           </div>
           <div class="ai-result-pillars" id="resultPillars"></div>
+          <div class="ai-insight" id="resultInsight"></div>
           <div class="ai-result-body" id="resultBody"></div>
           <div class="ai-result-foot">
             이 풀이는 무료 맛보기를 위해 AI가 간단히 생성한 데모입니다. 절기와 정확한 출생 시간을 반영한 정식 사주 원국, 그리고 상담가의 직접 검토는 정밀풀이에서 제공됩니다.
@@ -1274,6 +1318,69 @@
 
   function pillarReadingKR(p) { return p ? CHEONGAN[p.gan] + JIJI[p.zhi] : "모름"; }
   function pillarHanja(p) { return p ? CHEONGAN_HANJA[p.gan] + JIJI_HANJA[p.zhi] : "?"; }
+  const ELEMENTS = {
+    wood: { label: "목", hanja: "木", color: "#25b879", copy: "새로운 것을 키우고 확장하려는 힘이 강한 타입입니다." },
+    fire: { label: "화", hanja: "火", color: "#e25547", copy: "따뜻하게 드러내고 반응하는 에너지가 중심에 있습니다." },
+    earth: { label: "토", hanja: "土", color: "#e0a93a", copy: "현실을 붙잡고 안정시키는 힘이 중요한 축입니다." },
+    metal: { label: "금", hanja: "金", color: "#aeb4be", copy: "기준을 세우고 다듬어내는 감각이 강하게 작동합니다." },
+    water: { label: "수", hanja: "水", color: "#3c83e6", copy: "깊이 생각하고 흐름을 읽는 힘이 중심에 있습니다." }
+  };
+  const GAN_ELEMENT = ["wood", "wood", "fire", "fire", "earth", "earth", "metal", "metal", "water", "water"];
+  const ZHI_ELEMENT = ["water", "earth", "wood", "wood", "earth", "fire", "fire", "earth", "metal", "metal", "earth", "water"];
+
+  function elementOfGan(gan) { return ELEMENTS[GAN_ELEMENT[gan]]; }
+  function elementKeyOfGan(gan) { return GAN_ELEMENT[gan]; }
+  function elementKeyOfZhi(zhi) { return ZHI_ELEMENT[zhi]; }
+
+  function buildBalance(pillars) {
+    const keys = ["wood", "fire", "earth", "metal", "water"];
+    const counts = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
+    pillars.filter(Boolean).forEach(function (p) {
+      counts[elementKeyOfGan(p.gan)] += 1;
+      counts[elementKeyOfZhi(p.zhi)] += 1;
+    });
+    const total = keys.reduce(function (sum, key) { return sum + counts[key]; }, 0) || 1;
+    const rows = keys.map(function (key) {
+      const percent = Math.round((counts[key] / total) * 100);
+      return { key: key, percent: percent, meta: ELEMENTS[key] };
+    });
+    const ideal = 100 / keys.length;
+    const spread = rows.reduce(function (sum, row) { return sum + Math.abs(row.percent - ideal); }, 0);
+    return { rows: rows, score: Math.max(45, Math.round(100 - spread * 1.2)) };
+  }
+
+  function donutGradient(rows) {
+    let start = 0;
+    return "conic-gradient(" + rows.map(function (row) {
+      const end = start + row.percent * 3.6;
+      const part = row.meta.color + " " + start + "deg " + end + "deg";
+      start = end;
+      return part;
+    }).join(", ") + ")";
+  }
+
+  function buildSpecialTags(saju) {
+    const branches = [saju.year, saju.month, saju.day, saju.hour].filter(Boolean).map(function (p) { return p.zhi; });
+    const tags = [];
+    if (branches.includes(2) || branches.includes(6) || branches.includes(10)) tags.push({ label: "표현력", type: "good" });
+    if (branches.includes(8) || branches.includes(0) || branches.includes(4)) tags.push({ label: "추진력", type: "good" });
+    if (branches.includes(3) || branches.includes(7) || branches.includes(11)) tags.push({ label: "관계감각", type: "good" });
+    if (branches.includes(1) || branches.includes(5) || branches.includes(9)) tags.push({ label: "집중력", type: "good" });
+    const balance = buildBalance([saju.year, saju.month, saju.day, saju.hour]);
+    balance.rows.filter(function (row) { return row.percent >= 35; }).forEach(function (row) { tags.push({ label: row.meta.label + " 기운 강함", type: "note" }); });
+    balance.rows.filter(function (row) { return row.percent === 0; }).forEach(function (row) { tags.push({ label: row.meta.label + " 보완", type: "note" }); });
+    return tags.slice(0, 12);
+  }
+
+  function renderInsight(saju) {
+    const target = document.getElementById("resultInsight");
+    if (!target || !saju || !saju.day) return;
+    const dayElement = elementOfGan(saju.day.gan);
+    const balance = buildBalance([saju.year, saju.month, saju.day, saju.hour]);
+    const dominant = balance.rows.slice().sort(function (a, b) { return b.percent - a.percent; })[0];
+    const tags = buildSpecialTags(saju);
+    target.innerHTML = '<div class="insight-grid"><div class="insight-card"><div class="insight-title"><span class="insight-icon">✦</span>핵심 분석</div><div class="core-boxes"><div class="core-box"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-box"><div class="core-label">Key Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div></div><div class="insight-card"><div class="balance-head"><div class="insight-title" style="margin-bottom:0"><span class="insight-icon">◔</span>오행 밸런스</div><div class="score-pill">Score <b>' + balance.score + '</b></div></div><div class="balance-body"><div class="donut" style="background:' + donutGradient(balance.rows) + '"><div class="donut-center">Total<b>100%</b></div></div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div>';
+  }
 
   function buildPrompt(name, gender, year, month, day, hour, question, saju) {
     const hourText = (hour === null || hour === undefined) ? "미상" : hour + "시";
@@ -1514,6 +1621,7 @@
         return '<div class="rp"><div class="rp-label">' + pd.label + '</div><div class="rp-glyph">' +
           pillarReadingKR(pd.p) + "<br>" + pillarHanja(pd.p) + "</div></div>";
       }).join("");
+      renderInsight(saju);
       document.getElementById("resultBody").innerHTML = escapeHTML(content).replace(/\n/g, "<br>");
 
       showOnly(aiResult);
