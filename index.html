@@ -570,6 +570,11 @@
   .core-main { font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 800; color: var(--ink); }
   .core-sub { margin-top: 6px; font-family: 'Noto Serif KR', serif; color: var(--jujube); font-size: 14px; }
   .insight-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.75; }
+  .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .support-note { border: 1px solid rgba(43,37,33,0.13); border-radius: 8px; background: rgba(250,246,236,0.62); padding: 13px 14px; }
+  .support-label { font-size: 11px; font-weight: 800; color: var(--jujube); margin-bottom: 5px; }
+  .support-title { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+  .support-copy { font-size: 12.5px; color: var(--ink-soft); line-height: 1.65; }
   .balance-list { display: flex; flex-direction: column; gap: 11px; }
   .balance-row { display: grid; grid-template-columns: 56px 1fr 40px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-soft); }
   .balance-name { font-weight: 800; }
@@ -580,7 +585,7 @@
   .element-fire { color: #bf3f35; } .bg-fire { background: #d94d42; }
   .element-earth { color: #a9781d; } .bg-earth { background: #d39a2e; }
   .element-metal { color: #737985; } .bg-metal { background: #9da4ae; }
-  .element-water { color: #2d6ebd; } .bg-water { background: #3779d6; }
+  .element-water { color: #2b2521; } .bg-water { background: #2b2521; }
   .special-card { border-top: 1px solid var(--line); background: rgba(243,237,226,0.52); padding: 18px 22px 20px; }
   .special-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
   .special-head h4 { font-size: 14px; font-weight: 800; }
@@ -636,6 +641,7 @@
     .analysis-body { grid-template-columns: 1fr; }
     .analysis-core { border-right: 0; border-bottom: 1px solid var(--line); }
     .core-seal-row { flex-direction: column; }
+    .support-grid { grid-template-columns: 1fr; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1324,7 +1330,7 @@
     fire: { label: "화", hanja: "火", color: "#e25547", copy: "따뜻하게 드러내고 반응하는 에너지가 중심에 있습니다." },
     earth: { label: "토", hanja: "土", color: "#e0a93a", copy: "현실을 붙잡고 안정시키는 힘이 중요한 축입니다." },
     metal: { label: "금", hanja: "金", color: "#aeb4be", copy: "기준을 세우고 다듬어내는 감각이 강하게 작동합니다." },
-    water: { label: "수", hanja: "水", color: "#3c83e6", copy: "깊이 생각하고 흐름을 읽는 힘이 중심에 있습니다." }
+    water: { label: "수", hanja: "水", color: "#2b2521", copy: "깊이 생각하고 흐름을 읽는 힘이 중심에 있습니다." }
   };
   const GAN_ELEMENT = ["wood", "wood", "fire", "fire", "earth", "earth", "metal", "metal", "water", "water"];
   const ZHI_ELEMENT = ["water", "earth", "wood", "wood", "earth", "fire", "fire", "earth", "metal", "metal", "earth", "water"];
@@ -1351,6 +1357,24 @@
   }
 
 
+  function buildSupportNotes(saju, balance) {
+    const sortedLow = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; });
+    const yongsin = sortedLow[0];
+    const monthElement = ELEMENTS[elementKeyOfZhi(saju.month.zhi)];
+    const monthBranch = JIJI[saju.month.zhi];
+    const gyeokCopy = monthElement.label + "의 환경이 강하게 깔린 " + monthBranch + "월생 흐름입니다.";
+    return {
+      yongsin: {
+        title: yongsin.meta.label + "(" + yongsin.meta.hanja + ")",
+        copy: "현재 원국에서 가장 보완하면 좋은 기운입니다. 선택과 루틴을 잡을 때 이 방향을 의식하면 균형을 만들기 쉽습니다."
+      },
+      gyeok: {
+        title: monthElement.label + "(" + monthElement.hanja + ") 환경",
+        copy: gyeokCopy + " 일의 방식과 대인관계에서 이 분위기가 배경처럼 작용합니다."
+      }
+    };
+  }
+
   function buildSpecialTags(saju) {
     const branches = [saju.year, saju.month, saju.day, saju.hour].filter(Boolean).map(function (p) { return p.zhi; });
     const tags = [];
@@ -1371,7 +1395,8 @@
     const balance = buildBalance([saju.year, saju.month, saju.day, saju.hour]);
     const dominant = balance.rows.slice().sort(function (a, b) { return b.percent - a.percent; })[0];
     const tags = buildSpecialTags(saju);
-    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
+    const support = buildSupportNotes(saju, balance);
+    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div><div class="support-grid"><div class="support-note"><div class="support-label">용신 · 당신의 치트키</div><div class="support-title">' + support.yongsin.title + '</div><div class="support-copy">' + support.yongsin.copy + '</div></div><div class="support-note"><div class="support-label">격 · 환경</div><div class="support-title">' + support.gyeok.title + '</div><div class="support-copy">' + support.gyeok.copy + '</div></div></div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
   }
 
   function buildPrompt(name, gender, year, month, day, hour, question, saju) {
