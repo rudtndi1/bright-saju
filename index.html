@@ -543,6 +543,30 @@
     background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
     padding: 26px 24px; font-size: 14.5px; line-height: 1.85; color: var(--ink); white-space: pre-line;
   }
+  .reading-visual { margin-top: 22px; }
+  .visual-stage { background: var(--ink); color: var(--paper); border-radius: 14px; padding: 22px; overflow: hidden; position: relative; }
+  .visual-stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 18% 18%, rgba(176,140,63,0.18), transparent 34%), radial-gradient(circle at 88% 78%, rgba(140,59,46,0.22), transparent 38%); pointer-events: none; }
+  .visual-head { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+  .visual-title { font-size: 16px; font-weight: 800; }
+  .visual-sub { font-size: 12px; color: rgba(243,237,226,0.62); margin-top: 3px; }
+  .visual-pulse { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.55); display: grid; place-items: center; color: var(--gold); font-family: 'Noto Serif KR', serif; animation: visualPulse 2.4s ease-in-out infinite; flex-shrink: 0; }
+  @keyframes visualPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(176,140,63,0.24); } 50% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(176,140,63,0); } }
+  .visual-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .visual-card { min-height: 126px; border: 1px solid rgba(243,237,226,0.14); border-radius: 10px; background: rgba(250,246,236,0.07); padding: 14px; transform: translateY(12px); opacity: 0; animation: visualRise 0.7s ease forwards; }
+  .visual-card:nth-child(1) { animation-delay: 0.04s; }
+  .visual-card:nth-child(2) { animation-delay: 0.12s; }
+  .visual-card:nth-child(3) { animation-delay: 0.2s; }
+  .visual-card:nth-child(4) { animation-delay: 0.28s; }
+  .visual-card:nth-child(5) { animation-delay: 0.36s; }
+  .visual-card:nth-child(6) { animation-delay: 0.44s; }
+  @keyframes visualRise { to { transform: translateY(0); opacity: 1; } }
+  .visual-icon { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: rgba(176,140,63,0.16); color: var(--gold); font-family: 'Noto Serif KR', serif; font-weight: 800; margin-bottom: 10px; }
+  .visual-label { font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+  .visual-line { height: 7px; background: rgba(243,237,226,0.12); border-radius: 100px; overflow: hidden; margin-bottom: 10px; }
+  .visual-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold), var(--jujube-soft)); transform-origin: left; animation: visualFill 1.2s ease forwards; transform: scaleX(0); }
+  @keyframes visualFill { to { transform: scaleX(1); } }
+  .visual-copy { font-size: 12.5px; line-height: 1.55; color: rgba(243,237,226,0.72); }
+  .visual-ribbon { position: relative; z-index: 1; margin-top: 12px; padding: 12px 14px; border-left: 3px solid var(--gold); background: rgba(176,140,63,0.1); border-radius: 8px; font-size: 13px; color: rgba(243,237,226,0.82); line-height: 1.6; }
   .ai-result-foot {
     margin-top: 22px; padding: 16px 18px; background: rgba(176,140,63,0.1);
     border: 1px solid rgba(176,140,63,0.3); border-radius: 10px;
@@ -575,6 +599,12 @@
   .support-label { font-size: 11px; font-weight: 800; color: var(--jujube); margin-bottom: 5px; }
   .support-title { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
   .support-copy { font-size: 12.5px; color: var(--ink-soft); line-height: 1.65; }
+  .plain-card { border-top: 1px solid var(--line); background: rgba(250,246,236,0.7); padding: 20px 22px 22px; }
+  .plain-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
+  .plain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .plain-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(243,237,226,0.62); padding: 13px 14px; }
+  .plain-item b { display: block; font-size: 13px; color: var(--jujube); margin-bottom: 5px; }
+  .plain-item span { display: block; font-size: 12.5px; line-height: 1.65; color: var(--ink-soft); }
   .balance-list { display: flex; flex-direction: column; gap: 11px; }
   .balance-row { display: grid; grid-template-columns: 56px 1fr 40px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-soft); }
   .balance-name { font-weight: 800; }
@@ -642,6 +672,8 @@
     .analysis-core { border-right: 0; border-bottom: 1px solid var(--line); }
     .core-seal-row { flex-direction: column; }
     .support-grid { grid-template-columns: 1fr; }
+    .plain-grid { grid-template-columns: 1fr; }
+    .visual-grid { grid-template-columns: 1fr; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1112,6 +1144,7 @@
           <div class="ai-result-pillars" id="resultPillars"></div>
           <div class="ai-insight" id="resultInsight"></div>
           <div class="ai-result-body" id="resultBody"></div>
+          <div class="reading-visual" id="readingVisual"></div>
           <div class="ai-result-foot">
             이 풀이는 무료 맛보기를 위해 AI가 간단히 생성한 데모입니다. 절기와 정확한 출생 시간을 반영한 정식 사주 원국, 그리고 상담가의 직접 검토는 정밀풀이에서 제공됩니다.
           </div>
@@ -1357,6 +1390,29 @@
   }
 
 
+  function buildPlainNotes(saju, balance, support, dominant, dayElement) {
+    const low = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; })[0];
+    const dayWord = CHEONGAN[saju.day.gan] + "일간";
+    return [
+      {
+        title: "일간은 나의 기본 성향",
+        copy: dayWord + "은 타고난 반응 방식입니다. 쉽게 말해 내가 생각하고 선택할 때 가장 먼저 나오는 기본 성격에 가깝습니다."
+      },
+      {
+        title: "오행 밸런스는 에너지 분포",
+        copy: dominant.meta.label + " 기운은 눈에 잘 띄고, " + low.meta.label + " 기운은 보완하면 좋은 쪽입니다. 많고 적음은 좋고 나쁨보다 균형의 힌트로 보면 됩니다."
+      },
+      {
+        title: "용신은 보완하면 좋은 방향",
+        copy: support.yongsin.title + "은 지금 원국에서 균형을 잡는 데 도움이 되는 기운입니다. 일상에서는 습관, 환경, 사람을 고를 때 참고하는 치트키처럼 보면 됩니다."
+      },
+      {
+        title: "격은 내가 놓인 환경",
+        copy: support.gyeok.title + "은 내가 어떤 분위기 속에서 힘을 쓰기 쉬운지를 보는 항목입니다. 직장, 관계, 생활 방식의 배경 성향으로 이해하면 쉽습니다."
+      }
+    ];
+  }
+
   function buildSupportNotes(saju, balance) {
     const sortedLow = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; });
     const yongsin = sortedLow[0];
@@ -1396,7 +1452,8 @@
     const dominant = balance.rows.slice().sort(function (a, b) { return b.percent - a.percent; })[0];
     const tags = buildSpecialTags(saju);
     const support = buildSupportNotes(saju, balance);
-    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div><div class="support-grid"><div class="support-note"><div class="support-label">용신 · 당신의 치트키</div><div class="support-title">' + support.yongsin.title + '</div><div class="support-copy">' + support.yongsin.copy + '</div></div><div class="support-note"><div class="support-label">격 · 환경</div><div class="support-title">' + support.gyeok.title + '</div><div class="support-copy">' + support.gyeok.copy + '</div></div></div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
+    const plainNotes = buildPlainNotes(saju, balance, support, dominant, dayElement);
+    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div><div class="support-grid"><div class="support-note"><div class="support-label">용신 · 당신의 치트키</div><div class="support-title">' + support.yongsin.title + '</div><div class="support-copy">' + support.yongsin.copy + '</div></div><div class="support-note"><div class="support-label">격 · 환경</div><div class="support-title">' + support.gyeok.title + '</div><div class="support-copy">' + support.gyeok.copy + '</div></div></div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div><div class="plain-card"><div class="plain-title">쉽게 풀어보면</div><div class="plain-grid">' + plainNotes.map(function (note) { return '<div class="plain-item"><b>' + note.title + '</b><span>' + note.copy + '</span></div>'; }).join('') + '</div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
   }
 
   function buildPrompt(name, gender, year, month, day, hour, question, saju) {
@@ -1640,6 +1697,7 @@
       }).join("");
       renderInsight(saju);
       document.getElementById("resultBody").innerHTML = escapeHTML(content).replace(/\n/g, "<br>");
+      renderReadingVisual(content, saju);
 
       showOnly(aiResult);
     } catch (err) {
@@ -1653,6 +1711,28 @@
       }
       showOnly(aiError);
     }
+  }
+
+  function renderReadingVisual(content, saju) {
+    const target = document.getElementById("readingVisual");
+    if (!target) return;
+    const dayKey = elementKeyOfGan(saju.day.gan);
+    const monthKey = elementKeyOfZhi(saju.month.zhi);
+    const dayElement = ELEMENTS[dayKey];
+    const monthElement = ELEMENTS[monthKey];
+    const sections = [
+      { icon: "流", label: "전체 흐름", value: 82, copy: monthElement.label + "의 환경 위에서 " + dayElement.label + "의 방식으로 삶을 풀어가는 흐름입니다." },
+      { icon: "心", label: "성향", value: 76, copy: dayElement.copy },
+      { icon: "緣", label: "연애 · 대인관계", value: 68, copy: "관계에서는 내가 편안해지는 거리감과 표현 방식을 알아차리는 것이 중요합니다." },
+      { icon: "業", label: "일 · 금전", value: 74, copy: monthElement.label + "의 환경을 잘 쓰면 일의 방식과 현실 감각을 정리하기 쉽습니다." },
+      { icon: "省", label: "주의점", value: 58, copy: "부족한 기운은 약점이라기보다 의식적으로 보완하면 좋아지는 방향입니다." },
+      { icon: "一", label: "한줄 조언", value: 88, copy: "타고난 결을 바꾸려 하기보다, 균형을 잡는 선택을 하나씩 늘려보세요." }
+    ];
+    target.innerHTML = '<div class="visual-stage"><div class="visual-head"><div><div class="visual-title">풀이 흐름 한눈에 보기</div><div class="visual-sub">긴 상담 내용을 생활 언어로 다시 묶었습니다</div></div><div class="visual-pulse">命</div></div><div class="visual-grid">' +
+      sections.map(function (item) {
+        return '<div class="visual-card"><div class="visual-icon">' + item.icon + '</div><div class="visual-label">' + item.label + '</div><div class="visual-line"><div class="visual-fill" style="width:' + item.value + '%"></div></div><div class="visual-copy">' + item.copy + '</div></div>';
+      }).join('') +
+      '</div><div class="visual-ribbon">이 시각화는 사주를 처음 보는 분도 흐름을 잡을 수 있도록 요약한 안내입니다. 자세한 해석은 위의 풀이 본문을 함께 보면 더 자연스럽게 이어집니다.</div></div>';
   }
 
   function escapeHTML(str) {
