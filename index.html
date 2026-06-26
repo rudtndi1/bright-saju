@@ -619,6 +619,18 @@
   .balance-bar { height: 10px; background: rgba(43,37,33,0.08); border-radius: 2px; overflow: hidden; }
   .balance-fill { height: 100%; border-radius: 0 2px 2px 0; }
   .balance-percent { text-align: right; font-variant-numeric: tabular-nums; }
+  .remedy-box { margin-top: 20px; border: 1px solid rgba(43,37,33,0.12); border-radius: 10px; background: rgba(250,246,236,0.6); padding: 15px; }
+  .remedy-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .remedy-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+  .remedy-chip { font-size: 11px; font-weight: 800; color: var(--jujube); border: 1px solid rgba(140,59,46,0.22); border-radius: 100px; padding: 4px 8px; background: rgba(140,59,46,0.06); }
+  .remedy-orbit { display: grid; grid-template-columns: 58px 1fr; gap: 12px; align-items: center; }
+  .remedy-mark { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 900; background: var(--paper); border: 1px solid var(--line); position: relative; overflow: hidden; }
+  .remedy-mark::after { content: ''; position: absolute; inset: 9px; border-radius: 50%; background: currentColor; opacity: 0.16; animation: remedyGlow 2.2s ease-in-out infinite; }
+  .remedy-mark span { position: relative; z-index: 1; }
+  @keyframes remedyGlow { 0%, 100% { transform: scale(0.8); opacity: 0.13; } 50% { transform: scale(1.18); opacity: 0.24; } }
+  .remedy-list { display: grid; gap: 6px; }
+  .remedy-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; }
+  .remedy-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
   .element-wood { color: #1f8f5f; } .bg-wood { background: #2da873; }
   .element-fire { color: #bf3f35; } .bg-fire { background: #d94d42; }
   .element-earth { color: #a9781d; } .bg-earth { background: #d39a2e; }
@@ -681,6 +693,8 @@
     .core-seal-row { flex-direction: column; }
     .support-grid { grid-template-columns: 1fr; }
     .plain-grid { grid-template-columns: 1fr; }
+    .remedy-orbit { grid-template-columns: 1fr; }
+    .remedy-mark { margin: 0 auto; }
     .life-steps { grid-template-columns: 1fr; }
     .life-map::before { display: none; }
   }
@@ -1399,6 +1413,18 @@
   }
 
 
+  function buildElementRemedy(balance) {
+    const low = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; })[0];
+    const recipes = {
+      wood: ["산책하거나 초록 식물을 가까이 두기", "새로운 계획을 작게 시작하기", "몸을 길게 펴는 스트레칭"],
+      fire: ["햇빛 쬐기와 따뜻한 대화", "좋은 감정을 바로 표현하기", "작은 성취를 눈에 보이게 체크하기"],
+      earth: ["방 정리와 식사 시간 고정", "할 일을 세 단계로 쪼개기", "불안할 때 발바닥 감각 느끼기"],
+      metal: ["물건과 생각을 덜어내기", "기준표를 만들고 선택하기", "마감 시간을 짧게 정하기"],
+      water: ["혼자 조용히 생각할 시간 확보", "물 마시기와 수면 루틴 지키기", "바로 답하지 말고 메모 후 결정하기"]
+    };
+    return { key: low.key, meta: low.meta, items: recipes[low.key] || [] };
+  }
+
   function buildPlainNotes(saju, balance, support, dominant, dayElement) {
     const low = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; })[0];
     const dayWord = CHEONGAN[saju.day.gan] + "일간";
@@ -1461,8 +1487,9 @@
     const dominant = balance.rows.slice().sort(function (a, b) { return b.percent - a.percent; })[0];
     const tags = buildSpecialTags(saju);
     const support = buildSupportNotes(saju, balance);
+    const remedy = buildElementRemedy(balance);
     const plainNotes = buildPlainNotes(saju, balance, support, dominant, dayElement);
-    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div><div class="support-grid"><div class="support-note"><div class="support-label">용신 · 당신의 치트키</div><div class="support-title">' + support.yongsin.title + '</div><div class="support-copy">' + support.yongsin.copy + '</div></div><div class="support-note"><div class="support-label">격 · 환경</div><div class="support-title">' + support.gyeok.title + '</div><div class="support-copy">' + support.gyeok.copy + '</div></div></div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div></div></div><div class="plain-card"><div class="plain-title">쉽게 풀어보면</div><div class="plain-grid">' + plainNotes.map(function (note) { return '<div class="plain-item"><b>' + note.title + '</b><span>' + note.copy + '</span></div>'; }).join('') + '</div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
+    target.innerHTML = '<div class="analysis-report"><div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div><div class="analysis-body"><div class="analysis-core"><div class="analysis-section-label">핵심 분석</div><div class="core-seal-row"><div class="core-seal"><div class="core-label">Day Master</div><div class="core-main">' + CHEONGAN[saju.day.gan] + '일간</div><div class="core-sub">' + CHEONGAN_HANJA[saju.day.gan] + '</div></div><div class="core-seal"><div class="core-label">Element</div><div class="core-main">' + dayElement.label + '</div><div class="core-sub">' + dayElement.hanja + '</div></div></div><div class="insight-copy"><b>' + dayElement.label + '</b> · ' + dayElement.copy + '<br><b>' + dominant.meta.label + '</b> · 현재 원국에서 가장 눈에 띄는 기운입니다.</div><div class="support-grid"><div class="support-note"><div class="support-label">용신 · 당신의 치트키</div><div class="support-title">' + support.yongsin.title + '</div><div class="support-copy">' + support.yongsin.copy + '</div></div><div class="support-note"><div class="support-label">격 · 환경</div><div class="support-title">' + support.gyeok.title + '</div><div class="support-copy">' + support.gyeok.copy + '</div></div></div></div><div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' + balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') + '</div><div class="remedy-box"><div class="remedy-head"><div class="remedy-title">오늘의 오행 처방</div><div class="remedy-chip">보완: ' + remedy.meta.label + '</div></div><div class="remedy-orbit"><div class="remedy-mark element-' + remedy.key + '"><span>' + remedy.meta.hanja + '</span></div><div class="remedy-list">' + remedy.items.map(function (item) { return '<div class="remedy-item"><span class="remedy-dot"></span>' + item + '</div>'; }).join('') + '</div></div></div></div></div><div class="plain-card"><div class="plain-title">쉽게 풀어보면</div><div class="plain-grid">' + plainNotes.map(function (note) { return '<div class="plain-item"><b>' + note.title + '</b><span>' + note.copy + '</span></div>'; }).join('') + '</div></div><div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' + tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') + '</div></div></div>';
   }
 
   function buildPrompt(name, gender, year, month, day, hour, question, saju) {
