@@ -1134,50 +1134,12 @@ manseryeok/dist/index.js:
 (function () {
   "use strict";
 
-  /* =========================================================
-     ⚠ API 키 설정 안내 (필독)
-     =========================================================
-     이전 버전에는 OpenRouter API 키가 코드에 그대로 노출되어
-     있었습니다. HTML/JS는 누구나 "페이지 소스 보기"로 볼 수 있는
-     코드라서, 키를 여기에 적어두면 누구든 그 키를 복사해서
-     무제한으로 가져다 쓸 수 있고, 비용이 의도치 않게 청구되거나
-     키가 정지될 수 있습니다.
-
-     그래서 이번 버전에서는 키를 직접 코드에 넣지 않고,
-     아래 두 가지 방법 중 하나를 선택하실 수 있게 만들어 두었습니다.
-
-     [방법 A] 그래도 빠르게 테스트만 하고 싶을 때 (운영 비추천)
-       - 아래 SAJU_CONFIG.apiKey 에 키를 직접 입력하면 이전처럼 동작합니다.
-       - 단, Netlify에 이 상태로 배포하면 키가 그대로 노출되니
-         "나만 보는 테스트용"으로만 쓰시고, 실제 운영 전에는
-         반드시 방법 B로 바꿔주세요.
-
-     [방법 B] Netlify Functions로 키를 숨기기 (운영 권장)
-       1. 프로젝트 루트에 netlify/functions/saju-ai.js 파일을 만들고
-          그 안에서 OpenRouter를 호출하면서 키는 Netlify의
-          "Environment variables" 설정에만 저장합니다.
-       2. 이 페이지의 fetch 주소를 아래처럼 바꿉니다.
-          SAJU_CONFIG.endpoint = "/.netlify/functions/saju-ai";
-          SAJU_CONFIG.apiKey   = ""; // 비워둠 (서버에서만 키 사용)
-       3. 이렇게 하면 브라우저(사용자)는 절대 실제 키를 볼 수 없습니다.
-
-     지금은 키가 비어 있는 상태이므로, AI 맛보기를 실제로 호출하면
-     안내 메시지와 함께 "신청서로 접수" 흐름으로 자연스럽게 넘어갑니다.
-  ========================================================= */
   const SAJU_CONFIG = {
-    endpoint: "https://openrouter.ai/api/v1/chat/completions", // 방법 B 적용 시 "/.netlify/functions/saju-ai" 로 교체
-    apiKey: "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", // 여기에 직접 키를 넣지 마세요 (방법 B 권장). 테스트용으로만 "sk-or-v1-..." 입력 가능.
+    endpoint: "https://openrouter.ai/api/v1/chat/completions",
+    apiKey: "",
     model: "openrouter/auto"
   };
 
-  /* ---------------------------------------------------------
-     사주(육십갑자) 계산 로직
-     - manseryeok 라이브러리(https://github.com/yhj1024/manseryeok)로
-       교체되었습니다. 절기 기반 월주 계산, 음력/양력 변환,
-       분 단위 시주 계산, 십신·공망까지 정확하게 계산됩니다.
-     - 라이브러리 본체는 위쪽 <script> 태그에 번들로 삽입되어
-       window.Manseryeok 으로 노출됩니다.
-  --------------------------------------------------------- */
   const CHEONGAN_HANJA = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
   const JIJI_HANJA = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
   const CHEONGAN = ["갑","을","병","정","무","기","경","신","임","계"];
@@ -1185,22 +1147,20 @@ manseryeok/dist/index.js:
 
   function computeSaju(year, month, day, hour, minute, isLunar) {
     const M = window.Manseryeok;
-    if (!M) {
-      throw new Error("MANSERYEOK_NOT_LOADED");
-    }
+    if (!M) throw new Error("MANSERYEOK_NOT_LOADED");
+
     const birthInfo = {
-      year: year,
-      month: month,
-      day: day,
-      hour: (hour === null || hour === undefined || isNaN(hour)) ? 0 : hour,
-      minute: (minute === null || minute === undefined || isNaN(minute)) ? 0 : minute,
-      isLunar: !!isLunar
+      year: Number(year),
+      month: Number(month),
+      day: Number(day),
+      hour: (hour === null || hour === undefined || hour === "" || isNaN(hour)) ? 0 : Number(hour),
+      minute: (minute === null || minute === undefined || minute === "" || isNaN(minute)) ? 0 : Number(minute),
+      isLunar: Boolean(isLunar)
     };
+
     const result = M.calculateFourPillars(birthInfo);
 
-    // 기존 코드와의 호환을 위해 { gan, zhi } 형태의 인덱스도 함께 만들어줌
     function toIdxPair(korean) {
-      // korean: "갑자" 같은 2글자 문자열 (천간1 + 지지1)
       const stem = korean.slice(0, 1);
       const branch = korean.slice(1, 2);
       return {
@@ -1209,21 +1169,76 @@ manseryeok/dist/index.js:
       };
     }
 
+    const obj = result.toObject ? result.toObject() : {
+      year: result.yearString,
+      month: result.monthString,
+      day: result.dayString,
+      hour: result.hourString
+    };
+
     return {
-      raw: result, // manseryeok 원본 결과 (tenGods, voidBranches, luckPillars 등 전부 포함)
-      year: toIdxPair(result.toObject().year),
-      month: toIdxPair(result.toObject().month),
-      day: toIdxPair(result.toObject().day),
-      hour: (hour === null || hour === undefined || isNaN(hour)) ? null : toIdxPair(result.toObject().hour)
+      raw: result,
+      year: toIdxPair(obj.year),
+      month: toIdxPair(obj.month),
+      day: toIdxPair(obj.day),
+      hour: obj.hour ? toIdxPair(obj.hour) : null,
+      yearString: obj.year,
+      monthString: obj.month,
+      dayString: obj.day,
+      hourString: obj.hour || "",
+      yearHanja: result.yearHanja,
+      monthHanja: result.monthHanja,
+      dayHanja: result.dayHanja,
+      hourHanja: result.hourHanja,
+      yearElement: result.yearElement,
+      monthElement: result.monthElement,
+      dayElement: result.dayElement,
+      hourElement: result.hourElement,
+      yearYinYang: result.yearYinYang,
+      monthYinYang: result.monthYinYang,
+      dayYinYang: result.dayYinYang,
+      hourYinYang: result.hourYinYang,
+      tenGods: result.tenGods,
+      voidBranches: result.voidBranches,
+      luckPillars: result.luckPillars,
+      toString() {
+        return [
+          `${obj.year}연주`,
+          `${obj.month}월주`,
+          `${obj.day}일주`,
+          obj.hour ? `${obj.hour}시주` : null
+        ].filter(Boolean).join(", ");
+      },
+      toObject() {
+        return {
+          year: obj.year,
+          month: obj.month,
+          day: obj.day,
+          hour: obj.hour
+        };
+      },
+      toHanjaObject() {
+        return {
+          year: { korean: obj.year, hanja: result.yearHanja },
+          month: { korean: obj.month, hanja: result.monthHanja },
+          day: { korean: obj.day, hanja: result.dayHanja },
+          hour: { korean: obj.hour, hanja: result.hourHanja }
+        };
+      },
+      toHanjaString() {
+        return [
+          `${result.yearHanja}年柱`,
+          `${result.monthHanja}月柱`,
+          `${result.dayHanja}日柱`,
+          result.hourHanja ? `${result.hourHanja}時柱` : null
+        ].filter(Boolean).join(", ");
+      }
     };
   }
 
   function pillarReadingKR(p) { return p ? CHEONGAN[p.gan] + JIJI[p.zhi] : "모름"; }
   function pillarHanja(p) { return p ? CHEONGAN_HANJA[p.gan] + JIJI_HANJA[p.zhi] : "?"; }
 
-  /* ---------------------------------------------------------
-     AI 호출
-  --------------------------------------------------------- */
   function buildPrompt(name, gender, year, month, day, hour, question, saju) {
     const hourText = (hour === null || hour === undefined) ? "미상" : hour + "시";
     const pillarsText = [
@@ -1233,8 +1248,6 @@ manseryeok/dist/index.js:
       saju.hour ? "시주 " + pillarReadingKR(saju.hour) : "시주 미상"
     ].join(", ");
 
-    // manseryeok이 계산해준 십성/공망 정보도 함께 프롬프트에 포함시켜
-    // AI가 더 정확한 풀이를 쓸 수 있도록 함
     let extraInfo = "";
     if (saju.raw && saju.raw.tenGods) {
       const tg = saju.raw.tenGods;
@@ -1271,7 +1284,6 @@ manseryeok/dist/index.js:
 
   async function callAI(prompt) {
     if (!SAJU_CONFIG.apiKey && SAJU_CONFIG.endpoint.indexOf("openrouter.ai") !== -1) {
-      // 키가 비어 있고 OpenRouter를 직접 호출하는 설정이면, 안내 에러를 던짐
       const e = new Error("NO_API_KEY");
       e.code = "NO_API_KEY";
       throw e;
@@ -1333,9 +1345,6 @@ manseryeok/dist/index.js:
     return content;
   }
 
-  /* ---------------------------------------------------------
-     폼 검증 & 제출 흐름
-  --------------------------------------------------------- */
   const form = document.getElementById("sajuForm");
   const submitBtn = document.getElementById("submitBtn");
   const formSuccess = document.getElementById("formSuccess");
@@ -1436,6 +1445,7 @@ manseryeok/dist/index.js:
         minute = parseInt(parts[1], 10);
       }
     }
+
     const gender = payload.fd.get("gender");
     const question = (payload.fd.get("question") || "").trim();
     const calendarType = payload.fd.get("calendar");
