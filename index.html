@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,6 +48,30 @@
       radial-gradient(circle at 80% 70%, rgba(43,37,33,0.02) 0, transparent 50%);
   }
 
+  /* ---------- Scroll reveal (ambient, slow) ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1.05s cubic-bezier(0.16, 1, 0.3, 1), transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .reveal-stagger.is-visible > * {
+    animation: revealStaggerItem 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .reveal-stagger > *:nth-child(1) { animation-delay: 0.02s; }
+  .reveal-stagger > *:nth-child(2) { animation-delay: 0.10s; }
+  .reveal-stagger > *:nth-child(3) { animation-delay: 0.18s; }
+  .reveal-stagger > *:nth-child(4) { animation-delay: 0.26s; }
+  .reveal-stagger > *:nth-child(5) { animation-delay: 0.34s; }
+  .reveal-stagger > *:nth-child(6) { animation-delay: 0.42s; }
+  @keyframes revealStaggerItem {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* JS not yet run, or motion disabled: never trap content invisible */
+  .no-js .reveal, .no-js .reveal-stagger > * { opacity: 1; transform: none; animation: none; }
+
   .serif { font-family: 'Noto Serif KR', serif; }
   a { color: inherit; text-decoration: none; }
 
@@ -71,7 +95,7 @@
     justify-content: space-between;
     align-items: center;
   }
-  .brand { font-size: 19px; font-weight: 700; letter-spacing: 0.02em; transition: opacity 0.3s ease; }
+  .brand { font-size: 19px; font-weight: 700; letter-spacing: 0.02em; }
   .brand .dot { color: var(--jujube); }
   .nav-cta {
     font-size: 14px;
@@ -97,40 +121,22 @@
   /* ---------- Hero ---------- */
   .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 90px; position: relative; }
   .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; width: 100%; }
+  .hero-enter {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: heroEnter 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--he, 0s);
+  }
+  @keyframes heroEnter { to { opacity: 1; transform: translateY(0); } }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 600; letter-spacing: 0.12em;
     color: var(--jujube); margin-bottom: 28px;
   }
-  .eyebrow::before {
-    content: "";
-    width: 0px;
-    height: 1px;
-    background: var(--jujube);
-    animation: eyebrowExpand 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  @keyframes eyebrowExpand { to { width: 28px; } }
+  .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--jujube); }
   .hero h1 { font-size: 52px; font-weight: 700; line-height: 1.28; letter-spacing: -0.01em; margin-bottom: 26px; }
   .hero h1 .accent { color: var(--jujube); position: relative; }
-  .hero h1 .accent::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 2px;
-    width: 0%;
-    height: 3px;
-    background: rgba(140,59,46,0.18);
-    animation: accentUnderline 1.4s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  @keyframes accentUnderline { to { width: 100%; } }
-  .hero p.lead {
-    font-size: 17px; color: var(--ink-soft); max-width: 460px; margin-bottom: 38px;
-    opacity: 0; transform: translateY(12px);
-    animation: fadeInUp 0.9s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  @keyframes fadeInUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .hero p.lead { font-size: 17px; color: var(--ink-soft); max-width: 460px; margin-bottom: 38px; }
   .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
   .btn-primary {
     background: var(--jujube); color: var(--paper-card);
@@ -150,7 +156,32 @@
 
   /* ---------- Sajupae ---------- */
   .sajupae { position: relative; height: 480px; display: flex; align-items: center; justify-content: center; }
-  .pillars { display: flex; gap: 14px; }
+  .sajupae::before {
+    content: "";
+    position: absolute;
+    inset: -60px;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 38% 42%, rgba(140,59,46,0.16) 0, transparent 52%),
+      radial-gradient(circle at 65% 60%, rgba(176,140,63,0.14) 0, transparent 55%),
+      radial-gradient(circle at 50% 50%, rgba(47,59,76,0.08) 0, transparent 60%);
+    filter: blur(2px);
+    animation: inkDrift 14s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes inkDrift {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.85; }
+    50% { transform: translate(-2.5%, 3%) scale(1.06); opacity: 1; }
+  }
+  .pillars { display: flex; gap: 14px; position: relative; z-index: 1; }
+  .pillar-wrap {
+    animation: rise 1.1s ease both;
+  }
+  .pillar-wrap:nth-child(1) { animation-delay: 0.05s; --ty: 0px; }
+  .pillar-wrap:nth-child(2) { animation-delay: 0.18s; --ty: -14px; }
+  .pillar-wrap:nth-child(3) { animation-delay: 0.31s; --ty: -22px; }
+  .pillar-wrap:nth-child(4) { animation-delay: 0.44s; --ty: -10px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(var(--ty, 0px)); } }
   .pillar {
     width: 78px; height: 380px;
     background: var(--paper-card);
@@ -159,20 +190,28 @@
     box-shadow: 0 18px 40px -16px rgba(43,37,33,0.25);
     display: flex; flex-direction: column; align-items: center;
     padding: 22px 0; position: relative;
-    animation: rise 1.1s ease both;
+    animation: pillarFloat 7s ease-in-out infinite;
+    animation-delay: var(--fd, 0s);
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
   }
-  .pillar:nth-child(1) { animation-delay: 0.05s; --ty: 0px; }
-  .pillar:nth-child(2) { animation-delay: 0.18s; --ty: -14px; }
-  .pillar:nth-child(3) { animation-delay: 0.31s; --ty: -22px; }
-  .pillar:nth-child(4) { animation-delay: 0.44s; --ty: -10px; }
-  @keyframes rise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(var(--ty, 0px)); } }
+  .pillar:hover {
+    box-shadow: 0 22px 48px -16px rgba(43,37,33,0.32);
+    border-color: rgba(140,59,46,0.3);
+  }
+  @keyframes pillarFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .pillar-wrap:nth-child(1) .pillar { --fd: 1.2s; }
+  .pillar-wrap:nth-child(2) .pillar { --fd: 1.5s; }
+  .pillar-wrap:nth-child(3) .pillar { --fd: 1.8s; }
+  .pillar-wrap:nth-child(4) .pillar { --fd: 2.1s; }
 
   .pillar .label { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.1em; margin-bottom: 18px; }
-  .pillar .glyph { font-family: 'Noto Serif KR', serif; font-size: 30px; font-weight: 700; color: var(--ink); line-height: 1.5; transition: color 0.4s ease; }
-  .pillar:hover .glyph { color: var(--jujube); }
-  .pillar:nth-child(2) .glyph { color: var(--jujube-soft); }
-  .pillar:nth-child(3) .glyph { color: var(--indigo); }
-  .pillar:nth-child(4) .glyph { color: var(--gold); }
+  .pillar .glyph { font-family: 'Noto Serif KR', serif; font-size: 30px; font-weight: 700; color: var(--ink); line-height: 1.5; }
+  .pillar-wrap:nth-child(2) .glyph { color: var(--jujube-soft); }
+  .pillar-wrap:nth-child(3) .glyph { color: var(--indigo); }
+  .pillar-wrap:nth-child(4) .glyph { color: var(--gold); }
   .pillar .tag { margin-top: auto; font-size: 10.5px; color: var(--ink-soft); opacity: 0.7; }
 
   .sajupae-caption {
@@ -194,9 +233,9 @@
     gap: 1px; background: var(--line);
     border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
   }
-  .about-cell { background: var(--paper-deep); padding: 36px 26px; transition: background 0.3s ease; }
+  .about-cell { background: var(--paper-deep); padding: 36px 26px; transition: background 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
   .about-cell:hover { background: var(--paper-card); }
-  .about-cell .num { font-family: 'Noto Serif KR', serif; font-size: 13px; color: var(--ink-soft); margin-bottom: 22px; transition: color 0.4s ease; }
+  .about-cell .num { font-family: 'Noto Serif KR', serif; font-size: 13px; color: var(--ink-soft); margin-bottom: 22px; transition: color 0.5s ease; }
   .about-cell:hover .num { color: var(--jujube); }
   .about-cell h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
   .about-cell p { font-size: 14px; color: var(--ink-soft); }
@@ -216,14 +255,17 @@
     border-radius: 16px; padding: 26px 18px; text-align: center;
     flex: 1; min-width: 120px;
     box-shadow: 0 14px 30px -16px rgba(43,37,33,0.15);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .mv-icon { font-family: 'Noto Serif KR', serif; font-size: 30px; font-weight: 700; color: var(--jujube); margin-bottom: 8px; transition: transform 0.5s ease; }
-  .mv-card:hover .mv-icon { transform: scale(1.12); }
+  .mv-card:hover { transform: translateY(-3px); box-shadow: 0 20px 38px -18px rgba(43,37,33,0.2); }
+  .mv-icon { font-family: 'Noto Serif KR', serif; font-size: 30px; font-weight: 700; color: var(--jujube); margin-bottom: 8px; }
   .mv-card-2 .mv-icon { color: var(--indigo); }
   .mv-card-3 .mv-icon { color: var(--gold); }
   .mv-label { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
   .mv-card p { font-size: 11.5px; color: var(--ink-soft); line-height: 1.4; }
-  .mv-plus, .mv-equals { font-size: 22px; font-weight: 300; color: var(--ink-soft); opacity: 0.6; flex-shrink: 0; }
+  .mv-plus, .mv-equals { font-size: 22px; font-weight: 300; color: var(--ink-soft); opacity: 0.6; flex-shrink: 0; animation: mvPulse 3.6s ease-in-out infinite; }
+  .mv-equals { animation-delay: 0.6s; }
+  @keyframes mvPulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.85; } }
 
   /* ---------- Counselor profile ---------- */
   .counselor { background: var(--paper-deep); }
@@ -238,14 +280,27 @@
     border: 1px solid var(--line);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .counselor-photo::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(176,140,63,0.3);
+    animation: photoRing 4.5s ease-in-out infinite;
+  }
+  @keyframes photoRing {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.045); opacity: 0.9; }
   }
   .counselor-photo-glyph { font-size: 56px; font-weight: 700; color: var(--jujube-soft); opacity: 0.7; }
   .counselor-info { flex: 1; }
   .counselor-name { font-size: 13px; font-weight: 700; color: var(--jujube); letter-spacing: 0.04em; margin-bottom: 12px; }
   .counselor-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.75; margin-bottom: 22px; }
   .counselor-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
-  .c-badge { background: var(--paper-deep); border: 1px solid var(--line); color: var(--ink); font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 100px; transition: all 0.4s ease; }
-  .c-badge:hover { border-color: var(--jujube-soft); color: var(--jujube); }
+  .c-badge { background: var(--paper-deep); border: 1px solid var(--line); color: var(--ink); font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 100px; }
   .counselor-quote {
     font-family: 'Noto Serif KR', serif; font-size: 15.5px; color: var(--ink);
     line-height: 1.7; padding-left: 18px; border-left: 3px solid var(--gold);
@@ -257,7 +312,21 @@
   .who-row {
     display: grid; grid-template-columns: 130px 1fr; gap: 32px;
     padding: 28px 0; border-top: 1px solid var(--line); align-items: baseline;
+    position: relative;
+    transition: padding-left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  .who-row::before {
+    content: "";
+    position: absolute;
+    left: -18px; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--jujube);
+    transform: scaleY(0);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center;
+  }
+  .who-row:hover { padding-left: 10px; }
+  .who-row:hover::before { transform: scaleY(1); }
   .who-row:last-child { border-bottom: 1px solid var(--line); }
   .who-row .when { font-size: 14px; font-weight: 600; color: var(--jujube); }
   .who-row .what { font-size: 18px; font-weight: 500; }
@@ -270,7 +339,7 @@
     display: flex; align-items: center; gap: 18px;
     background: var(--paper-card); border: 1px solid var(--line);
     border-radius: 16px; padding: 24px 26px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s ease;
   }
   .channel-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -20px rgba(43,37,33,0.25); }
   .channel-icon { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -292,14 +361,11 @@
   .process .section-title { color: var(--paper); }
   .process .section-sub { color: rgba(243,237,226,0.65); }
   .steps { margin-top: 64px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .step { padding: 28px 22px; border: 1px solid rgba(243,237,226,0.16); border-radius: 14px; position: relative; transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease; }
-  .step:hover { border-color: rgba(176,140,63,0.5); transform: translateY(-6px); background: rgba(243,237,226,0.04); }
-  .step .step-num { font-family: 'Noto Serif KR', serif; font-size: 28px; color: var(--gold); margin-bottom: 18px; transition: transform 0.5s ease, color 0.5s ease; }
-  .step:hover .step-num { transform: scale(1.15); color: rgba(176,140,63,0.9); }
+  .step { padding: 28px 22px; border: 1px solid rgba(243,237,226,0.16); border-radius: 14px; position: relative; }
+  .step .step-num { font-family: 'Noto Serif KR', serif; font-size: 28px; color: var(--gold); margin-bottom: 18px; }
   .step h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
   .step p { font-size: 13.5px; color: rgba(243,237,226,0.6); }
-  .step-arrow { position: absolute; right: -34px; top: 50%; transform: translateY(-50%); color: rgba(243,237,226,0.3); font-size: 20px; transition: color 0.5s ease; }
-  .step:hover .step-arrow { color: var(--gold); }
+  .step-arrow { position: absolute; right: -34px; top: 50%; transform: translateY(-50%); color: rgba(243,237,226,0.3); font-size: 20px; }
   .step:last-child .step-arrow { display: none; }
 
   .free-note {
@@ -315,7 +381,7 @@
   .price-card {
     position: relative; background: var(--paper-card); border: 1px solid var(--line);
     border-radius: 18px; padding: 34px 28px; display: flex; flex-direction: column;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .price-card:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -22px rgba(43,37,33,0.22); }
   .price-card.highlight { background: var(--ink); border-color: var(--ink); color: var(--paper); }
@@ -345,9 +411,7 @@
   }
   .price-cta:hover { transform: translateY(-2px); }
   .price-cta.ghost { background: transparent; border: 1.5px solid var(--ink); color: var(--ink); }
-  .price-cta.ghost:hover { background: var(--ink); color: var(--paper); }
   .price-card.highlight .price-cta { background: var(--gold); color: var(--ink); }
-  .price-card.highlight .price-cta:hover { box-shadow: 0 10px 28px -10px rgba(176,140,63,0.5); }
   .pricing-foot { margin-top: 32px; font-size: 13.5px; color: var(--ink-soft); text-align: center; }
 
   /* ---------- Premium card (심층 심리분석 솔루션, 99,000원) ---------- */
@@ -365,11 +429,16 @@
   .premium-card::before {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -20%;
     background:
       radial-gradient(circle at 88% 12%, rgba(176,140,63,0.18) 0, transparent 45%),
       radial-gradient(circle at 8% 92%, rgba(140,59,46,0.16) 0, transparent 50%);
     pointer-events: none;
+    animation: premiumDrift 16s ease-in-out infinite;
+  }
+  @keyframes premiumDrift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-1.5%, 2%); }
   }
   .premium-deco {
     position: absolute;
@@ -529,7 +598,7 @@
   .submit-note { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-top: 14px; opacity: 0.75; }
 
   .form-success { display: none; text-align: center; padding: 60px 20px; }
-  .form-success.show { display: block; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .form-success.show { display: block; }
   .form-success .glyph { font-family: 'Noto Serif KR', serif; font-size: 40px; color: var(--jujube); margin-bottom: 18px; }
   .form-success h3 { font-size: 21px; margin-bottom: 10px; }
   .form-success p { color: var(--ink-soft); font-size: 14.5px; }
@@ -555,7 +624,7 @@
   .ai-error {
     display: none; text-align: center; padding: 50px 30px;
   }
-  .ai-error.show { display: block; animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .ai-error.show { display: block; }
   .ai-error .glyph { font-family: 'Noto Serif KR', serif; font-size: 32px; color: var(--jujube); margin-bottom: 14px; }
   .ai-error h3 { font-size: 18px; margin-bottom: 8px; }
   .ai-error p { color: var(--ink-soft); font-size: 14px; margin-bottom: 20px; }
@@ -566,21 +635,12 @@
 
   .ai-result { display: none; padding: 8px; }
   .ai-result.show { display: block; }
-  .ai-result.show .ai-result-head { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .ai-result.show .ai-result-pillars { animation: fadeInUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .ai-insight { animation: fadeInUp 0.9s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .ai-result-body { animation: fadeInUp 0.7s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .reading-visual { animation: fadeInUp 0.8s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .compat-teaser { animation: fadeInUp 0.8s 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .ai-result-foot { animation: fadeInUp 0.7s 0.65s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .ai-result.show .ai-result-cta { animation: fadeInUp 0.7s 0.75s cubic-bezier(0.16, 1, 0.3, 1) both; }
   .ai-result-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
   .ai-result-name { font-size: 19px; font-weight: 700; }
   .ai-result-name span { font-weight: 400; font-size: 13.5px; color: var(--ink-soft); margin-left: 6px; }
   .demo-badge { font-size: 11.5px; font-weight: 700; color: var(--jujube); background: rgba(140,59,46,0.1); padding: 5px 12px; border-radius: 100px; white-space: nowrap; }
   .ai-result-pillars { display: flex; gap: 8px; margin-bottom: 24px; }
-  .ai-result-pillars .rp { flex: 1; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px; transition: transform 0.4s ease, border-color 0.4s ease; }
-  .ai-result-pillars .rp:hover { transform: translateY(-3px); border-color: var(--jujube-soft); }
+  .ai-result-pillars .rp { flex: 1; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px; }
   .ai-result-pillars .rp .rp-label { font-size: 10.5px; color: var(--ink-soft); margin-bottom: 4px; }
   .ai-result-pillars .rp .rp-glyph { font-family: 'Noto Serif KR', serif; font-size: 17px; font-weight: 700; line-height: 1.3; }
   .ai-result-body {
@@ -597,16 +657,14 @@
   .life-orb { width: 54px; height: 54px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.5); background: radial-gradient(circle, rgba(176,140,63,0.24), rgba(250,246,236,0.76)); display: grid; place-items: center; font-family: 'Noto Serif KR', serif; font-weight: 800; color: var(--jujube); animation: lifeBreathe 2.8s ease-in-out infinite; flex-shrink: 0; }
   @keyframes lifeBreathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
   .life-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; position: relative; z-index: 1; }
-  .life-step { min-height: 150px; background: rgba(243,237,226,0.72); border: 1px solid rgba(43,37,33,0.12); border-radius: 10px; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; transform: translateY(10px); opacity: 0; animation: lifeRise 0.65s ease forwards; transition: transform 0.4s ease, border-color 0.4s ease; }
-  .life-step:hover { transform: translateY(-4px) !important; border-color: var(--gold); }
+  .life-step { min-height: 150px; background: rgba(243,237,226,0.72); border: 1px solid rgba(43,37,33,0.12); border-radius: 10px; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; transform: translateY(10px); opacity: 0; animation: lifeRise 0.65s ease forwards; }
   .life-step:nth-child(1) { animation-delay: 0.04s; }
   .life-step:nth-child(2) { animation-delay: 0.14s; }
   .life-step:nth-child(3) { animation-delay: 0.24s; }
   .life-step:nth-child(4) { animation-delay: 0.34s; }
   .life-step:nth-child(5) { animation-delay: 0.44s; }
   @keyframes lifeRise { to { transform: translateY(0); opacity: 1; } }
-  .life-symbol { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 11px; display: grid; place-items: center; background: var(--paper-card); border: 1px solid var(--line); position: relative; transition: transform 0.4s ease; }
-  .life-step:hover .life-symbol { transform: scale(1.1); }
+  .life-symbol { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 11px; display: grid; place-items: center; background: var(--paper-card); border: 1px solid var(--line); position: relative; }
   .life-symbol::after { content: ''; position: absolute; inset: 10px; border-radius: 50%; background: currentColor; opacity: 0.18; animation: lifeGlow 2s ease-in-out infinite; }
   @keyframes lifeGlow { 0%, 100% { transform: scale(0.82); opacity: 0.14; } 50% { transform: scale(1.2); opacity: 0.28; } }
   .life-step:nth-child(1) .life-symbol { color: var(--gold); }
@@ -629,79 +687,67 @@
   .compat-title { font-size: 17px; font-weight: 800; color: var(--ink); }
   .compat-badge { font-size: 11px; font-weight: 700; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 100px; padding: 5px 10px; white-space: nowrap; }
   .compat-pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; margin-bottom: 18px; }
-  .compat-side { text-align: center; border: 1px solid rgba(43,37,33,0.14); border-radius: 10px; padding: 16px 10px; background: rgba(243,237,226,0.6); transition: transform 0.4s ease; }
-  .compat-side:hover { transform: translateY(-2px); }
+  .compat-side { text-align: center; border: 1px solid rgba(43,37,33,0.14); border-radius: 10px; padding: 16px 10px; background: rgba(243,237,226,0.6); }
   .compat-side .compat-label { font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
   .compat-side .compat-glyph { font-family: 'Noto Serif KR', serif; font-size: 19px; font-weight: 800; color: var(--ink); }
   .compat-link { font-family: 'Noto Serif KR', serif; font-size: 22px; color: var(--gold); }
   .compat-score-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .compat-score-circle { width: 64px; height: 64px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.5); background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.5s ease; }
-  .compat-score-circle:hover { transform: scale(1.08); }
+  .compat-score-circle { width: 64px; height: 64px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.5); background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
   .compat-score-circle b { font-size: 19px; color: var(--jujube); line-height: 1; }
   .compat-score-circle span { font-size: 9px; color: var(--ink-soft); margin-top: 2px; }
   .compat-score-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
   .compat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .compat-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(250,246,236,0.62); padding: 12px 13px; transition: transform 0.4s ease; }
-  .compat-item:hover { transform: translateY(-2px); }
+  .compat-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(250,246,236,0.62); padding: 12px 13px; }
   .compat-item b { display: block; font-size: 12.5px; color: var(--jujube); margin-bottom: 4px; }
   .compat-item span { display: block; font-size: 12px; line-height: 1.6; color: var(--ink-soft); }
   .compat-locked { border: 1px dashed rgba(43,37,33,0.22); border-radius: 10px; padding: 14px; text-align: center; font-size: 12.5px; color: var(--ink-soft); background: rgba(243,237,226,0.4); }
   .compat-locked b { color: var(--ink); }
   .compat-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 8px; margin-top: 10px; }
-  .compat-form input, .compat-form select { font-family: inherit; font-size: 13px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); transition: border-color 0.3s ease; }
-  .compat-form input:focus, .compat-form select:focus { outline: none; border-color: var(--jujube-soft); }
-  .compat-form button { font-family: inherit; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 8px; border: none; background: var(--jujube); color: var(--paper-card); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-  .compat-form button:hover { transform: translateY(-2px); box-shadow: 0 6px 18px -6px rgba(140,59,46,0.4); }
+  .compat-form input, .compat-form select { font-family: inherit; font-size: 13px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+  .compat-form button { font-family: inherit; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 8px; border: none; background: var(--jujube); color: var(--paper-card); cursor: pointer; }
   .ai-result-foot {
     margin-top: 22px; padding: 16px 18px; background: rgba(176,140,63,0.1);
     border: 1px solid rgba(176,140,63,0.3); border-radius: 10px;
     font-size: 12.5px; color: var(--ink-soft); line-height: 1.6;
   }
   .ai-result-cta { margin-top: 22px; display: flex; gap: 10px; flex-wrap: wrap; }
-  .ai-result-cta a { flex: 1; text-align: center; padding: 14px 0; border-radius: 100px; font-weight: 700; font-size: 14px; min-width: 160px; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  .ai-result-cta a:hover { transform: translateY(-3px); }
+  .ai-result-cta a { flex: 1; text-align: center; padding: 14px 0; border-radius: 100px; font-weight: 700; font-size: 14px; min-width: 160px; }
   .ai-result-cta .primary { background: var(--jujube); color: var(--paper-card); }
   .ai-result-cta .ghost { border: 1.5px solid var(--ink); color: var(--ink); }
-  .ai-result-cta .ghost:hover { background: var(--ink); color: var(--paper); }
   .ai-insight { margin: 24px 0 26px; }
-  .analysis-report { background: var(--paper-card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 18px 42px -28px rgba(43,37,33,0.28); transition: box-shadow 0.5s ease; }
-  .analysis-report:hover { box-shadow: 0 24px 52px -28px rgba(43,37,33,0.35); }
+  .analysis-report { background: var(--paper-card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 18px 42px -28px rgba(43,37,33,0.28); }
   .analysis-head { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 20px 22px; background: linear-gradient(90deg, rgba(140,59,46,0.09), rgba(176,140,63,0.08)); border-bottom: 1px solid var(--line); }
   .analysis-kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; color: var(--jujube); margin-bottom: 5px; }
   .analysis-title { font-size: 19px; font-weight: 800; color: var(--ink); }
-  .analysis-score { min-width: 78px; height: 78px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.5); background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--ink-soft); transition: transform 0.5s ease; }
-  .analysis-score:hover { transform: scale(1.06); }
+  .analysis-score { min-width: 78px; height: 78px; border-radius: 50%; border: 1px solid rgba(176,140,63,0.5); background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--ink-soft); }
   .analysis-score b { display: block; font-size: 22px; color: var(--jujube); line-height: 1.1; }
   .analysis-body { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; }
   .analysis-core { padding: 22px; border-right: 1px solid var(--line); }
   .analysis-balance { padding: 22px; }
   .analysis-section-label { font-size: 12px; font-weight: 800; color: var(--ink-soft); margin-bottom: 14px; }
   .core-seal-row { display: flex; gap: 14px; margin-bottom: 16px; }
-  .core-seal { flex: 1; min-height: 112px; border: 1px solid rgba(43,37,33,0.16); border-radius: 8px; background: rgba(243,237,226,0.72); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease; }
-  .core-seal:hover { transform: translateY(-3px); border-color: var(--jujube-soft); }
+  .core-seal { flex: 1; min-height: 112px; border: 1px solid rgba(43,37,33,0.16); border-radius: 8px; background: rgba(243,237,226,0.72); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
   .core-seal::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; height: 1px; background: rgba(43,37,33,0.08); }
   .core-label { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
   .core-main { font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 800; color: var(--ink); }
   .core-sub { margin-top: 6px; font-family: 'Noto Serif KR', serif; color: var(--jujube); font-size: 14px; }
   .insight-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.75; }
   .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-  .support-note { border: 1px solid rgba(43,37,33,0.13); border-radius: 8px; background: rgba(250,246,236,0.62); padding: 13px 14px; transition: transform 0.4s ease, border-color 0.4s ease; }
-  .support-note:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .support-note { border: 1px solid rgba(43,37,33,0.13); border-radius: 8px; background: rgba(250,246,236,0.62); padding: 13px 14px; }
   .support-label { font-size: 11px; font-weight: 800; color: var(--jujube); margin-bottom: 5px; }
   .support-title { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
   .support-copy { font-size: 12.5px; color: var(--ink-soft); line-height: 1.65; }
   .plain-card { border-top: 1px solid var(--line); background: rgba(250,246,236,0.7); padding: 20px 22px 22px; }
   .plain-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
   .plain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .plain-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(243,237,226,0.62); padding: 13px 14px; transition: transform 0.4s ease, border-color 0.4s ease; }
-  .plain-item:hover { transform: translateY(-2px); border-color: var(--jujube-soft); }
+  .plain-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(243,237,226,0.62); padding: 13px 14px; }
   .plain-item b { display: block; font-size: 13px; color: var(--jujube); margin-bottom: 5px; }
   .plain-item span { display: block; font-size: 12.5px; line-height: 1.65; color: var(--ink-soft); }
   .balance-list { display: flex; flex-direction: column; gap: 11px; }
   .balance-row { display: grid; grid-template-columns: 56px 1fr 40px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-soft); }
   .balance-name { font-weight: 800; }
   .balance-bar { height: 10px; background: rgba(43,37,33,0.08); border-radius: 2px; overflow: hidden; }
-  .balance-fill { height: 100%; border-radius: 0 2px 2px 0; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+  .balance-fill { height: 100%; border-radius: 0 2px 2px 0; }
   .balance-percent { text-align: right; font-variant-numeric: tabular-nums; }
   .remedy-box { margin-top: 20px; border: 1px solid rgba(43,37,33,0.12); border-radius: 10px; background: rgba(250,246,236,0.6); padding: 15px; }
   .remedy-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
@@ -727,8 +773,7 @@
   .special-legend span::before { content: ''; display: inline-block; width: 14px; height: 2px; margin-right: 5px; vertical-align: 3px; }
   .special-legend .good::before { background: #2da873; } .special-legend .note::before { background: #d39a2e; }
   .special-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .special-tag { border-radius: 100px; padding: 7px 12px; font-size: 12px; font-weight: 700; border: 1px solid transparent; background: var(--paper-card); transition: transform 0.3s ease; }
-  .special-tag:hover { transform: translateY(-1px); }
+  .special-tag { border-radius: 100px; padding: 7px 12px; font-size: 12px; font-weight: 700; border: 1px solid transparent; background: var(--paper-card); }
   .special-tag.good { color: #126f4e; border-color: rgba(45,168,115,0.36); }
   .special-tag.note { color: #9b6614; border-color: rgba(211,154,46,0.4); }
 
@@ -739,8 +784,7 @@
   .month-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
   .month-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 14px; }
   .month-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .month-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(250,246,236,0.6); padding: 13px 14px; transition: transform 0.4s ease; }
-  .month-item:hover { transform: translateY(-2px); }
+  .month-item { border: 1px solid rgba(43,37,33,0.12); border-radius: 8px; background: rgba(250,246,236,0.6); padding: 13px 14px; }
   .month-item b { display: block; font-size: 12.5px; color: var(--jujube); margin-bottom: 4px; }
   .month-item span { display: block; font-size: 12px; line-height: 1.6; color: var(--ink-soft); }
 
@@ -752,8 +796,7 @@
   .formula-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
   .formula-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 14px; }
   .formula-list { display: flex; flex-direction: column; gap: 8px; }
-  .formula-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; border: 1px solid rgba(43,37,33,0.1); border-radius: 8px; padding: 11px 13px; background: rgba(243,237,226,0.5); transition: transform 0.3s ease, border-color 0.3s ease; }
-  .formula-row:hover { transform: translateX(4px); border-color: var(--gold); }
+  .formula-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; border: 1px solid rgba(43,37,33,0.1); border-radius: 8px; padding: 11px 13px; background: rgba(243,237,226,0.5); }
   .formula-row .f-left { font-size: 12px; font-weight: 800; color: var(--ink-soft); }
   .formula-row .f-right { font-size: 12.5px; line-height: 1.6; color: var(--ink); }
   .formula-row .f-arrow { display: none; }
@@ -764,89 +807,10 @@
   .footer-left { display: flex; flex-direction: column; gap: 10px; }
   footer .brand { font-size: 15px; }
   .footer-links { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
-  .footer-links a { color: var(--ink-soft); transition: color 0.35s ease; }
+  .footer-links a { color: var(--ink-soft); transition: color 0.2s ease; }
   .footer-links a:hover { color: var(--jujube); }
   .footer-divider { opacity: 0.5; }
   footer .fine { font-size: 12.5px; color: var(--ink-soft); opacity: 0.7; max-width: 360px; text-align: right; }
-  footer .fine a { transition: color 0.35s ease; }
-  footer .fine a:hover { color: var(--jujube); }
-
-
-  /* ===== SCROLL REVEAL ===== */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .reveal-delay-1 { transition-delay: 0.05s; }
-  .reveal-delay-2 { transition-delay: 0.12s; }
-  .reveal-delay-3 { transition-delay: 0.19s; }
-  .reveal-delay-4 { transition-delay: 0.26s; }
-  .reveal-delay-5 { transition-delay: 0.33s; }
-
-  .reveal-up {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ===== FLOATING DECOR ===== */
-  @keyframes floatSlow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  @keyframes floatSubtle {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-4px) rotate(0.5deg); }
-  }
-  .float-slow { animation: floatSlow 5.5s ease-in-out infinite; }
-  .float-subtle { animation: floatSubtle 7s ease-in-out infinite; }
-
-
-  /* ---------- Compat standalone section ---------- */
-  .compat-standalone { background: var(--paper); }
-  .compat-split {
-    margin-top: 48px; display: grid;
-    grid-template-columns: 1fr auto 1fr; gap: 32px; align-items: center;
-  }
-  .compat-myinfo, .compat-otherinfo {
-    background: var(--paper-card); border: 1px solid var(--line);
-    border-radius: 16px; padding: 28px 24px;
-  }
-  .compat-myinfo h4, .compat-otherinfo h4 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--ink); }
-  .compat-myinfo h4 { color: var(--jujube); }
-  .compat-otherinfo h4 { color: var(--indigo); }
-  .compat-form-split {
-    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;
-  }
-  .compat-form-split input, .compat-form-split select {
-    font-family: inherit; font-size: 14px; padding: 10px 8px;
-    border-radius: 8px; border: 1px solid var(--line); background: var(--paper);
-    color: var(--ink); transition: border-color 0.35s ease;
-  }
-  .compat-form-split input:focus, .compat-form-split select:focus {
-    outline: none; border-color: var(--jujube-soft);
-  }
-  .compat-heart {
-    font-family: 'Noto Serif KR', serif; font-size: 32px;
-    color: var(--jujube); animation: lifeBreathe 2.5s ease-in-out infinite; user-select: none;
-  }
-  .compat-action { margin-top: 28px; text-align: center; }
-  .compat-result {
-    margin-top: 36px; padding: 32px;
-    background: var(--paper-card); border: 1px solid var(--line); border-radius: 18px;
-    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
 
   /* ---------- Responsive ---------- */
   @media (max-width: 860px) {
@@ -861,8 +825,8 @@
     .form-2col, .form-4col { grid-template-columns: 1fr 1fr; }
     .form-3col { grid-template-columns: 1fr 1fr; }
     .form-3col select[name="timeUnknown"] { grid-column: 1 / -1; }
-    .form-3col select[name="timeUnknown"] { grid-column: 1 / -1; }
-    .who-row { grid-template-columns: 1fr; gap: 6px; }
+    .who-row { grid-template-columns: 1fr; gap: 6px; padding-left: 0 !important; }
+    .who-row::before { display: none; }
     .channel-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
     .premium-card { padding: 34px 26px; }
@@ -900,13 +864,107 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pillar { animation: none !important; opacity: 1 !important; transform: none !important; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .pillar-wrap, .pillar { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .sajupae::before, .premium-card::before { animation: none !important; }
+    .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; animation: none !important; }
+    .hero-enter { opacity: 1 !important; transform: none !important; animation: none !important; }
   }
+
+  /* ---------- Mind card (이 사람의 속마음) ---------- */
+  .mind-card {
+    border-top: 1px solid var(--line);
+    background: rgba(243,237,226,0.46);
+    overflow: hidden;
+  }
+  .mind-toggle {
+    width: 100%; display: flex; align-items: center; gap: 14px;
+    padding: 18px 22px; background: none; border: none; cursor: pointer;
+    font-family: inherit; text-align: left;
+    transition: background 0.3s ease;
+  }
+  .mind-toggle:hover { background: rgba(140,59,46,0.06); }
+  .mind-toggle-icon {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center;
+    font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 800;
+    color: var(--jujube);
+    background: rgba(140,59,46,0.1);
+    border: 1px solid rgba(140,59,46,0.22);
+    animation: lifeBreathe 3.2s ease-in-out infinite;
+  }
+  .mind-toggle-text { flex: 1; }
+  .mind-toggle-text b { display: block; font-size: 14.5px; color: var(--ink); }
+  .mind-toggle-text span { font-size: 12px; color: var(--ink-soft); display: block; margin-top: 2px; }
+  .mind-toggle-arrow {
+    font-size: 16px; color: var(--ink-soft); flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mind-toggle[aria-expanded="true"] .mind-toggle-arrow { transform: rotate(180deg); }
+
+  .mind-body {
+    overflow: hidden;
+    max-height: 0; opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  }
+  .mind-body:not([hidden]) { /* JS로 제어 */ }
+
+  .mind-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .mind-pane {
+    padding: 20px 22px;
+  }
+  .mind-outer { border-right: 1px solid var(--line); background: rgba(250,246,236,0.6); }
+  .mind-inner { background: rgba(243,237,226,0.46); }
+
+  .mind-pane-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    color: var(--ink-soft); margin-bottom: 8px;
+  }
+  .mind-pane-season {
+    font-size: 12px; font-weight: 700; color: var(--jujube);
+    margin-bottom: 6px;
+  }
+  .mind-pane-title {
+    font-size: 14.5px; font-weight: 800; color: var(--ink);
+    margin-bottom: 12px; line-height: 1.4;
+  }
+  .mind-pane-copy {
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .mind-pane-copy:last-child { margin-bottom: 0; }
+  .mind-pane-copy b { color: var(--jujube); }
+
+  .mind-gap {
+    grid-column: 1 / -1;
+    padding: 14px 22px 18px;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(90deg, rgba(140,59,46,0.06), rgba(176,140,63,0.06));
+  }
+  .mind-gap-label {
+    font-size: 11px; font-weight: 800; color: var(--jujube);
+    margin-bottom: 6px; letter-spacing: 0.06em;
+  }
+  .mind-gap p { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+
+  @media (max-width: 860px) {
+    .mind-grid { grid-template-columns: 1fr; }
+    .mind-outer { border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+
 </style>
 </head>
 <body>
 
-<nav id="navbar">
+<nav>
   <div class="nav-inner">
     <div class="brand">사주, 다시 읽다<span class="dot">.</span></div>
     <div class="nav-actions">
@@ -922,17 +980,17 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow">지금은 무료로 열어두었습니다</div>
-      <h1 class="serif">
+      <div class="eyebrow hero-enter" style="--he:0.05s">지금은 무료로 열어두었습니다</div>
+      <h1 class="serif hero-enter" style="--he:0.18s">
         태어난 네 글자를,<br>
         <span class="accent">오늘의 언어</span>로 풀어드립니다
       </h1>
-      <p class="lead">
+      <p class="lead hero-enter" style="--he:0.34s">
         명리학 자격을 갖춘 상담가가 직접 검토하고,
         어려운 한자말 대신 일상의 언어로 다시 쓴 사주풀이.
         생년월일시만 남겨주시면 됩니다.
       </p>
-      <div class="hero-ctas">
+      <div class="hero-ctas hero-enter" style="--he:0.5s">
         <a href="#apply" class="btn-primary">무료로 풀이 받기 →</a>
         <a href="#process" class="btn-ghost">어떻게 진행되나요</a>
       </div>
@@ -940,26 +998,26 @@
 
     <div class="sajupae" aria-hidden="true">
       <div class="pillars">
-        <div class="pillar">
+        <div class="pillar-wrap"><div class="pillar">
           <div class="label">年</div>
           <div class="glyph">甲<br>子</div>
           <div class="tag">년주</div>
-        </div>
-        <div class="pillar">
+        </div></div>
+        <div class="pillar-wrap"><div class="pillar">
           <div class="label">月</div>
           <div class="glyph">丁<br>未</div>
           <div class="tag">월주</div>
-        </div>
-        <div class="pillar">
+        </div></div>
+        <div class="pillar-wrap"><div class="pillar">
           <div class="label">日</div>
           <div class="glyph">庚<br>申</div>
           <div class="tag">일주</div>
-        </div>
-        <div class="pillar">
+        </div></div>
+        <div class="pillar-wrap"><div class="pillar">
           <div class="label">時</div>
           <div class="glyph">乙<br>巳</div>
           <div class="tag">시주</div>
-        </div>
+        </div></div>
       </div>
       <div class="sajupae-caption">네 개의 기둥, 한 사람의 이야기</div>
     </div>
@@ -973,7 +1031,7 @@
     <h2 class="section-title serif reveal">점집이 아니라, 심리상담실입니다</h2>
     <p class="section-sub reveal">사주는 미래를 단정하는 도구가 아니라, 그 사람의 심리를 읽는 언어라고 생각합니다. 명리와 심리학, 두 가지 시선으로 함께 풀어드립니다.</p>
 
-    <div class="about-grid">
+    <div class="about-grid reveal reveal-stagger">
       <div class="about-cell">
         <div class="num serif">壹</div>
         <h3>명리 1급 + 심리상담 자격</h3>
@@ -1001,35 +1059,35 @@
 <!-- ============ MENTAL MODEL ============ -->
 <section class="mindmodel section-pad">
   <div class="wrap">
-    <div class="mindmodel-grid">
+    <div class="mindmodel-grid reveal">
       <div class="mindmodel-text">
         <div class="kicker">THE IDEA</div>
         <h2 class="section-title serif reveal">사주를 알면,<br>그 사람의 마음이 보입니다</h2>
-        <p class="section-sub">
+        <p class="section-sub reveal">
           사주는 단순히 길흉을 점치는 도구가 아니라, 태어날 때부터 타고난 기질과 마음의 패턴을 보여주는 심리 지도에 가깝습니다.
           같은 상황에서도 사람마다 다르게 반응하는 이유, 반복되는 관계의 패턴, 스스로도 설명하기 어려운 선택의 순간들 — 그 답이 사주 안에 있는 경우가 많습니다.
         </p>
         <ul class="mindmodel-list">
           <li><b>오행</b>은 기질과 에너지의 방향을, <b>십성</b>은 관계와 욕구의 패턴을 보여줍니다.</li>
-          <li class="reveal reveal-delay-2">아동심리상담 현장에서 보던 행동·정서 패턴이, 명리의 구조와 자주 겹쳐 보였습니다.</li>
-          <li class="reveal reveal-delay-3">그래서 명리만으로 끝내지 않고, 심리학의 언어로 한 번 더 짚어드립니다.</li>
+          <li>아동심리상담 현장에서 보던 행동·정서 패턴이, 명리의 구조와 자주 겹쳐 보였습니다.</li>
+          <li>그래서 명리만으로 끝내지 않고, 심리학의 언어로 한 번 더 짚어드립니다.</li>
         </ul>
       </div>
 
       <div class="mindmodel-visual">
-        <div class="mv-card mv-card-1 reveal reveal-delay-1 float-subtle">
+        <div class="mv-card mv-card-1">
           <div class="mv-icon">心</div>
           <div class="mv-label">심리</div>
           <p>기질·정서·관계 패턴</p>
         </div>
-        <div class="mv-plus reveal">+</div>
-        <div class="mv-card mv-card-2 reveal reveal-delay-2">
+        <div class="mv-plus">+</div>
+        <div class="mv-card mv-card-2">
           <div class="mv-icon">命</div>
           <div class="mv-label">명리</div>
           <p>오행·십성·사주 구조</p>
         </div>
-        <div class="mv-equals reveal">=</div>
-        <div class="mv-card mv-card-3 reveal reveal-delay-3 float-slow">
+        <div class="mv-equals">=</div>
+        <div class="mv-card mv-card-3">
           <div class="mv-icon">解</div>
           <div class="mv-label">현대해석</div>
           <p>지금 언어로 다시 쓴 풀이</p>
@@ -1074,7 +1132,7 @@
     <div class="kicker">FOR YOU, IF</div>
     <h2 class="section-title serif reveal">이런 마음으로 찾아오시는 분들이 많았습니다</h2>
 
-    <div class="who-list">
+    <div class="who-list reveal reveal-stagger">
       <div class="who-row">
         <div class="when">진로 앞에서</div>
         <div class="what">지금 가는 길이 나에게 맞는 방향인지 궁금할 때<span>적성과 일하는 스타일을 사주에서 짚어드립니다.</span></div>
@@ -1102,8 +1160,8 @@
     <h2 class="section-title serif reveal">먼저 풀이를 만나보고 싶다면</h2>
     <p class="section-sub reveal">신청 전에 어떤 느낌으로 풀어드리는지 영상으로 먼저 보셔도 좋습니다. 채널을 추가해두시면 다음 풀이 소식도 바로 받아보실 수 있어요.</p>
 
-    <div class="channel-grid">
-      <a href="https://www.youtube.com/" target="_blank" rel="noopener" class="channel-card yt-card reveal reveal-delay-1">
+    <div class="channel-grid reveal reveal-stagger">
+      <a href="https://www.youtube.com/" target="_blank" rel="noopener" class="channel-card yt-card">
         <div class="channel-icon yt-icon">
           <svg viewBox="0 0 24 24" fill="none"><path d="M21.6 7.2s-.21-1.5-.87-2.16c-.83-.87-1.76-.87-2.19-.92C15.5 4 12 4 12 4h-.01s-3.49 0-6.53.12c-.43.05-1.36.05-2.19.92-.66.66-.87 2.16-.87 2.16S2.18 9 2.18 10.8v1.69c0 1.8.22 3.6.22 3.6s.21 1.5.87 2.16c.83.87 1.92.84 2.41.93C7.49 19.97 12 20 12 20s3.5-.01 6.54-.13c.43-.05 1.36-.05 2.19-.92.66-.66.87-2.16.87-2.16s.22-1.8.22-3.6v-1.69c0-1.8-.22-3.6-.22-3.6ZM9.96 14.98V8.82l5.75 3.08-5.75 3.08Z" fill="#fff"/></svg>
         </div>
@@ -1114,7 +1172,7 @@
         <div class="channel-arrow">→</div>
       </a>
 
-      <a href="http:///" target="_blank" rel="noopener" class="channel-card kakao-card reveal reveal-delay-2">
+      <a href="http:///" target="_blank" rel="noopener" class="channel-card kakao-card">
         <div class="channel-icon kakao-icon">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.86 5.34 4.66 6.78-.2.74-.73 2.71-.84 3.13-.13.52.19.51.4.37.16-.11 2.6-1.77 3.66-2.49.68.1 1.39.15 2.12.15 5.52 0 10-3.58 10-8s-4.48-8-10-8z" fill="#391b1b"/></svg>
         </div>
@@ -1128,50 +1186,6 @@
   </div>
 </section>
 
-
-<!-- ============ COMPAT STANDALONE ============ -->
-<section class="compat-standalone section-pad" id="compat">
-  <div class="wrap">
-    <div class="kicker reveal">COMPATIBILITY</div>
-    <h2 class="section-title serif reveal">그 사람과의 궁합이 궁금한가요?</h2>
-    <p class="section-sub reveal">생년월일만 입력하면 일간 오행의 상생상극과 일지의 합·충으로 간단한 궁합을 보여드려요. (정밀 분석은 정밀풀이에서)</p>
-
-    <div class="compat-split reveal">
-      <div class="compat-myinfo">
-        <h4>내 정보</h4>
-        <div class="compat-form-split">
-          <input type="number" id="myYear" placeholder="년" min="1920" max="2026" required>
-          <input type="number" id="myMonth" placeholder="월" min="1" max="12" required>
-          <input type="number" id="myDay" placeholder="일" min="1" max="31" required>
-          <select id="myGender">
-            <option value="남성">남성</option>
-            <option value="여성" selected>여성</option>
-          </select>
-        </div>
-      </div>
-      <div class="compat-heart serif">❤</div>
-      <div class="compat-otherinfo">
-        <h4>그 사람 정보</h4>
-        <div class="compat-form-split">
-          <input type="number" id="otherYear" placeholder="년" min="1920" max="2026" required>
-          <input type="number" id="otherMonth" placeholder="월" min="1" max="12" required>
-          <input type="number" id="otherDay" placeholder="일" min="1" max="31" required>
-          <select id="otherGender">
-            <option value="남성" selected>남성</option>
-            <option value="여성">여성</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="compat-action reveal">
-      <button type="button" id="compatCalcBtn" class="btn-primary">궁합 보기 →</button>
-    </div>
-
-    <div id="compatResult" class="compat-result" style="display:none;"></div>
-  </div>
-</section>
-
 <!-- ============ PROCESS ============ -->
 <section class="process section-pad" id="process">
   <div class="wrap">
@@ -1179,7 +1193,7 @@
     <h2 class="section-title serif reveal">신청부터 결과까지, 이렇게 진행됩니다</h2>
     <p class="section-sub reveal">사람이 직접 확인하는 만큼, 결과는 바로 나오지 않습니다. 대신 정성껏 살펴보고 보내드립니다.</p>
 
-    <div class="steps">
+    <div class="steps reveal reveal-stagger">
       <div class="step">
         <div class="step-num serif">一</div>
         <h4>정보 남기기</h4>
@@ -1205,7 +1219,7 @@
       </div>
     </div>
 
-    <div class="free-note reveal">
+    <div class="free-note">
       <span class="badge">무료</span>
       지금 신청해 주시는 모든 분은 비용 없이 풀이를 받아보실 수 있습니다.
     </div>
@@ -1219,7 +1233,7 @@
     <h2 class="section-title serif reveal">더 깊이 알고 싶을 때를 위해</h2>
     <p class="section-sub reveal">무료 풀이로 충분하지 않다면, 두 가지 방법으로 더 자세히 봐드립니다. 글로 깊이 받아보거나, 대화로 직접 풀어가거나.</p>
 
-    <div class="pricing-grid">
+    <div class="pricing-grid reveal reveal-stagger">
       <div class="price-card">
         <div class="price-card-head">
           <div class="price-tag">글로 받는 풀이</div>
@@ -1235,7 +1249,7 @@
         <a href="#apply" class="price-cta" data-product="정밀풀이">정밀풀이 신청하기</a>
       </div>
 
-      <div class="price-card highlight reveal reveal-delay-2">
+      <div class="price-card highlight">
         <div class="price-pop">가장 많이 찾는 구성</div>
         <div class="price-card-head">
           <div class="price-tag">글로 받는 풀이 · PLUS</div>
@@ -1298,8 +1312,8 @@
     <h2 class="section-title serif reveal">생년월일시만 알려주세요</h2>
     <p class="section-sub reveal">나머지는 저희가 준비하겠습니다.</p>
 
-    <div class="apply-grid">
-      <div class="apply-side reveal">
+    <div class="apply-grid reveal">
+      <div class="apply-side">
         <h3 class="serif">신청 전에 알아두세요</h3>
         <p>지금은 신청 정보를 모아두는 단계입니다. 순서대로 정성껏 풀이해 연락드리니, 결과까지 며칠 정도 여유를 두고 기다려 주세요.</p>
         <div class="apply-points">
@@ -1310,7 +1324,7 @@
       </div>
 
       <div>
-        <form id="sajuForm" novalidate class="reveal">
+        <form id="sajuForm" novalidate>
           <div class="form-row">
             <label for="name">이름 또는 닉네임</label>
             <input type="text" id="name" name="name" placeholder="예: 김민지" required>
@@ -1353,24 +1367,6 @@
               </select>
             </div>
             <p class="birth-hint">시간을 모르셔도 신청할 수 있습니다. 다만 더 정확한 풀이를 위해 가족분께 한 번 여쭤보시는 것도 추천드려요. 분은 10분 단위로 선택해주세요.</p>
-          </div>
-
-          <div class="form-row">
-            
-          <div class="form-row">
-            <label>풀이 스타일</label>
-            <div class="radio-pills" id="stylePills">
-              <input type="radio" id="styleDokseol" name="sajuStyle" value="dokseol" checked>
-              <label for="styleDokseol" title="팩트로 찌르는 직설">🗡️ 독설가</label>
-              <input type="radio" id="styleHyeonja" name="sajuStyle" value="hyeonja">
-              <label for="styleHyeonja" title="오행과 주역의 논리">📜 현자</label>
-              <input type="radio" id="styleFriend" name="sajuStyle" value="friend">
-              <label for="styleFriend" title="편하게 말하듯">🤝 친구</label>
-              <input type="radio" id="styleCoach" name="sajuStyle" value="coach">
-              <label for="styleCoach" title="액션 플랜 중심">🎯 코치</label>
-              <input type="radio" id="styleSimri" name="sajuStyle" value="simri">
-              <label for="styleSimri" title="정서와 마음 깊이">🌿 심리상담</label>
-            </div>
           </div>
 
           <div class="form-row">
@@ -1459,6 +1455,7 @@
   </div>
 </footer>
 
+
 <script>
 /*
  * manseryeok (https://github.com/yhj1024/manseryeok)
@@ -1485,6 +1482,7 @@
  * SOFTWARE.
  */
 </script>
+
 <script>
 "use strict";
 var Manseryeok = (() => {
@@ -1560,29 +1558,17 @@ var Manseryeok = (() => {
       ];
       exports.BRANCH_ELEMENTS = [
         "\uC218",
-        // 자
         "\uD1A0",
-        // 축
         "\uBAA9",
-        // 인
         "\uBAA9",
-        // 묘
         "\uD1A0",
-        // 진
         "\uD654",
-        // 사
         "\uD654",
-        // 오
         "\uD1A0",
-        // 미
         "\uAE08",
-        // 신
         "\uAE08",
-        // 유
         "\uD1A0",
-        // 술
         "\uC218"
-        // 해
       ];
       exports.BRANCH_MAIN_STEM = {
         \uC790: "\uACC4",
@@ -1647,7 +1633,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/validation.js
   var require_validation = __commonJS({
     "dist/validation.js"(exports) {
       "use strict";
@@ -1716,7 +1701,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/elements.js
   var require_elements = __commonJS({
     "dist/elements.js"(exports) {
       "use strict";
@@ -1746,7 +1730,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/calendar/lunar-data.js
   var require_lunar_data = __commonJS({
     "dist/calendar/lunar-data.js"(exports) {
       "use strict";
@@ -1757,718 +1740,7 @@ var Manseryeok = (() => {
       exports.getLunarMonthDays = getLunarMonthDays;
       exports.getLunarYearDays = getLunarYearDays;
       var validation_1 = require_validation();
-      var LUNAR_DATA = [
-        25904,
-        92828,
-        23200,
-        43856,
-        76632,
-        11104,
-        41840,
-        21221,
-        53600,
-        58544,
-        87331,
-        55968,
-        88907,
-        22224,
-        10976,
-        106967,
-        41680,
-        53584,
-        117076,
-        46368,
-        112268,
-        44448,
-        21968,
-        75193,
-        17840,
-        41648,
-        107189,
-        43344,
-        46368,
-        92833,
-        43872,
-        87468,
-        19312,
-        17776,
-        86391,
-        21168,
-        26960,
-        92500,
-        23200,
-        109388,
-        42720,
-        19168,
-        107752,
-        42336,
-        53920,
-        60070,
-        54608,
-        22176,
-        103842,
-        38352,
-        84699,
-        18864,
-        42192,
-        118999,
-        45728,
-        46416,
-        27987,
-        11680,
-        38320,
-        71025,
-        18864,
-        107641,
-        25776,
-        27280,
-        109222,
-        27472,
-        11104,
-        43746,
-        37744,
-        84331,
-        51552,
-        58544,
-        92455,
-        55968,
-        23248,
-        71379,
-        9952,
-        37600,
-        103122,
-        51536,
-        119897,
-        46240,
-        46736,
-        87462,
-        21936,
-        9680,
-        42418,
-        37552,
-        108858,
-        26960,
-        29856,
-        111784,
-        43872,
-        21424,
-        11124,
-        9584,
-        21168,
-        86705,
-        26960,
-        92761,
-        23200,
-        43856,
-        83669,
-        19168,
-        42352,
-        83171,
-        53920,
-        121163,
-        46416,
-        22176,
-        103847,
-        38352,
-        19168,
-        43444,
-        42192,
-        53840,
-        109217,
-        46416,
-        87641,
-        11680,
-        38320,
-        82805,
-        18800,
-        42160,
-        107700,
-        27280,
-        109900,
-        23376,
-        11104,
-        103656,
-        37616,
-        18800,
-        26980,
-        54432,
-        125516,
-        54928,
-        22224,
-        76634,
-        9952,
-        37600,
-        51926,
-        51536,
-        54432,
-        111778,
-        46480,
-        87756,
-        21936,
-        9680,
-        102839,
-        37552,
-        43344,
-        110933,
-        27808,
-        44368,
-        76641,
-        19376,
-        75129,
-        9584,
-        21168,
-        43686,
-        59728,
-        27296,
-        105123,
-        43856,
-        84827,
-        19168,
-        42352,
-        86231,
-        53856,
-        55632,
-        87381,
-        22176,
-        38608,
-        71122,
-        19168,
-        107706,
-        42192,
-        53840,
-        119446,
-        46416,
-        13728,
-        43938,
-        38320,
-        84412,
-        18800,
-        42160,
-        45752,
-        27216,
-        27968,
-        109396,
-        11104,
-        37744,
-        21234,
-        18800,
-        25833,
-        54432,
-        59984,
-        92822,
-        22224,
-        11104,
-        99811,
-        37600,
-        51579,
-        43344,
-        54432,
-        55976,
-        46416,
-        22192,
-        11700,
-        9680,
-        37584,
-        53938,
-        43344,
-        46297,
-        27296,
-        44368,
-        22358,
-        19376,
-        9648,
-        83315,
-        21168,
-        108875,
-        59728,
-        27296,
-        44456,
-        39760,
-        19296,
-        43748,
-        42224,
-        21088,
-        119394,
-        54608,
-        88730,
-        22176,
-        38608,
-        84438,
-        18912,
-        42192,
-        54484,
-        53840,
-        54587,
-        46400,
-        46496,
-        103848,
-        38320,
-        18864,
-        43380,
-        42160,
-        43600,
-        59985,
-        27968,
-        44475,
-        11104,
-        37744,
-        19190,
-        18800,
-        25776,
-        29859,
-        55888,
-        27483,
-        22224,
-        10976,
-        37863,
-        37600,
-        51552,
-        119125,
-        54432,
-        55888,
-        87379,
-        22176,
-        42919,
-        42448,
-        37584,
-        43702,
-        43344,
-        46240,
-        47780,
-        44368,
-        21920,
-        101282,
-        42416,
-        21367,
-        21168,
-        26928,
-        94549,
-        27296,
-        44368,
-        23379,
-        19296,
-        42472,
-        42208,
-        53856,
-        60006,
-        54560,
-        55968,
-        91812,
-        22224,
-        19168,
-        43475,
-        42192,
-        53943,
-        45648,
-        54560,
-        120133,
-        46496,
-        21968,
-        21939,
-        18864,
-        25975,
-        42160,
-        43600,
-        46678,
-        27936,
-        44448,
-        23396,
-        37744,
-        18800,
-        26995,
-        25808,
-        27303,
-        55888,
-        23200,
-        44741,
-        43744,
-        37600,
-        53987,
-        51552,
-        119896,
-        54432,
-        54608,
-        88406,
-        22176,
-        42704,
-        21972,
-        21200,
-        43344,
-        117075,
-        46240,
-        111783,
-        44368,
-        21920,
-        107429,
-        42416,
-        21168,
-        45427,
-        26928,
-        27321,
-        27296,
-        43856,
-        20310,
-        19296,
-        42352,
-        21220,
-        53600,
-        59696,
-        29987,
-        55968,
-        88743,
-        22224,
-        19168,
-        106965,
-        41680,
-        53584,
-        55892,
-        46368,
-        54953,
-        44448,
-        21968,
-        76214,
-        17840,
-        41648,
-        45749,
-        43344,
-        46368,
-        109346,
-        44384,
-        87399,
-        21360,
-        17776,
-        25973,
-        21168,
-        26960,
-        31059,
-        23200,
-        43882,
-        42704,
-        19168,
-        42726,
-        42336,
-        53920,
-        60069,
-        54608,
-        23200,
-        46755,
-        42704,
-        19415,
-        19120,
-        43216,
-        54613,
-        45728,
-        46416,
-        23892,
-        19872,
-        38352,
-        21874,
-        18864,
-        43382,
-        25776,
-        27280,
-        47780,
-        27472,
-        11168,
-        43874,
-        37744,
-        21222,
-        53600,
-        58544,
-        27941,
-        55952,
-        23376,
-        14035,
-        10976,
-        41696,
-        58066,
-        51536,
-        54614,
-        46368,
-        46736,
-        23972,
-        21968,
-        9680,
-        42419,
-        41648,
-        108727,
-        43344,
-        46240,
-        111269,
-        44368,
-        21936,
-        11124,
-        9584,
-        21241,
-        21168,
-        26960,
-        27990,
-        23200,
-        43856,
-        22228,
-        19168,
-        42352,
-        83299,
-        53920,
-        125095,
-        54608,
-        23200,
-        44453,
-        38352,
-        19168,
-        43700,
-        42192,
-        53944,
-        45712,
-        46416,
-        22359,
-        11680,
-        38352,
-        19829,
-        18864,
-        42160,
-        107699,
-        27280,
-        44440,
-        27472,
-        11104,
-        103269,
-        37744,
-        18800,
-        26980,
-        58528,
-        60010,
-        55952,
-        23248,
-        76502,
-        10976,
-        37600,
-        51925,
-        51536,
-        54432,
-        119971,
-        46736,
-        22439,
-        21936,
-        9680,
-        38325,
-        37552,
-        43344,
-        55636,
-        46240,
-        46416,
-        27986,
-        21936,
-        10102,
-        9584,
-        21168,
-        43685,
-        59728,
-        27296,
-        47779,
-        43856,
-        19416,
-        19168,
-        42352,
-        21717,
-        53856,
-        55632,
-        91476,
-        22176,
-        39632,
-        21970,
-        19168,
-        42422,
-        42192,
-        53840,
-        55957,
-        46416,
-        22176,
-        44450,
-        38352,
-        19383,
-        18864,
-        42160,
-        46261,
-        27280,
-        44352,
-        47956,
-        11104,
-        38320,
-        21362,
-        18800,
-        25958,
-        58528,
-        59984,
-        92821,
-        23376,
-        11104,
-        101091,
-        37600,
-        116951,
-        51536,
-        54432,
-        120998,
-        46736,
-        22224,
-        75188,
-        9680,
-        37584,
-        53938,
-        43344,
-        54615,
-        46240,
-        46416,
-        87381,
-        19888,
-        9648,
-        99699,
-        21168,
-        43448,
-        26960,
-        27296,
-        44710,
-        43856,
-        19296,
-        43748,
-        42352,
-        21104,
-        29283,
-        55632,
-        27479,
-        22176,
-        39632,
-        19925,
-        19168,
-        42208,
-        54484,
-        53840,
-        54680,
-        46400,
-        54944,
-        103846,
-        38320,
-        18864,
-        43444,
-        42160,
-        45690,
-        27216,
-        27968,
-        46934,
-        11104,
-        38320,
-        19317,
-        18800,
-        25776,
-        29859,
-        59984,
-        28056,
-        23248,
-        11104,
-        38629,
-        37600,
-        51552,
-        59732,
-        54432,
-        55888,
-        30034,
-        22208,
-        43959,
-        9680,
-        37584,
-        51893,
-        43344,
-        46240,
-        111779,
-        46416,
-        21977,
-        19360,
-        42416,
-        21877,
-        21168,
-        43344,
-        47444,
-        27296,
-        44368,
-        27474,
-        19296,
-        42726,
-        42352,
-        21104,
-        27237,
-        55600,
-        23200,
-        46755,
-        38608,
-        19195,
-        19168,
-        42192,
-        118998,
-        53840,
-        54560,
-        56645,
-        46752,
-        38608,
-        21938,
-        18864,
-        42359,
-        42160,
-        45648,
-        111189,
-        27968,
-        44448,
-        84835,
-        37744,
-        18936,
-        18800,
-        25776,
-        92326,
-        59984,
-        27424,
-        108228,
-        43744,
-        37600,
-        53987,
-        51552,
-        54615,
-        54432,
-        55888,
-        23893,
-        22176,
-        42704,
-        21972,
-        21200,
-        43448,
-        43344,
-        46240,
-        46758,
-        44368,
-        21920,
-        43940,
-        42416,
-        21168,
-        45683,
-        26928,
-        29495,
-        27296,
-        44368,
-        84821,
-        19296,
-        42352,
-        21732,
-        53600,
-        59752,
-        54560,
-        55968,
-        92838,
-        22224,
-        19168,
-        43476,
-        41680,
-        53584,
-        62034,
-        54560
-      ];
+      var LUNAR_DATA = [25904,92828,23200,43856,76632,11104,41840,21221,53600,58544,87331,55968,88907,22224,10976,106967,41680,53584,117076,46368,112268,44448,21968,75193,17840,41648,107189,43344,46368,92833,43872,87468,19312,17776,86391,21168,26960,92500,23200,109388,42720,19168,107752,42336,53920,60070,54608,22176,103842,38352,84699,18864,42192,118999,45728,46416,27987,11680,38320,71025,18864,107641,25776,27280,109222,27472,11104,43746,37744,84331,51552,58544,92455,55968,23248,71379,9952,37600,103122,51536,119897,46240,46736,87462,21936,9680,42418,37552,108858,26960,29856,111784,43872,21424,11124,9584,21168,86705,26960,92761,23200,43856,83669,19168,42352,83171,53920,121163,46416,22176,103847,38352,19168,43444,42192,53840,109217,46416,87641,11680,38320,82805,18800,42160,107700,27280,109900,23376,11104,103656,37616,18800,26980,54432,125516,54928,22224,76634,9952,37600,51926,51536,54432,111778,46480,87756,21936,9680,102839,37552,43344,110933,27808,44368,76641,19376,75129,9584,21168,43686,59728,27296,105123,43856,84827,19168,42352,86231,53856,55632,87381,22176,38608,71122,19168,107706,42192,53840,119446,46416,13728,43938,38320,84412,18800,42160,45752,27216,27968,109396,11104,37744,21234,18800,25833,54432,59984,92822,22224,11104,99811,37600,51579,43344,54432,55976,46416,22192,11700,9680,37584,53938,43344,46297,27296,44368,22358,19376,9648,83315,21168,108875,59728,27296,44456,39760,19296,43748,42224,21088,119394,54608,88730,22176,38608,84438,18912,42192,54484,53840,54587,46400,46496,103848,38320,18864,43380,42160,43600,59985,27968,44475,11104,37744,19190,18800,25776,29859,55888,27483,22224,10976,37863,37600,51552,119125,54432,55888,87379,22176,42919,42448,37584,43702,43344,46240,47780,44368,21920,101282,42416,21367,21168,26928,94549,27296,44368,23379,19296,42472,42208,53856,60006,54560,55968,91812,22224,19168,43475,42192,53943,45648,54560,120133,46496,21968,21939,18864,25975,42160,43600,46678,27936,44448,23396,37744,18800,26995,25808,27303,55888,23200,44741,43744,37600,53987,51552,119896,54432,54608,88406,22176,42704,21972,21200,43344,117075,46240,111783,44368,21920,107429,42416,21168,45427,26928,27321,27296,43856,20310,19296,42352,21220,53600,59696,29987,55968,88743,22224,19168,106965,41680,53584,55892,46368,54953,44448,21968,76214,17840,41648,45749,43344,46368,109346,44384,87399,21360,17776,25973,21168,26960,31059,23200,43882,42704,19168,42726,42336,53920,60069,54608,23200,46755,42704,19415,19120,43216,54613,45728,46416,23892,19872,38352,21874,18864,43382,25776,27280,47780,27472,11168,43874,37744,21222,53600,58544,27941,55952,23376,14035,10976,41696,58066,51536,54614,46368,46736,23972,21968,9680,42419,41648,108727,43344,46240,111269,44368,21936,11124,9584,21241,21168,26960,27990,23200,43856,22228,19168,42352,83299,53920,125095,54608,23200,44453,38352,19168,43700,42192,53944,45712,46416,22359,11680,38352,19829,18864,42160,107699,27280,44440,27472,11104,103269,37744,18800,26980,58528,60010,55952,23248,76502,10976,37600,51925,51536,54432,119971,46736,22439,21936,9680,38325,37552,43344,55636,46240,46416,27986,21936,10102,9584,21168,43685,59728,27296,47779,43856,19416,19168,42352,21717,53856,55632,91476,22176,39632,21970,19168,42422,42192,53840,55957,46416,22176,44450,38352,19383,18864,42160,46261,27280,44352,47956,11104,38320,21362,18800,25958,58528,59984,92821,23376,11104,101091,37600,116951,51536,54432,120998,46736,22224,75188,9680,37584,53938,43344,54615,46240,46416,87381,19888,9648,99699,21168,43448,26960,27296,44710,43856,19296,43748,42352,21104,29283,55632,27479,22176,39632,19925,19168,42208,54484,53840,54680,46400,54944,103846,38320,18864,43444,42160,45690,27216,27968,46934,11104,38320,19317,18800,25776,29859,59984,28056,23248,11104,38629,37600,51552,59732,54432,55888,30034,22208,43959,9680,37584,51893,43344,46240,111779,46416,21977,19360,42416,21877,21168,43344,47444,27296,44368,27474,19296,42726,42352,21104,27237,55600,23200,46755,38608,19195,19168,42192,118998,53840,54560,56645,46752,38608,21938,18864,42359,42160,45648,111189,27968,44448,84835,37744,18936,18800,25776,92326,59984,27424,108228,43744,37600,53987,51552,54615,54432,55888,23893,22176,42704,21972,21200,43448,43344,46240,46758,44368,21920,43940,42416,21168,45683,26928,29495,27296,44368,84821,19296,42352,21732,53600,59752,54560,55968,92838,22224,19168,43476,41680,53584,62034,54560];
       exports.LUNAR_MIN_YEAR = 1391;
       exports.LUNAR_MAX_YEAR = exports.LUNAR_MIN_YEAR + LUNAR_DATA.length - 1;
       exports.LUNAR_BASE_UTC_MS = Date.UTC(1391, 1, 13);
@@ -2502,7 +1774,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/calendar/convert.js
   var require_convert = __commonJS({
     "dist/calendar/convert.js"(exports) {
       "use strict";
@@ -2606,7 +1877,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/astro/solar-terms-data.js
   var require_solar_terms_data = __commonJS({
     "dist/astro/solar-terms-data.js"(exports) {
       "use strict";
@@ -2617,109 +1887,7 @@ var Manseryeok = (() => {
       exports.SOLAR_TERM_DATA_MAX_YEAR = 2300;
       var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
       var OFFSET = 31;
-      var PACKED = [
-        "fjejeiehegeeececgdjgmhmhlgkekflgninjmhjgffdededgeggihlkomrmrlpjlfiefdfehfjhkikijighehdhchchdiejfjflgmglgjghghihkimhlfibe",
-        "ZdYeafdjflgmjnlnnnnmmiieedcdffihlhlfjdicieigjgjgifieifihiihiehcgcjelhnhmgjcgZdYcYcaeefhhkimkokokoilhkfididjfkhkikiiihggh",
-        "gijkkmmolokoimhmhmilhlhlhmjnkokmiigdebfchemipkpkpjoininingkghgghhkhlilhkgiehdiflhnjpjokmkljkkkkjjkjkklllnkmhlfjcgafaebgd",
-        "iflhminilijhghdgchchcgbfaeafafafZfbgehhjkklikgidfcdbdbgciejfkglhkhkhhefbbZbaceghikjmhmglhmhmimhlgkeibfaeZcabaacafdkhokrm",
-        "qknhkdgaeYdZecffhiijikiljkijhifheidjelgmhmjljlilimlompnomkjfgbfZfagcidjfliplsnsormmhgecebgdigkgkfjeiekfkgmgkgjgihijjljlj",
-        "jiihhhkjnlqlqjnhkehcfcfdgehfkimmpqpsorlpilfjdiciejfkfkejeiehghihkhkhkgjfjfieiejdidjekhmknnmmkjhecbbbbcdgfiflgnjplrmpknij",
-        "dgbebgchfgfeebfbgciflgmhmglfjeidhdgbebccbfejimjmikfgbdYcWbWdYecheihkjklmllkkjjhghehdidididhcgchdjgljolqmpmmkhifiejejekek",
-        "gminjpingkdgbcacddhhlinknkmkmknjnhlgkejeifhgihighfgfhgjklnmqlpkoimgkfjejfkglhokolollkiiehbfafagcielhnjpjoinhlhihhhghefdd",
-        "bcbcbdcgchdkfmiolplnkkggddadaedhiiljnjnjojnilfhbfZeZebifljmllljmjmjojnjmhkehbeZdYeZeaecggikmooqppnmjiffbdYcZfciflhlilili",
-        "lhjgjegeffegejgmiojojoiniokplqlpikffcbaacbgdifkhljnlpmqkohkcgZbYbbefgiiiigggfgghfieidididiekglilhkgjgkhljmmllhjdhaeZeZfb",
-        "gdjfmiokqmrnolkjghdgcfcfeifjgjgidichchdifhghghggfgfhghgghfhejflhninhkegadYcYdagdjijkkmkolqlpjngkdhbgcidkfjeidfddeehgkili",
-        "likgjfjeidhbhbfbfdhhkjlkliiffccbbcbfchekgmininjninimhmglhkhiigigjfjeididjflipmsmsmqjmhjiiiikikikjkjkkljlgkdibgbgdiglknmo",
-        "kmjlikikjikhkgkflflglfkfkfjdjejhmjolnnlnjmgkgkfjekgkhlhmglgkehdfdcdcccefghijlklilgkejdhdidhegdebdZdZcadbdccfdhflhninhldh",
-        "beYdYfahejgjhhhgjgjfiehbeaebfdiekhmhlfjfhgiijkkjjihfedbcZbXcYdZfbiflinlqmpknhjegcdccediekfkfkfkfkflglglglgkgjijlkmjlhkgj",
-        "hkjomqmqlngjcfadaddffiijjkkmnoooomnhjdhbgciejgkfjdhchdhfjijjikhkglhlhmgkfkejekgmjplplnkjifgcfcecfdhgkimjplrlqkojkhhffdfd",
-        "fegehegeeedgdielgmimhlgkeidhcgbgcfdfggkinkojmfibeYcWcYeahdkflhlkmnnolnkjghefegdgdgbfZdYdafdihlkmkmikgheedccZcYcYeahekglh",
-        "mgleibeYcXbacddhfkglhlhlinimhmhmgkdidfcedeeefdeeggiknoqoqmoildhcgcgeigjhkhlilikijgfebeZeagdjgnhninhmhmhmhmikhiigheiehdhe",
-        "heiejgliolqmrlpkmijhgffgghiikllmlnjmgkeichbebfbgdiflimimjljhjgjglflfjdgaeYdYdZfbgdifjjlmnpnolmghcdZcZebhflgmgmhlikikiigg",
-        "eecddefhiililhlgkgminjoknikdgadYbYaaZdbhekhnkqmrlpkngjcfZeZebffhijkikikhjhkjlilikgkekfkhlimjljkikjmkomomlkfgZdXcXeahdjgl",
-        "hnjolplpkmihfccZdbgdiekfjeididjekflfkfighhgigighfhgigiiljokojngkdfbdZcZdbfejhmknmnolojmhkehbgbgafbhchchcfcfdeffigkhmhkfi",
-        "dgcfbgchchdiejilkllkkhgdbZaZabddhgkhniniokolnjmhjehdhdgegfffbeaeagckgmjpkpingkeicgbecdddfeifkhlhlhjfidgafZfahejgkjlkkkjj",
-        "jjkjklkljlikfkejeieieheidigljpmqnpnlkhjeidjekgkfkfkejekejdhdfcdeehhljnkokmikgifiejekfkgjfhghfhffefeeeffhjimjninimfjeidhd",
-        "iejgmhlhjggfeebeafafagbhdiekglgkdicgbeceffhegdeabYaYbZcaeafbidjgljmkliifebcZcbeeghfieichbidididhcgbgchdifkhihfgdfchdjgmh",
-        "mhkehaeYcWbWcYdceggjjllnmnllijfhcfafbhdjfkgififheigkilklllkikhlhlhmhmglgkgmjplqlpjkgecacZebhejglhninjplqkoilfgcedeefhghg",
-        "gffefehgjhlininhmgkgjfififheigkimmmolnhleibeZdYdZgcjgmiokplplmljkhiehcgbfbebebfaeZeagcihkkllkkigfccbbbbdcecgdjfmjojnikfg",
-        "adYbYcZedhghjhliniojojnhkeidhbfaeYdYbYZZadchglknlokmhjehaeYcXcYcaeehgihjijhifgedcacZdahdjflflgkgkglhmjnjmjjhfebeaeafagbh",
-        "djfmkqmsmrknhhddccddgeififififigjeichbgbfdhfjikjkijgihihikjmimhlfjdicgbgbgbhdjfljomponplnilficgbgdjfkhmhmgkfiehfffffefef",
-        "eggihjhjgjeiejekglikhieeabXaXbacddgfigmiplqlpjmfibfZdZfcjfkhihfifjfkgkfkfididhdidjfkeiegefghijlkljigecbYZWaVbYfbiflinkom",
-        "plojlhieecccbfcjelfkfjejdjekglhmhlgjghhgjhkhlhkgkgmjnlpknhkbfYbXaZdeghjkllllmmlljkghcgaeZfagdheiehdhcheigjiijhkfkfjejejd",
-        "ieiekfmhojnjmihgdeacYbZcafejimkojojnimgjehefcdccbdbdceddecebgcielhmilhjegaeaeaecgeghgihminimhkdgZeYcYeahelhnkmklllmknklj",
-        "khifhegdgbgafaeafdhgkjnlomnlmiifedceafbhdjekglglgkglfjeidgdgggjinknjoimgkglhmjpjojnhkegeffegfgfgfhiklnnrnqlohkdhcgdhgkhk",
-        "hjgiehfhfffdgdhciejflhmhlgkeicidifkijjijgiehcgbfbgdheiglhnjokpknjjiggeeeeefgiiihiegcfagbgcgcgdhdgdheieifhfeecfchekglfjcf",
-        "YcWbWcYeafdgfgiilkolojlghcdZdafcidjejdgcedffghihihhhghghfieidhcgafchfkimimhkehbdZaYZbZebiekgmhojnjoinhlejdhdgfghgjhjfieh",
-        "ehfkjnlpmpkpimilhkikjjiihjjlknmnmklfhbfZeagdjgminjojojojmkkjhhfheidjeididichchdjfminknlmlkkijghfhehfihljnkojpimgjfhdebdc",
-        "edhgjilklljmimhlgkfjeicgaeYdYdYdZdadcegglkplpjngjcfZeZeZfahcifihjklljkhhddbbabbeciekflfkgkhlkmjmjmhkfidfccbZbXbXdZgdkhok",
-        "rlqlpildgbcYaaadcgeifjfkfkgkglfjdichcheihjjjkijhihijlmonplnhjcgZeZebgdheigljomqpronmiidgaeagcjekfkejejejekfighgfhfigkhlh",
-        "lhjgjgkglhojpkojkhhfecccddefhijmmonrnsmqknhkdhcgchdkglikhjhhheiekfkfkejdidiejfjekejehfiijmkmikfgbcYaYbZeciekgmjomqoqoolk",
-        "ggddbddfhgjgkeididjfkglhlglgjfieifggggeheiekgmiojnhlehaeXbWbYccfhilknkmkmjlikhifhcgbhchejgkgjghfhfihkjnmnnkmhkfkfkflhmgl",
-        "gmhninjnhkfgcbbYbYfcjglinjnjnjnhmgkfidfdeeeffgfgffegfgfihkhminhmhlfifhdgeheigkillmlklhkeicfZeYdZeaielhnjnjmjjihifiehdgbf",
-        "ZcZdYdZeZfZfbhfjjlmnmkjhfecbbaccfdifkgmhminjmhjfgceaebfehikljmiminhnjojoinimfkdhaeZdabccedigkjolqnqmpkmfibfZfbgeiijijjii",
-        "ihiijijjhigjfkgniojnjmikgkhliolqnomkjfgcgbhdjekglgmipkqlrlpjkgfededhfjgjgiegdgchchdididifihjikjkjjhighgghhliminglfichbfa",
-        "fbgciekhmjnmmnknjlfjdhcgbhdjflfkeicgbfdfffhgjhighfhfhfiehdgagbhejhliliiefbbZbZcceffigkgmiokpkoingjdhdidifjgifffcfbfcifkh",
-        "mjnjmimglfjdhdfdeedfgihjjljjiiffbeZeZgbjfliljmjlimimjlkljkjikglglglfkeididjgnjpmsornomklililhlhlhlhnjnkpjnhkfhcfdfghjjll",
-        "mllllklkmjlhlglglgkgjfiehdhdiejgkjmnmpmqlpjohkejdjdjfmhnioknkkjijghegcfbfchfjhmjmimglgkhkikijihfecbabZabbcaebhdliolqlpkl",
-        "fhadYcYcaedggfifkhlhmhleidhbgagbiekgkhjihjhkjmknknkliidfadXbWbXcafdiillonqoommjigcdZdYfbiekflgkfkflgmhlilhjhghfjgmininhm",
-        "glgnjpmrmrkmggdcbbccffigjjllonqosnpjmeibeaecgeigigififighihjgkgkflfkfkfkfkfkfkflhnlonnnkmgjcfZeZeagdkgmjqlrmrnroomkjgfee",
-        "deegfhgjfiehcidjglimjmikfidhdhegfggehekhokqkqjmfhaeXcXeZgdihkkkmmpmqnqloikfidhdiejdjeidgdgfhijlmnnmmllkiiehbgagbgdhekhli",
-        "mimgkfgcdaaaZdbhflhnjnjnjninininhlgjghgfhfifjeiehfjhlkpmrmrkoikfifhghhiikjkjllkljkhidgZeZfcifkhnkokojmimikjiigifjeidichc",
-        "hchdiekglinkomnmlmjkgiegdgeihlknkojnhmgifhdfcdcdcfeiiklmmklhkfkekflgkehbeZdYdYdaecfefhgliolqlpilfhbfaeagcjfliljkkjkikijh",
-        "iffegfhgkhmiojoimililjmknlnklhiffebdafbhdkgmhnjqlrmqkpilfidfefhgkinjmhlfjfkgkhminimimimkmnnonnlljjijknmpnpkmgjcgbgcgfihk",
-        "iljmkolomnmjkficgchdjflglfjeichcheifighigkhkgkgkgjfjfidjekhmimilhhfedccbbcdfgjkknlokojoinhkfidgcfcgdiehegdecbebhekfmgmhk",
-        "fjdhchbhcgcfcffhjjmjnilfhcdZcZdagciekglilkmlmmmlkijhhghhghehdgafZeagdjhmkplqlojlhifeecebgchdjekflhlglfkdhbfaecffhkjmkljk",
-        "hjhkimknjojnglfjfhfhfhfhfhgjjmnqrqsnpjnglejejfkglglglililikhggdfcheiglininimhmhmgmhmiljlkjjhifgdfdfdffhglinkrlrmqlnjkghe",
-        "gdgeigkjkkjlhkfkfkejdichchcjekgkgkghffgfiglglgjdfZbWaWaWbXdZecgfjkmnmnlkhgdcbbacbfdidjdidieifjgjfifhehehfggfieidididiflh",
-        "ojoimgjcfYbXZYZbbfdiglinkomqmojleibfaebgehhiihhgffghijlkmkmilglglglhlhkgkgkhnkpnqnnlhhbeYdYeagdkflhnjpkqlqkmiifeececgdgd",
-        "gdgdfdgdiekflglhkijhiggffefegfgiilkokpkohkehaeXbXcZgdjhlknmmnmnloimfjcgbfZeagbgbgagbfcfgikknkmjkfgdebeaeafagciekhmknlmji",
-        "feaaYaZbddhfkhminjpkqlpknilfjdhdgcecdcbdbfbhdjgnjokojngjdgZdYcZbcdgfhgjhihihiggdfadYdZfbigkimjlhjgjgjhjijihidhbfafagbhbg",
-        "bidkgnjplpmnjhgdfcebgcifkgkfkfkfjdibfacabbcefghjjjijiihifieiejejdhdfbeaeaeaecgfihjkkmjojnhlficgZeZgcjflhmhkghfffdfcebeae",
-        "afbgejgkgkeidhcfeghhihfecaZYXYYZbaebgdielinkojnhjdfZdZdaeeghgjfididjdjejejeidjdjekgkhiihigheigjhlilikgicfZcWcXdaffhhkjkk",
-        "llmklkkiggcfbgciekglhkfjdidiekhljmjkkijhlhlhmhlfkekglhnioimghddbabaddhfihkjlkmjnimfkdhbfadbededfdececdbcccfdhdjejeidicgb",
-        "fbfbhchdifjijjhjegbeYbWaWbYfbiflglglhkhihhgefcdbbababacacZcXcYeagejhlikgidebcZcZbbbdbfbhekgmglficfZdWbXdZfdhghigjhkhlhlh",
-        "lgkgjeidhafZdYbYaZbccefijllmmmkkfgbeYcXdZfbfcgdgdhdgdheheedcdbfcielglfkdididjflhmjnijgffdebebfbfbfchfkiplqlpjmgieeddeeef",
-        "gffgfffegegchbhbhchdifjfjfjeidgcgegggjhlhlficfZdXdXdYfahdjgljmmmmkmijegbdbdcfdhdhcgafZebededfddcdbcbdcddcdZbXcXdZhdjeieg",
-        "acWZUXTYVZYaZZdcgekgmhmgjcfZcXbWcXdZdacaabacaecfegehfhehdgbgbgafadbcbfehgjhjghedbYYUXTZWdZgcjekfkglglgkficebbcaecgdhdhbf",
-        "aeagdigmhmhmhjfhfggghfhfgeggiiljmikehadXaVZXcbfehgjhkikjkjhiegaeZdYeYeZdZdYeZeZeagehghigjgidgbeZdYdZebhdjflhmhkghedbaZWX",
-        "WXYbcegjhlhlglglgjfideacZbXZWZXaYaZZaZebhelhmhmfiaeYcVbVbXdaedfghjilikgidfZbWaWaXeahdifjhjijjjijiihhgfeccZbXbWaWcXdZfdig",
-        "ljokojlfgbaYWYVaXdagbhcgbgbgcgagZdYbYaZaddgfifiegdfdgfjglgkeiaeYbXZYaZbbccedghkllmjlfibeYbXbXcZebgcgbfafbdbcbabYdYeZeagc",
-        "hbhbhbgbfbgchegfgfddaaXYWYXZZccfdielhminikhhddabYaYbbedffefbeZdZfafbfaeZdYdZeafbfbdaaaZdbgejeicfZbUXSWSYUaXcZecefgiikjjh",
-        "gddaaZaZbZfbgbfaeZdZdbecgdgehehffedecfbgafZfZfbhdjejdibfYbWYWXYZdchekfkfjeifieidgaeZeaebeefgffddbbacceeigjhlgkeidieieiei",
-        "eheheifighfdcZbVZVaWdZgchdjeieichbfacaZaYbYbYbYbXbXbYbXcXdZfafcgdfddccbaZaZaabccedgcgbgaeZcXZUYTYTZXcagdhfgfdebfafafZeYc",
-        "WbVZUZTZUZUYUXWYbbgfjgjefbcYaWZVZVbWdYeaebfdfefdeabYZYaaacbechcichbhchdiejfjeidgacYYYVYVaVbWdZfbjelhmhlfibeXaWYXabbecebd",
-        "acadbecgcfafaeZfcgehfhdfcebecffijikgidgZdXbWbXcXdZfbhflhmjmjjhefacXbYcZeaeafZdYdYeYeadbddcdddcdcdcdbcbdadafcidkfjehdeZaW",
-        "YVYVZYcbeefhgkhmhmfibfZbVaVaXdZeZcYaXZYYbZebfbfadZcYcXcYcWbVZUZXbbefggecaZWVTTSTSWUZVbXdZgdieifidfbcYaXZXZZZbYbWbVbVbXdZ",
-        "gbididhcgbdZaZZZYaYbZcZecgdgdgaeXaUXSXTYXbceffffefegfffefceZeYdYeZeaeZdYdXcYechfjikihhdgbfafZeafafbhciejeidgacYYXWYWZYcb",
-        "fdheiehehchbfaeZcZcZaYZXYWYWYXZaacbfdiekejcgaeXbVZVaXcZfcgeggegcgbeXbVZSYTZUcYebhchcgcedefdfcebbYYVWUVTWTXTZVaXdbgfjilhj",
-        "eeZaWXTVVVYXbYeagbhchchbfZdXbVbVbXbadddgdgchdidiejgkfjcfXbUXSWSVVXZZcbeehhiijhiefZaTXRXSYWbadadZcZbZdadbdcbbZbXcYeZfbgbf",
-        "aeZfafciejfgdbZWXTWTYUaWbYdbgdjflgkeibdYZWXXXYYaabaaaaZaYbXbXcXcYcYcZcZcZdZdYdZcaccdfdhdhcfYbVYSXSXUbXeahdifihiigiegbdYa",
-        "VZWaYcaeZdYcXbWaYcbdcdccbbaaZZZaaZaXaVbXdagchdgadXZTXRWTXWZZbdbfchdididicgaeYcXcYcYdacaaaYZXaXbZdcgehfjehcfZeYdYbZcacbdb",
-        "dbdcdbcbZYWYTZUbYechdjdhbfafafafcecdcbdbfbgbfafYdXcXdZgciekfjegdedcdcdcdcecececeaeYdWbUYUXUYXaZdcfegdfcecbbYbXcWcWcXbWaU",
-        "ZUZUaUZVbXbacccfcfbeZcWZUYUZVbYeZgafadZcaaZYXVWUVUWWZZcbeceZdXcXbXcZcabXZUXSURTRTTUVTXUaWeahdjeicfXbUYSWSXUZYaaacZdaeaea",
-        "eZcYbXbXbXdYeaebecdcccddefgghgeeabVXSWRXTZWbYdagchfkgkfhddaYYUYUaXeZeZdYdXcXdYeafbfcebccbecfcgbeadadagdiflfkdgZbXYWWWXXY",
-        "ZabddfghihjficgYcWaWZWaWbXbXbWaWZXZZacafbfbfaeYdXcWbWbWbWcYebfegfffbcXYTURUTWVaYdZgbhcieififfccZZWYXZYZZYYVXTWSYVcYfbgcg",
-        "aeYcVaUYUXTVTTVUZYdagbgbeXaTXRWQWRYUZWaZaccedfefefcdacZcYbWaUaUYTWUXVYWbafdhfighfdcZaVYTZUaVbXcYdZeZfaeZcXZVWVUYWbYebfbf",
-        "aeZeafbgbhbgbeZbZaZZaZZXYYZYbcfejglhleicfZcYcYbYcaebecfdedccZbWaUZUZUaXdZfagbgafaeadbcbbcacYbVZUXSXUYVaWcXebhdhfiggfcbZX",
-        "WVVWXYZdbfbfafZeZdYcXaVXTXUYWbZebedccZdZeZfagbfYcUYRVPTPVQVTXWYabeeigjghdeZaUWSVSXTaWdZdbecdcdccccbbaaZZZYbYdZeZfbeafaea",
-        "gchcgbfZaVVSRSQUSYVcYfagchdidjchadWYSVTUWXaZdacZaXaXZYcYdZdXdXcWbYbacbdbcZbZcceffgefacWYSWQVRXTZXcZfbhdieiefcaaWYTXSXTYU",
-        "ZWaWaVZUaVaVbXaabbabYaYZXYXZXZYbYcYfahcgbfabXXUURTRVTYYccdfdgdidichbfYcVZTYTYUZVaVZWXWVYXbYebgbfZdXaWZUYTZTYUYVZZbcdfeec",
-        "bYYVUTUSVTYVcYeZfagbgdfdfcebdacabZZZXaVaUaVZUaWcYfbiejejcfabXXXWYWaYbYcYcYcYcYcXbWZUZUYWaacdfffddbbbbabcbeaeZdYdXcXbXbXa",
-        "WaVaWcZfeggggdgaeXbWcXcXdZfafafYdXcWYVWWVWUYVaXbZdaeadZcWbVaVaWbXaYZXXVVTUTUUWWXYYaYeafbgcgadYaUXTXTYVbYcZbZZZWZVZVaVZUY",
-        "SYTYUaXcYdXbWYVWXXZYcacZZVXSTRSPTPVRXSYVaYdceegeebbYYVVVVVVYWbXdXcWaWaXcXcYdZeZdadadcbdaeZdYcXcXeagcidhbeXaTWSUTVXXaacad",
-        "bedfegfgceZbVZUZWbZcacaaXZWYWaZcdefdgcgbfZfafaeZdXcXcZgcheheecaaVYTXSXUZWbYdagbgcichbeabYYYYYXYWXWWVWUWUWUYUaXdafbfbdYaX",
-        "YUXUWUYVYXZaaebgbgadXbTWQVQWRYVbXdadbcdcecfbeZcXaVXTXTWSWQVPUPTRVWZacededbaYXVVUTURURWRYUaXdaebdZbWZTWSURUUVXVaXdXdYeZeZ",
-        "fafafZeZcWaVWTUUTUSWTXVZYdcgeificfYaTXRVRVVXXYYZYZYZYZZZZXYUYTYTZWbYdZeZdYcYbYdZecedccZbXaUZUZTZTaVaXeahdjfkfhdcbZZWYVYW",
-        "ZYbZdadZcXbWbVaUYUXWXXYXaYbZbabaaaYaXcYeYeYcVZTWQVQVRWUZWbZdddgeieicfYbUXRWSXUbXdYdYcXaYaaZaZZWXWWUWVYWaYbXbVaUZVaYdbebc",
-        "YYTUPROQQQRRVUZWcZgciejehaeXaTXRVSWUXXYZXbWaWbWaWcXcYdYcWbWbVaXZYZZZZZZZbcddfddaaVWQTNSOURYWbZcbdbecfbebcYXWSURWSYUaWbWa",
-        "VZUZVaWcYeadabaZaYaWaXbXaWbYcafbhbgadXZTUSSRSSTVWYZacdeedfbeZcWaUXSWSWRWSWSXSWTWUWWXZYbZeZeXcVZTXRWSXTYUaXcZdadccdZaWWST",
-        "PROSRXVbYfafafbfbecdabYYWWUUTUTUVTVRVRWSYVbYebgbfZbWYTWRVSUTUWUYWbYeYeZdXcVZTXSXRXTZWbabcbdbdacadacbdbeacXaUYSXSWTWVXWYX",
-        "ZZdbfegeedZZUXSWSYVbXcXbWaVZUZUZVYVXVVXVZXdYeaeYcWaUZUaWcXdZdYaYXXWXVXVXWXWYXaadbfchbfZcWZVXVXVYXaXaXZWXVVVTVRWRWRXSYTZV",
-        "bWbWbWaUYTXUVVWYXbWZUXSVQTPUQVRXTZUbWcYcbccbaYXVTTSSUVXWaWZUYSXRXSXTYUXVXUXTYUYWYWXXTVRVQXTaWcXbVZSVOSNRNSPTSVVVYXaYdZdZ",
-        "dZbWZUYSXSYTZVZWYWXVVVVWWXZaacccbdZcXbWbWbWaVZVZXbZdaeadYZVUSQSQWSZWcYdYeYeZeZfZdYcWYVWWXYXaXbXZVYTWVYWbYeafbfadZbZaYZYZ",
-        "YZXZYabcdceacWaUXRWRVRWT"
-      ].join("");
+      var PACKED = "fjejeiehegeeececgdjgmhmhlgkekflgninjmhjgffdededgeggihlkomrmrlpjlfiefdfehfjhkikijighehdhchchdiejfjflgmglgjghghihkimhlfibeZdYeafdjflgmjnlnnnnmmiieedcdffihlhlfjdicieigjgjgifieifihiihiehcgcjelhnhmgjcgZdYcYcaeefhhkimkokokoilhkfididjfkhkikiiihgghgijkkmmolokoimhmhmilhlhlhmjnkokmiigdebfchemipkpkpjoininingkghgghhkhlilhkgiehdiflhnjpjokmkljkkkkjjkjkklllnkmhlfjcgafaebgdiflhminilijhghdgchchcgbfaeafafafZfbgehhjkklikgidfcdbdbgciejfkglhkhkhhefbbZbaceghikjmhmglhmhmimhlgkeibfaeZcabaacafdkhokrmqknhkdgaeYdZecffhiijikiljkijhifheidjelgmhmjljlilimlompnomkjfgbfZfagcidjfliplsnsormmhgecebgdigkgkfjeiekfkgmgkgjgihijjljljjiihhhkjnlqlqjnhkehcfcfdgehfkimmpqpsorlpilfjdiciejfkfkejeiehghihkhkhkgjfjfieiejdidjekhmknnmmkjhecbbbbcdgfiflgnjplrmpknijdgbebgchfgfeebfbgciflgmhmglfjeidhdgbebccbfejimjmikfgbdYcWbWdYecheihkjklmllkkjjhghehdidididhcgchdjgljolqmpmmkhifiejejekekgminjpingkdgbcacddhhlinknkmkmknjnhlgkejeifhgihighfgfhgjklnmqlpkoimgkfjejfkglhokolollkiiehbfafagcielhnjpjoinhlhihhhghefddbcbcbdcgchdkfmiolplnkkggddadaedhiiljnjnjojnilfhbfZeZebifljmllljmjmjojnjmhkehbeZdYeZeaecggikmooqppnmjiffbdYcZfciflhlililihjgjegeffegejgmiojojoiniokplqlpikffcbaacbgdifkhljnlpmqkohkcgZbYbbefgiiiigggfgghfieidididiekglilhkgjgkhljmmllhjdhaeZeZfbgdjfmiokqmrnolkjghdgcfcfeifjgjgidichchdifhghghggfgfhghgghfhejflhninhkegadYcYdagdjijkkmkolqlpjngkdhbgcidkfjeidfddeehgkililikgjfjeidhbhbfbfdhhkjlkliiffccbbcbfchekgmininjninimhmglhkhiigigjfjeididjflipmsmsmqjmhjiiiikikikjkjkkljlgkdibgbgdiglknmokmjlikikjikhkgkflflglfkfkfjdjejhmjolnnlnjmgkgkfjekgkhlhmglgkehdfdcdcccefghijlklilgkejdhdidhegdebdZdZcadbdccfdhflhninhldhbeYdYfahejgjhhhgjgjfiehbeaebfdiekhmhlfjfhgiijkkjjihfedbcZbXcYdZfbiflinlqmpknhjegcdccediekfkfkfkfkflglglglgkgjijlkmjlhkgjhkjomqmqlngjcfadaddffiijjkkmnoooomnhjdhbgciejgkfjdhchdhfjijjikhkglhlhmgkfkejekgmjplplnkjifgcfcecfdhgkimjplrlqkojkhhffdfdfegehegeeedgdielgmimhlgkeidhcgbgcfdfggkinkojmfibeYcWcYeahdkflhlkmnnolnkjghefegdgdgbfZdYdafdihlkmkmikgheedccZcYcYeahekglhmgleibeYcXbacddhfkglhlhlinimhmhmgkdidfcedeeefdeeggiknoqoqmoildhcgcgeigjhkhlilikijgfebeZeagdjgnhninhmhmhmhmikhiigheiehdheheiejgliolqmrlpkmijhgffgghiikllmlnjmgkeichbebfbgdiflimimjljhjgjglflfjdgaeYdYdZfbgdifjjlmnpnolmghcdZcZebhflgmgmhlikikiiggeecddefhiililhlgkgminjoknikdgadYbYaaZdbhekhnkqmrlpkngjcfZeZebffhijkikikhjhkjlilikgkekfkhlimjljkikjmkomomlkfgZdXcXeahdjglhnjolplpkmihfccZdbgdiekfjeididjekflfkfighhgigighfhgigiiljokojngkdfbdZcZdbfejhmknmnolojmhkehbgbgafbhchchcfcfdeffigkhmhkfidgcfbgchchdiejilkllkkhgdbZaZabddhgkhniniokolnjmhjehdhdgegfffbeaeagckgmjpkpingkeicgbecdddfeifkhlhlhjfidgafZfahejgkjlkkkjjjjkjklkljlikfkejeieieheidigljpmqnpnlkhjeidjekgkfkfkejekejdhdfcdeehhljnkokmikgifiejekfkgjfhghfhffefeeeffhjimjninimfjeidhdiejgmhlhjggfeebeafafagbhdiekglgkdicgbeceffhegdeabYaYbZcaeafbidjgljmkliifebcZcbeeghfieichbidididhcgbgchdifkhihfgdfchdjgmhmhkehaeYcWbWcYdceggjjllnmnllijfhcfafbhdjfkgififheigkilklllkikhlhlhmhmglgkgmjplqlpjkgecacZebhejglhninjplqkoilfgcedeefhghggffefehgjhlininhmgkgjfififheigkimmmolnhleibeZdYdZgcjgmiokplplmljkhiehcgbfbebebfaeZeagcihkkllkkigfccbbbbdcecgdjfmjojnikfgadYbYcZedhghjhliniojojnhkeidhbfaeYdYbYZZadchglknlokmhjehaeYcXcYcaeehgihjijhifgedcacZdahdjflflgkgkglhmjnjmjjhfebeaeafagbhdjfmkqmsmrknhhddccddgeififififigjeichbgbfdhfjikjkijgihihikjmimhlfjdicgbgbgbhdjfljomponplnilficgbgdjfkhmhmgkfiehfffffefefeggihjhjgjeiejekglikhieeabXaXbacddgfigmiplqlpjmfibfZdZfcjfkhihfifjfkgkfkfididhdidjfkeiegefghijlkljigecbYZWaVbYfbiflinkomplojlhieecccbfcjelfkfjejdjekglhmhlgjghhgjhkhlhkgkgmjnlpknhkbfYbXaZdeghjkllllmmlljkghcgaeZfagdheiehdhcheigjiijhkfkfjejejdieiekfmhojnjmihgdeacYbZcafejimkojojnimgjehefcdccbdbdceddecebgcielhmilhjegaeaeaecgeghgihminimhkdgZeYcYeahelhnkmklllmknkljkhifhegdgbgafaeafdhgkjnlomnlmiifedceafbhdjekglglgkglfjeidgdgggjinknjoimgkglhmjpjojnhkegeffegfgfgfhiklnnrnqlohkdhcgdhgkhkhjgiehfhfffdgdhciejflhmhlgkeicidifkijjijgiehcgbfbgdheiglhnjokpknjjiggeeeeefgiiihiegcfagbgcgcgdhdgdheieifhfeecfchekglfjcfYcWbWcYeafdgfgiilkolojlghcdZdafcidjejdgcedffghihihhhghghfieidhcgafchfkimimhkehbdZaYZbZebiekgmhojnjoinhlejdhdgfghgjhjfiehehfkjnlpmpkpimilhkikjjiihjjlknmnmklfhbfZeagdjgminjojojojmkkjhhfheidjeididichchdjfminknlmlkkijghfhehfihljnkojpimgjfhdebdcedhgjilklljmimhlgkfjeicgaeYdYdYdZdadcegglkplpjngjcfZeZeZfahcifihjklljkhhddbbabbeciekflfkgkhlkmjmjmhkfidfccbZbXbXdZgdkhokrmrlqlpildgbcYaaadcgeifjfkfkgkglfjdichcheihjjjkijhihijlmonplnhjcgZeZebgdheigljomqpronmiidgaeagcjekfkejejejekfighgfhfigkhlhlhjgjgkglhojpkojkhhfecccddefhijmmonrnsmqknhkdhcgchdkglikhjhhheiekfkfkejdidiejfjekejehfiijmkmikfgbcYaYbZeciekgmjomqoqoolkggddbddfhgjgkeididjfkglhlglgjfieifggggeheiekgmiojnhlehaeXbWbYccfhilknkmkmjlikhifhcgbhchejgkgjghfhfihkjnmnnkmhkfkfkflhmglgmhninjnhkfgcbbYbYfcjglinjnjnjnhmgkfidfdeeeffgfgffegfgfihkhminhmhlfifhdgeheigkillmlklhkeicfZeYdZeaielhnjnjmjjihifiehdgbfZcZdYdZeZfZfbhfjjlmnmkjhfecbbaccfdifkgmhminjmhjfgceaebfehikljmiminhnjojoinimfkdhaeZdabccedigkjolqnqmpkmfibfZfbgeiijijjiiihiijijjhigjfkgniojnjmikgkhliolqnomkjfgcgbhdjekglgmipkqlrlpjkgfededhfjgjgiegdgchchdididifihjikjkjjhighgghhliminglfichbfafbgciekhmjnmmnknjlfjdhcgbhdjflfkeicgbfdfffhgjhighfhfhfiehdgagbhejhliliiefbbZbZcceffigkgmiokpkoingjdhdidifjgifffcfbfcifkhmjnjmimglfjdhdfdeedfgihjjljjiiffbeZeZgbjfliljmjlimimjlkljkjikglglglfkeididjgnjpmsornomklililhlhlhlhnjnkpjnhkfhcfdfghjjllmllllklkmjlhlglglgkgjfiehdhdiejgkjmnmpmqlpjohkejdjdjfmhnioknkkjijghegcfbfchfjhmjmimglgkhkikijihfecbabZabbcaebhdliolqlpklfhadYcYcaedggfifkhlhmhleidhbgagbiekgkhjihjhkjmknknkliidfadXbWbXcafdiillonqoommjigcdZdYfbiekflgkfkflgmhlilhjhghfjgmininhmglgnjpmrmrkmggdcbbccffigjjllonqosnpjmeibeaecgeigigififighihjgkgkflfkfkfkfkfkfkflhnlonnnkmgjcfZeZeagdkgmjqlrmrnroomkjgfeedeegfhgjfiehcidjglimjmikfidhdhegfggehekhokqkqjmfhaeXcXeZgdihkkkmmpmqnqloikfidhdiejdjeidgdgfhijlmnnmmllkiiehbgagbgdhekhlimimgkfgcdaaaZdbhflhnjnjnjninininhlgjghgfhfifjeiehfjhlkpmrmrkoikfifhghhiikjkjllkljkhidgZeZfcifkhnkokojmimikjiigifjeidichchchdiekglinkomnmlmjkgiegdgeihlknkojnhmgifhdfcdcdcfeiiklmmklhkfkekflgkehbeZdYdYdaecfefhgliolqlpilfhbfaeagcjfliljkkjkikijhiffegfhgkhmiojoimililjmknlnklhiffebdafbhdkgmhnjqlrmqkpilfidfefhgkinjmhlfjfkgkhminimimimkmnnonnlljjijknmpnpkmgjcgbgcgfihkiljmkolomnmjkficgchdjflglfjeichcheifighigkhkgkgkgjfjfidjekhmimilhhfedccbbcdfgjkknlokojoinhkfidgcfcgdiehegdecbebhekfmgmhkfjdhchbhcgcfcffhjjmjnilfhcdZcZdagciekglilkmlmmmlkijhhghhghehdgafZeagdjhmkplqlojlhifeecebgchdjekflhlglfkdhbfaecffhkjmkljkhjhkimknjojnglfjfhfhfhfhfhgjjmnqrqsnpjnglejejfkglglglililikhggdfcheiglininimhmhmgmhmiljlkjjhifgdfdfdffhglinkrlrmqlnjkghegdgeigkjkkjlhkfkfkejdichchcjekgkgkghffgfiglglgjdfZbWaWaWbXdZecgfjkmnmnlkhgdcbbacbfdidjdidieifjgjfifhehehfggfieidididiflhojoimgjcfYbXZYZbbfdiglinkomqmojleibfaebgehhiihhgffghijlkmkmilglglglhlhkgkgkhnkpnqnnlhhbeYdYeagdkflhnjpkqlqkmiifeececgdgdgdgdfdgdiekflglhkijhiggffefegfgiilkokpkohkehaeXbXcZgdjhlknmmnmnloimfjcgbfZeagbgbgagbfcfgikknkmjkfgdebeaeafagciekhmknlmjifeaaYaZbddhfkhminjpkqlpknilfjdhdgcecdcbdbfbhdjgnjokojngjdgZdYcZbcdgfhgjhihihiggdfadYdZfbigkimjlhjgjgjhjijihidhbfafagbhbgbidkgnjplpmnjhgdfcebgcifkgkfkfkfjdibfacabbcefghjjjijiihifieiejejdhdfbeaeaeaecgfihjkkmjojnhlficgZeZgcjflhmhkghfffdfcebeaeafbgejgkgkeidhcfeghhihfecaZYXYYZbaebgdielinkojnhjdfZdZdaeeghgjfididjdjejejeidjdjekgkhiihigheigjhlilikgicfZcWcXdaffhhkjkkllmklkkiggcfbgciekglhkfjdidiekhljmjkkijhlhlhmhlfkekglhnioimghddbabaddhfihkjlkmjnimfkdhbfadbededfdececdbcccfdhdjejeidicgbfbfbhchdifjijjhjegbeYbWaWbYfbiflglglhkhihhgefcdbbababacacZcXcYeagejhlikgidebcZcZbbbdbfbhekgmglficfZdWbXdZfdhghigjhkhlhlhlgkgjeidhafZdYbYaZbccefijllmmmkkfgbeYcXdZfbfcgdgdhdgdheheedcdbfcielglfkdididjflhmjnijgffdebebfbfbfchfkiplqlpjmgieeddeeefgffgfffegegchbhbhchdifjfjfjeidgcgegggjhlhlficfZdXdXdYfahdjgljmmmmkmijegbdbdcfdhdhcgafZebededfddcdbcbdcddcdZbXcXdZhdjeiegacWZUXTYVZYaZZdcgekgmhmgjcfZcXbWcXdZdacaabacaecfegehfhehdgbgbgafadbcbfehgjhjghedbYYUXTZWdZgcjekfkglglgkficebbcaecgdhdhbfaeagdigmhmhmhjfhfggghfhfgeggiiljmikehadXaVZXcbfehgjhkikjkjhiegaeZdYeYeZdZdYeZeZeagehghigjgidgbeZdYdZebhdjflhmhkghedbaZWXWXYbcegjhlhlglglgjfideacZbXZWZXaYaZZaZebhelhmhmfiaeYcVbVbXdaedfghjilikgidfZbWaWaXeahdifjhjijjjijiihhgfeccZbXbWaWcXdZfdigljokojlfgbaYWYVaXdagbhcgbgbgcgagZdYbYaZaddgfifiegdfdgfjglgkeiaeYbXZYaZbbccedghkllmjlfibeYbXbXcZebgcgbfafbdbcbabYdYeZeagchbhbhbgbfbgchegfgfddaaXYWYXZZccfdielhminikhhddabYaYbbedffefbeZdZfafbfaeZdYdZeafbfbdaaaZdbgejeicfZbUXSWSYUaXcZecefgiikjjhgddaaZaZbZfbgbfaeZdZdbecgdgehehffedecfbgafZfZfbhdjejdibfYbWYWXYZdchekfkfjeifieidgaeZeaebeefgffddbbacceeigjhlgkeidieieieieheheifighfdcZbVZVaWdZgchdjeieichbfacaZaYbYbYbYbXbXbYbXcXdZfafcgdfddccbaZaZaabccedgcgbgaeZcXZUYTYTZXcagdhfgfdebfafafZeYcWbVZUZTZUZUYUXWYbbgfjgjefbcYaWZVZVbWdYeaebfdfefdeabYZYaaacbechcichbhchdiejfjeidgacYYYVYVaVbWdZfbjelhmhlfibeXaWYXabbecebdacadbecgcfafaeZfcgehfhdfcebecffijikgidgZdXbWbXcXdZfbhflhmjmjjhefacXbYcZeaeafZdYdYeYeadbddcdddcdcdcdbcbdadafcidkfjehdeZaWYVYVZYcbeefhgkhmhmfibfZbVaVaXdZeZcYaXZYYbZebfbfadZcYcXcYcWbVZUZXbbefggecaZWVTTSTSWUZVbXdZgdieifidfbcYaXZXZZZbYbWbVbVbXdZgbididhcgbdZaZZZYaYbZcZecgdgaeXaUXSXTYXbceffffefegfffefceZeYdYeZeaeZdYdXcYechfjikihhdgbfafZeafafbhciejeidgacYYXWYWZYcbfdheiehehchbfaeZcZcZaYZXYWYWYXZaacbfdiekejcgaeXbVZVaXcZfcgeggegcgbeXbVZSYTZUcYebhchcgcedefdfcebbYYVWUVTWTXTZVaXdbgfjilhjeeZaWXTVVVYXbYeagbhchchbfZdXbVbVbXbadddgdgchdidiejgkfjcfXbUXSWSVVXZZcbeehhiijhiefZaTXRXSYWbadadZcZbZdadbdcbbZbXcYeZfbgbfaeZfafciejfgdbZWXTWTYUaWbYdbgdjflgkeibdYZWXXXYYaabaaaaZaYbXbXcXcYcYcZcZdZdYdZcaccdfdhdhcfYbVYSXSXUbXeahdifihiigiegbdYaVZWaYcaeZdYcXbWaYcbdcdccbbaaZZZaaZaXaVbXdagchdgadXZTXRWTXWZZbdbfchdididicgaeYcXcYcYdacaaaYZXaXbZdcgehfjehcfZeYdYbZcacbdbdbdcdbcbZYWYTZUbYechdjdhbfafafafcecdcbdbfbgbfafYdXcXdZgciekfjegdedcdcdcdcecececeaeYdWbUYUXUYXaZdcfegdfcecbbYbXcWcWcXbWaUZUZUaUZVbXbacccfcfbeZcWZUYUZVbYeZgafadZcaaZYXVWUVUWWZZcbeceZdXcXbXcZcabXZUXSURTRTTUVTXUaWeahdjeicfXbUYSWSXUZYaaacZdaeaeaeZcYbXbXbXdYeaebecdcccddefgghgeeabVXSWRXTZWbYdagchfkgkfhddaYYUYUaXeZeZdYdXcXdYeafbfcebccbecfcgbeadadagdiflfkdgZbXYWWWXXYZabddfghihjficgYcWaWZWaWbXbXbWaWZXZZacafbfbfaeYdXcWbWbWbWcYebfegfffbcXYTURUTWVaYdZgbhcieififfccZZWYXZYZZYYVXTWSYVcYfbgcgaeYcVaUYUXTVTTVUZYdagbgbeXaTXRWQWRYUZWaZaccedfefefcdacZcYbWaUaUYTWUXVYWbafdhfighfdcZaVYTZUaVbXcYdZeZfaeZcXZVWVUYWbYebfbfaeZeafbgbhbgbeZbZaZZaZZXYYZYbcfejglhleicfZcYcYbYcaebecfdedccZbWaUZUZUaXdZfagbgafaeadbcbbcacYbVZUXSXUYVaWcXebhdhfiggfcbZXWVVWXYZdbfbfafZeZdYcXaVXTXUYWbZebedccZdZeZfagbfYcUYRVPTPVQVTXWYabeeigjghdeZaUWSVSXTaWdZdbecdcdccccbbaaZZZYbYdZeZfbeafaeagchcgbfZaVVSRSQUSYVcYfagchdidjchadWYSVTUWXaZdacZaXaXZYcYdZdXdXcWbYbacbdbcZbZcceffgefacWYSWQVRXTZXcZfbhdieiefcaaWYTXSXTYUZWaWaVZUaVaVbXaabbabYaYZXYXZXZYbYcYfahcgbfabXXUURTRVTYYccdfdgdidichbfYcVZTYTYUZVaVZWXWVYXbYebgbfZdXaWZUYTZTYUYVZZbcdfeecbYYVUTUSVTYVcYeZfagbgdfdfcebdacabZZZXaVaUaVZUaWcYfbiejejcfabXXXWYWaYbYcYcYcYcYcXbWZUZUYWaacdfffddbbbbabcbeaeZdYdXcXbXbXaWaVaWcZfeggggdgaeXbWcXcXdZfafafYdXcWYVWWVWUYVaXbZdaeadZcWbVaVaWbXaYZXXVVTUTUUWWXYYaYeafbgcgadYaUXTXTYVbYcZbZZZWZVZVaVZUYSYTYUaXcYdXbWYVWXXZYcacZZVXSTRSPTPVRXSYVaYdceegeebbYYVVVVVVYWbXdXcWaWaXcXcYdZeZdadadcbdaeZdYcXcXeagcidhbeXaTWSUTVXXaacadbedfegfgceZbVZUZWbZcacaaXZWYWaZcdefdgcgbfZfafaeZdXcXcZgcheheecaaVYTXSXUZWbYdagbgcichbeabYYYYYXYWXWWVWUWUWUYUaXdafbfbdYaXYUXUWUYVYXZaaebgbgadXbTWQVQWRYVbXdadbcdcecfbeZcXaVXTXTWSWQVPUPTRVWZacededbaYXVVUTURURWRYUaXdaebdZbWZTWSURUUVXVaXdXdYeZeZfafafZeZcWaVWTUUTUSWTXVZYdcgeificfYaTXRVRVVXXYYZYZYZYZZZZXYUYTYTZWbYdZeZdYcYbYdZecedccZbXaUZUZTZTaVaXeahdjfkfhdcbZZWYVYWZYbZdadZcXbWbVaUYUXWXXYXaYbZbabaaaYaXcYeYeYcVZTWQVQVRWUZWbZdddgeieicfYbUXRWSXUbXdYdYcXaYaaZaZZWXWWUWVYWaYbXbVaUZVaYdbebcYYTUPROQQQRRVUZWcZgciejehaeXaTXRVSWUXXYZXbWaWbWaWcXcYdYcWbWbVaXZYZZZZZZZbcddfddaaVWQTNSOURYWbZcbdbecfbebcYXWSURWSYUaWbWaVZUZVaWcYeadabaZaYaWaXbXaWbYcafbhbgadXZTUSSRSSTVWYZacdeedfbeZcWaUXSWSWRWSWSXSWTWUWWXZYbZeZeXcVZTXRWSXTYUaXcZdadccdZaWWSTPROSRXVbYfafafbfbecdabYYWWUUTUTUVTVRVRWSYVbYebgbfZbWYTWRVSUTUWUYWbYeYeZdXcVZTXSXRXTZWbabcbdbdacadacbdbeacXaUYSXSWTWVXWYXZZdbfegeedZZUXSWSYVbXcXbWaVZUZUZVYVXVVXVZXdYeaeYcWaUZUaWcXdZdYaYXXWXVXVXWXWYXaadbfchbfZcWZVXVXVYXaXaXZWXVVVTVRWRWRXSYTZVbWbWbWaUYTXUVVWYXbWZUXSVQTPUQVRXTZUbWcYcbccbaYXVTTSSUVXWaWZUYSXRXSXTYUXVXUXTYUYWYWXXTVRVQXTaWcXbVZSVOSNRNSPTSVVVYXaYdZdZdZbWZUYSXSYTZVZWYWXVVVVWWXZaacccbdZcXbWbWbWaVZVZXbZdaeadYZVUSQSQWSZWcYdYeYeZeZfZdYcWYVWWXYXaXbZVYTWVYWbYeafbfadZbZaYZYZYZXZYabcdceacWaUXRWRVRWT";
       function solarTermCorrectionMinutes(year, index) {
         if (year < exports.SOLAR_TERM_DATA_MIN_YEAR || year > exports.SOLAR_TERM_DATA_MAX_YEAR)
           return 0;
@@ -2728,7 +1896,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/astro/sun-longitude.js
   var require_sun_longitude = __commonJS({
     "dist/astro/sun-longitude.js"(exports) {
       "use strict";
@@ -2788,7 +1955,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/time/korea-timezone.js
   var require_korea_timezone = __commonJS({
     "dist/time/korea-timezone.js"(exports) {
       "use strict";
@@ -2846,7 +2012,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/time/true-solar-time.js
   var require_true_solar_time = __commonJS({
     "dist/time/true-solar-time.js"(exports) {
       "use strict";
@@ -2878,7 +2043,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/ganji.js
   var require_ganji = __commonJS({
     "dist/ganji.js"(exports) {
       "use strict";
@@ -2901,7 +2065,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/astro/solar-terms.js
   var require_solar_terms = __commonJS({
     "dist/astro/solar-terms.js"(exports) {
       "use strict";
@@ -2922,58 +2085,8 @@ var Manseryeok = (() => {
       function assertSolarTermYear(year) {
         (0, validation_1.assertIntegerInRange)(year, SOLAR_TERM_MIN_YEAR, SOLAR_TERM_MAX_YEAR, "\uC808\uAE30 \uC5F0\uB3C4(year)");
       }
-      exports.SOLAR_TERM_NAMES = [
-        "\uC18C\uD55C",
-        "\uB300\uD55C",
-        "\uC785\uCD98",
-        "\uC6B0\uC218",
-        "\uACBD\uCE69",
-        "\uCD98\uBD84",
-        "\uCCAD\uBA85",
-        "\uACE1\uC6B0",
-        "\uC785\uD558",
-        "\uC18C\uB9CC",
-        "\uB9DD\uC885",
-        "\uD558\uC9C0",
-        "\uC18C\uC11C",
-        "\uB300\uC11C",
-        "\uC785\uCD94",
-        "\uCC98\uC11C",
-        "\uBC31\uB85C",
-        "\uCD94\uBD84",
-        "\uD55C\uB85C",
-        "\uC0C1\uAC15",
-        "\uC785\uB3D9",
-        "\uC18C\uC124",
-        "\uB300\uC124",
-        "\uB3D9\uC9C0"
-      ];
-      exports.SOLAR_TERM_NAMES_HANJA = [
-        "\u5C0F\u5BD2",
-        "\u5927\u5BD2",
-        "\u7ACB\u6625",
-        "\u96E8\u6C34",
-        "\u9A5A\u87C4",
-        "\u6625\u5206",
-        "\u6DF8\u660E",
-        "\u7A40\u96E8",
-        "\u7ACB\u590F",
-        "\u5C0F\u6EFF",
-        "\u8292\u7A2E",
-        "\u590F\u81F3",
-        "\u5C0F\u6691",
-        "\u5927\u6691",
-        "\u7ACB\u79CB",
-        "\u8655\u6691",
-        "\u767D\u9732",
-        "\u79CB\u5206",
-        "\u5BD2\u9732",
-        "\u971C\u964D",
-        "\u7ACB\u51AC",
-        "\u5C0F\u96EA",
-        "\u5927\u96EA",
-        "\u51AC\u81F3"
-      ];
+      exports.SOLAR_TERM_NAMES = ["\uC18C\uD55C","\uB300\uD55C","\uC785\uCD98","\uC6B0\uC218","\uACBD\uCE69","\uCD98\uBD84","\uCCAD\uBA85","\uACE1\uC6B0","\uC785\uD558","\uC18C\uB9CC","\uB9DD\uC885","\uD558\uC9C0","\uC18C\uC11C","\uB300\uC11C","\uC785\uCD98","\uCC98\uC11C","\uBC31\uB85C","\uCD94\uBD84","\uD55C\uB85C","\uC0C1\uAC15","\uC785\uB3D9","\uC18C\uC124","\uB300\uC124","\uB3D9\uC9C0"];
+      exports.SOLAR_TERM_NAMES_HANJA = ["\u5C0F\u5BD2","\u5927\u5BD2","\u7ACB\u6625","\u96E8\u6C34","\u9A5A\u87C4","\u6625\u5206","\u6DF8\u660E","\u7A40\u96E8","\u7ACB\u590F","\u5C0F\u6EFF","\u8292\u7A2E","\u590F\u81F3","\u5C0F\u6691","\u5927\u6691","\u7ACB\u79CB","\u8655\u6691","\u767D\u9732","\u79CB\u5206","\u5BD2\u9732","\u971C\u964D","\u7ACB\u51AC","\u5C0F\u96EA","\u5927\u96EA","\u51AC\u81F3"];
       var LICHUN_INDEX = 2;
       function solarTermLongitude(index) {
         (0, validation_1.assertIntegerInRange)(index, 0, 23, "\uC808\uAE30 \uC778\uB371\uC2A4(index)");
@@ -3010,20 +2123,7 @@ var Manseryeok = (() => {
         const lichunMs = solarTermInstantMs(calendarYear, LICHUN_INDEX);
         return instantMs < lichunMs ? calendarYear - 1 : calendarYear;
       }
-      var JEOL_TO_MONTH = [
-        [2, 1],
-        [4, 2],
-        [6, 3],
-        [8, 4],
-        [10, 5],
-        [12, 6],
-        [14, 7],
-        [16, 8],
-        [18, 9],
-        [20, 10],
-        [22, 11],
-        [0, 12]
-      ];
+      var JEOL_TO_MONTH = [[2,1],[4,2],[6,3],[8,4],[10,5],[12,6],[14,7],[16,8],[18,9],[20,10],[22,11],[0,12]];
       function sajuMonthForInstant(instantMs) {
         (0, validation_1.assertFiniteNumber)(instantMs, "\uC808\uB300 \uC21C\uAC04(instantMs)");
         const year = new Date(instantMs).getUTCFullYear();
@@ -3043,7 +2143,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/pillars.js
   var require_pillars = __commonJS({
     "dist/pillars.js"(exports) {
       "use strict";
@@ -3120,7 +2219,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/features/ten-gods.js
   var require_ten_gods = __commonJS({
     "dist/features/ten-gods.js"(exports) {
       "use strict";
@@ -3177,7 +2275,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/features/void-branches.js
   var require_void_branches = __commonJS({
     "dist/features/void-branches.js"(exports) {
       "use strict";
@@ -3199,7 +2296,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/features/luck-pillars.js
   var require_luck_pillars = __commonJS({
     "dist/features/luck-pillars.js"(exports) {
       "use strict";
@@ -3270,7 +2366,6 @@ var Manseryeok = (() => {
     }
   });
 
-  // dist/index.js
   var require_index = __commonJS({
     "dist/index.js"(exports) {
       Object.defineProperty(exports, "__esModule", { value: true });
@@ -3289,99 +2384,43 @@ var Manseryeok = (() => {
       var luck_pillars_1 = require_luck_pillars();
       var validation_1 = require_validation();
       var constants_2 = require_constants();
-      Object.defineProperty(exports, "HEAVENLY_STEMS", { enumerable: true, get: function() {
-        return constants_2.HEAVENLY_STEMS;
-      } });
-      Object.defineProperty(exports, "HEAVENLY_STEMS_HANJA", { enumerable: true, get: function() {
-        return constants_2.HEAVENLY_STEMS_HANJA;
-      } });
-      Object.defineProperty(exports, "EARTHLY_BRANCHES", { enumerable: true, get: function() {
-        return constants_2.EARTHLY_BRANCHES;
-      } });
-      Object.defineProperty(exports, "EARTHLY_BRANCHES_HANJA", { enumerable: true, get: function() {
-        return constants_2.EARTHLY_BRANCHES_HANJA;
-      } });
-      Object.defineProperty(exports, "YIN_YANG", { enumerable: true, get: function() {
-        return constants_2.YIN_YANG;
-      } });
-      Object.defineProperty(exports, "FIVE_ELEMENTS", { enumerable: true, get: function() {
-        return constants_2.FIVE_ELEMENTS;
-      } });
-      Object.defineProperty(exports, "TEN_GOD_HANJA", { enumerable: true, get: function() {
-        return constants_2.TEN_GOD_HANJA;
-      } });
+      Object.defineProperty(exports, "HEAVENLY_STEMS", { enumerable: true, get: function() { return constants_2.HEAVENLY_STEMS; } });
+      Object.defineProperty(exports, "HEAVENLY_STEMS_HANJA", { enumerable: true, get: function() { return constants_2.HEAVENLY_STEMS_HANJA; } });
+      Object.defineProperty(exports, "EARTHLY_BRANCHES", { enumerable: true, get: function() { return constants_2.EARTHLY_BRANCHES; } });
+      Object.defineProperty(exports, "EARTHLY_BRANCHES_HANJA", { enumerable: true, get: function() { return constants_2.EARTHLY_BRANCHES_HANJA; } });
+      Object.defineProperty(exports, "YIN_YANG", { enumerable: true, get: function() { return constants_2.YIN_YANG; } });
+      Object.defineProperty(exports, "FIVE_ELEMENTS", { enumerable: true, get: function() { return constants_2.FIVE_ELEMENTS; } });
+      Object.defineProperty(exports, "TEN_GOD_HANJA", { enumerable: true, get: function() { return constants_2.TEN_GOD_HANJA; } });
       var elements_2 = require_elements();
-      Object.defineProperty(exports, "getHeavenlyStemYinYang", { enumerable: true, get: function() {
-        return elements_2.getHeavenlyStemYinYang;
-      } });
-      Object.defineProperty(exports, "getHeavenlyStemElement", { enumerable: true, get: function() {
-        return elements_2.getHeavenlyStemElement;
-      } });
-      Object.defineProperty(exports, "getEarthlyBranchYinYang", { enumerable: true, get: function() {
-        return elements_2.getEarthlyBranchYinYang;
-      } });
-      Object.defineProperty(exports, "getEarthlyBranchElement", { enumerable: true, get: function() {
-        return elements_2.getEarthlyBranchElement;
-      } });
+      Object.defineProperty(exports, "getHeavenlyStemYinYang", { enumerable: true, get: function() { return elements_2.getHeavenlyStemYinYang; } });
+      Object.defineProperty(exports, "getHeavenlyStemElement", { enumerable: true, get: function() { return elements_2.getHeavenlyStemElement; } });
+      Object.defineProperty(exports, "getEarthlyBranchYinYang", { enumerable: true, get: function() { return elements_2.getEarthlyBranchYinYang; } });
+      Object.defineProperty(exports, "getEarthlyBranchElement", { enumerable: true, get: function() { return elements_2.getEarthlyBranchElement; } });
       var convert_2 = require_convert();
-      Object.defineProperty(exports, "lunarToSolar", { enumerable: true, get: function() {
-        return convert_2.lunarToSolar;
-      } });
-      Object.defineProperty(exports, "solarToLunar", { enumerable: true, get: function() {
-        return convert_2.solarToLunar;
-      } });
-      Object.defineProperty(exports, "isValidSolarDate", { enumerable: true, get: function() {
-        return convert_2.isValidSolarDate;
-      } });
+      Object.defineProperty(exports, "lunarToSolar", { enumerable: true, get: function() { return convert_2.lunarToSolar; } });
+      Object.defineProperty(exports, "solarToLunar", { enumerable: true, get: function() { return convert_2.solarToLunar; } });
+      Object.defineProperty(exports, "isValidSolarDate", { enumerable: true, get: function() { return convert_2.isValidSolarDate; } });
       var lunar_data_2 = require_lunar_data();
-      Object.defineProperty(exports, "LUNAR_MIN_YEAR", { enumerable: true, get: function() {
-        return lunar_data_2.LUNAR_MIN_YEAR;
-      } });
-      Object.defineProperty(exports, "LUNAR_MAX_YEAR", { enumerable: true, get: function() {
-        return lunar_data_2.LUNAR_MAX_YEAR;
-      } });
+      Object.defineProperty(exports, "LUNAR_MIN_YEAR", { enumerable: true, get: function() { return lunar_data_2.LUNAR_MIN_YEAR; } });
+      Object.defineProperty(exports, "LUNAR_MAX_YEAR", { enumerable: true, get: function() { return lunar_data_2.LUNAR_MAX_YEAR; } });
       var solar_terms_1 = require_solar_terms();
-      Object.defineProperty(exports, "getSolarTerm", { enumerable: true, get: function() {
-        return solar_terms_1.getSolarTerm;
-      } });
-      Object.defineProperty(exports, "getSolarTermsOfYear", { enumerable: true, get: function() {
-        return solar_terms_1.getSolarTermsOfYear;
-      } });
-      Object.defineProperty(exports, "SOLAR_TERM_NAMES", { enumerable: true, get: function() {
-        return solar_terms_1.SOLAR_TERM_NAMES;
-      } });
-      Object.defineProperty(exports, "SOLAR_TERM_NAMES_HANJA", { enumerable: true, get: function() {
-        return solar_terms_1.SOLAR_TERM_NAMES_HANJA;
-      } });
+      Object.defineProperty(exports, "getSolarTerm", { enumerable: true, get: function() { return solar_terms_1.getSolarTerm; } });
+      Object.defineProperty(exports, "getSolarTermsOfYear", { enumerable: true, get: function() { return solar_terms_1.getSolarTermsOfYear; } });
+      Object.defineProperty(exports, "SOLAR_TERM_NAMES", { enumerable: true, get: function() { return solar_terms_1.SOLAR_TERM_NAMES; } });
+      Object.defineProperty(exports, "SOLAR_TERM_NAMES_HANJA", { enumerable: true, get: function() { return solar_terms_1.SOLAR_TERM_NAMES_HANJA; } });
       var sun_longitude_1 = require_sun_longitude();
-      Object.defineProperty(exports, "apparentSolarLongitude", { enumerable: true, get: function() {
-        return sun_longitude_1.apparentSolarLongitude;
-      } });
-      Object.defineProperty(exports, "equationOfTimeMinutes", { enumerable: true, get: function() {
-        return sun_longitude_1.equationOfTimeMinutes;
-      } });
+      Object.defineProperty(exports, "apparentSolarLongitude", { enumerable: true, get: function() { return sun_longitude_1.apparentSolarLongitude; } });
+      Object.defineProperty(exports, "equationOfTimeMinutes", { enumerable: true, get: function() { return sun_longitude_1.equationOfTimeMinutes; } });
       var ten_gods_2 = require_ten_gods();
-      Object.defineProperty(exports, "getTenGod", { enumerable: true, get: function() {
-        return ten_gods_2.getTenGod;
-      } });
-      Object.defineProperty(exports, "getBranchTenGod", { enumerable: true, get: function() {
-        return ten_gods_2.getBranchTenGod;
-      } });
-      Object.defineProperty(exports, "getTenGodChart", { enumerable: true, get: function() {
-        return ten_gods_2.getTenGodChart;
-      } });
+      Object.defineProperty(exports, "getTenGod", { enumerable: true, get: function() { return ten_gods_2.getTenGod; } });
+      Object.defineProperty(exports, "getBranchTenGod", { enumerable: true, get: function() { return ten_gods_2.getBranchTenGod; } });
+      Object.defineProperty(exports, "getTenGodChart", { enumerable: true, get: function() { return ten_gods_2.getTenGodChart; } });
       var void_branches_2 = require_void_branches();
-      Object.defineProperty(exports, "getVoidBranches", { enumerable: true, get: function() {
-        return void_branches_2.getVoidBranches;
-      } });
+      Object.defineProperty(exports, "getVoidBranches", { enumerable: true, get: function() { return void_branches_2.getVoidBranches; } });
       var luck_pillars_2 = require_luck_pillars();
-      Object.defineProperty(exports, "getLuckPillars", { enumerable: true, get: function() {
-        return luck_pillars_2.getLuckPillars;
-      } });
+      Object.defineProperty(exports, "getLuckPillars", { enumerable: true, get: function() { return luck_pillars_2.getLuckPillars; } });
       var true_solar_time_2 = require_true_solar_time();
-      Object.defineProperty(exports, "DEFAULT_LONGITUDE", { enumerable: true, get: function() {
-        return true_solar_time_2.DEFAULT_LONGITUDE;
-      } });
+      Object.defineProperty(exports, "DEFAULT_LONGITUDE", { enumerable: true, get: function() { return true_solar_time_2.DEFAULT_LONGITUDE; } });
       function validateBirthInfo(birthInfo) {
         if (birthInfo === null || typeof birthInfo !== "object") {
           throw new TypeError("\uC0DD\uB144\uC6D4\uC77C\uC2DC \uC815\uBCF4(birthInfo)\uB294 \uAC1D\uCCB4\uC5EC\uC57C \uD569\uB2C8\uB2E4.");
@@ -3547,7 +2586,7 @@ var Manseryeok = (() => {
   return require_index();
 })();
 /**
- * 만세력(萬歲曆) 계산 라이브러리
+ * \uB9CC\uC138\uB825(\u842C\u6B72\u66A6) \uC0AC\uC8FC \uACC4\uC0B0 \uB7CC\uC774\uBE0C\uB7EC\uB9AC
  * Korean Saju (Four Pillars) and Manseryeok calculation library
  *
  * @author Yoohyojun
@@ -3555,12 +2594,15 @@ var Manseryeok = (() => {
  */
 
 window.Manseryeok = Manseryeok;
-
 </script>
+
 <script>
 (function () {
   "use strict";
 
+  // ⚠️ 보안 안내: 이 API 키는 브라우저에 노출됩니다.
+  // 실제 서비스 운영 시에는 Netlify Functions로 키를 서버 측으로 이동시키세요.
+  // Netlify 환경변수 OPENROUTER_API_KEY에 키를 저장하고 함수에서만 호출하면 됩니다.
   const SAJU_CONFIG = {
     endpoint: "https://openrouter.ai/api/v1/chat/completions",
     apiKey: "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",
@@ -3733,26 +2775,21 @@ window.Manseryeok = Manseryeok;
   function elementKeyOfGan(gan) { return GAN_ELEMENT[gan]; }
   function elementKeyOfZhi(zhi) { return ZHI_ELEMENT[zhi]; }
 
-  // ===== 지장간(支藏干) 표준 절기일수표 =====
-  // 자평명리(子平命理)에서 지지 속에 숨어있는 천간들과 그 비중을 일수로 나타낸 표준표.
-  // 각 배열은 [천간index, 비중(일수)] 형태이며 배열 순서는 여기(餘氣) → 중기(中氣) → 정기(正氣) 순.
   const JIJI_HIDDEN_STEMS = [
-    [[8, 10], [9, 20]],            // 자(子): 임10 · 계20
-    [[9, 9], [6, 3], [5, 18]],     // 축(丑): 계9 · 신3 · 기18
-    [[5, 7], [2, 7], [0, 16]],     // 인(寅): 기7 · 병7 · 갑16
-    [[0, 10], [1, 20]],            // 묘(卯): 갑10 · 을20
-    [[1, 9], [9, 3], [4, 18]],     // 진(辰): 을9 · 계3 · 무18
-    [[4, 7], [6, 7], [2, 16]],     // 사(巳): 무7 · 경7 · 병16
-    [[2, 10], [5, 9], [3, 11]],    // 오(午): 병10 · 기9 · 정11
-    [[3, 9], [1, 3], [5, 18]],     // 미(未): 정9 · 을3 · 기18
-    [[5, 7], [8, 7], [6, 16]],     // 신(申): 기7 · 임7 · 경16
-    [[6, 10], [7, 20]],            // 유(酉): 경10 · 신20
-    [[7, 9], [3, 3], [4, 18]],     // 술(戌): 신9 · 정3 · 무18
-    [[4, 7], [0, 7], [8, 16]]      // 해(亥): 무7 · 갑7 · 임16
+    [[8, 10], [9, 20]],
+    [[9, 9], [6, 3], [5, 18]],
+    [[5, 7], [2, 7], [0, 16]],
+    [[0, 10], [1, 20]],
+    [[1, 9], [9, 3], [4, 18]],
+    [[4, 7], [6, 7], [2, 16]],
+    [[2, 10], [5, 9], [3, 11]],
+    [[3, 9], [1, 3], [5, 18]],
+    [[5, 7], [8, 7], [6, 16]],
+    [[6, 10], [7, 20]],
+    [[7, 9], [3, 3], [4, 18]],
+    [[4, 7], [0, 7], [8, 16]]
   ];
 
-  // 월지 사령(司令) 가중치: 자평명리에서는 월지가 계절의 기운을 가장 강하게 대표하므로
-  // 다른 지지보다 비중을 더 크게 둔다.
   const MONTH_BRANCH_WEIGHT = 1.8;
 
   function buildBalance(pillars) {
@@ -3762,11 +2799,7 @@ window.Manseryeok = Manseryeok;
     const slots = ["year", "month", "day", "hour"];
     pillars.forEach(function (p, idx) {
       if (!p) return;
-      // 천간: 그 자체로 1점
       counts[elementKeyOfGan(p.gan)] += 1;
-
-      // 지지: 지장간 비중(일수)을 정규화해서 1점을 나누어 반영하고,
-      // 월지에는 사령 가중치를 추가로 곱한다.
       const hidden = JIJI_HIDDEN_STEMS[p.zhi];
       const totalDays = hidden.reduce(function (sum, h) { return sum + h[1]; }, 0);
       const weight = (slots[idx] === "month") ? MONTH_BRANCH_WEIGHT : 1;
@@ -3786,7 +2819,6 @@ window.Manseryeok = Manseryeok;
     const spread = rows.reduce(function (sum, row) { return sum + Math.abs(row.percent - ideal); }, 0);
     return { rows: rows, score: Math.max(45, Math.round(100 - spread * 1.2)) };
   }
-
 
   function buildElementRemedy(balance) {
     const low = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; })[0];
@@ -3823,10 +2855,6 @@ window.Manseryeok = Manseryeok;
     ];
   }
 
-  // ===== 월지 기준 삼합(三合) · 방합(方合) · 사시(四時) · 사계(四季) =====
-  // 자평명리에서는 월지(月支)가 태어난 계절의 기운을 대표한다고 본다.
-  // 삼합: 인오술(화국) · 신자진(수국) · 사유축(금국) · 해묘미(목국)
-  // 방합: 인묘진(동방·목) · 사오미(남방·화) · 신유술(서방·금) · 해자축(북방·수)
   const SAMHAP_GROUPS = [
     { branches: [2, 6, 10], label: "인오술(寅午戌)", element: "fire", name: "화국(火局)", copy: "확산하고 드러내는 힘이 강하게 묶인 조합입니다." },
     { branches: [8, 0, 4], label: "신자진(申子辰)", element: "water", name: "수국(水局)", copy: "생각을 깊게 쌓고 흐름을 만드는 조합입니다." },
@@ -3858,10 +2886,7 @@ window.Manseryeok = Manseryeok;
     };
   }
 
-  // ===== 자오묘유(子午卯酉) 특별 멘트 =====
-  // 일지 또는 월지에 자(子)·오(午)·묘(卯)·유(酉) 중 하나라도 있으면
-  // "사패지(四敗地)" 또는 "도화살" 계열로 분류되어 색채와 매력, 시그니처가 강한 특징으로 본다.
-  const JAOMYOYU_BRANCHES = [0, 6, 3, 9]; // 자, 오, 묘, 유
+  const JAOMYOYU_BRANCHES = [0, 6, 3, 9];
 
   function hasJaOMyoYu(saju) {
     return JAOMYOYU_BRANCHES.indexOf(saju.day.zhi) !== -1 || JAOMYOYU_BRANCHES.indexOf(saju.month.zhi) !== -1;
@@ -3879,7 +2904,6 @@ window.Manseryeok = Manseryeok;
     };
   }
 
-  // ===== 사주 공식 — 절기/계절 기반 스토리텔링 =====
   function buildSajuFormula(saju, support, balance) {
     const monthProfile = buildMonthBranchProfile(saju);
     const dayElement = elementOfGan(saju.day.gan);
@@ -3928,6 +2952,108 @@ window.Manseryeok = Manseryeok;
     return tags.slice(0, 12);
   }
 
+
+  // ===== 사시(四時) · 속마음 풀이 =====
+  // 자평명리에서 시지(時支)는 내면, 무의식, 겉으로 잘 드러내지 않는 속마음의 영역으로 본다.
+  // 시지가 인묘진(봄=내면이 새로 시작하려는 마음) / 사오미(여름=내면이 표현하고 싶어하는 마음) /
+  // 신유술(가을=내면이 정리하고 거두려는 마음) / 해자축(겨울=내면이 응축하고 숨기는 마음) 중
+  // 어느 계절 자리에 있는지로, 겉모습과는 다른 "진짜 속내"의 결을 짚어준다.
+  const SASI_SEASON_PROFILE = {
+    "봄": {
+      title: "내면은 봄 — 늘 다음 시작을 그리는 마음",
+      copy: "겉으로는 차분해 보여도 속으로는 항상 \"다음엔 뭘 해볼까\"를 굴리고 있는 쪽입니다. 가만히 머물러 있는 시간을 답답하게 느끼고, 새 계획이 없을 때 오히려 불안해집니다.",
+      hidden: "마음 깊은 곳의 동력은 '시작'에 있습니다. 지금 정체돼 있다고 느낀다면, 새로운 시도 자체가 부족해서일 가능성이 큽니다."
+    },
+    "여름": {
+      title: "내면은 여름 — 표현하고 싶은 마음이 늘 끓고 있음",
+      copy: "겉으로 무덤덤해 보여도 속에서는 누군가에게 마음을 표현하고, 반응 받고 싶은 욕구가 늘 켜져 있는 쪽입니다. 무시당하거나 반응이 없으면 생각보다 크게 서운해합니다.",
+      hidden: "마음 깊은 곳의 동력은 '인정과 표현'입니다. 요즘 유독 허전하다면, 마음을 표현할 곳이 없어서일 가능성이 큽니다."
+    },
+    "가을": {
+      title: "내면은 가을 — 끊임없이 정리하고 평가하는 마음",
+      copy: "겉으로는 무난해 보여도 속으로는 상황과 사람을 계속 판단하고 정리하는 쪽입니다. 애매하게 끝나거나 결론이 안 나는 상태를 유독 못 견딥니다.",
+      hidden: "마음 깊은 곳의 동력은 '결론'입니다. 요즘 신경이 곤두서 있다면, 끝맺지 못한 일이 마음 한 켠에 남아있을 가능성이 큽니다."
+    },
+    "겨울": {
+      title: "내면은 겨울 — 쉽게 보여주지 않는, 응축된 마음",
+      copy: "겉으로는 무덤덤하거나 쿨해 보여도 속에는 잘 안 꺼내는 생각과 감정이 꽤 깊게 쌓여 있는 쪽입니다. 힘들어도 먼저 티 내지 않다가, 어느 순간 한 번에 무너지는 패턴이 있습니다.",
+      hidden: "마음 깊은 곳의 동력은 '안전함'입니다. 요즘 유독 말이 없어졌다면, 누군가에게 털어놓지 못한 마음이 쌓이고 있을 가능성이 큽니다."
+    }
+  };
+
+  function buildSasiProfile(saju) {
+    if (!saju.hour) return null;
+    const hourZhi = saju.hour.zhi;
+    const season = MONTH_BRANCH_SEASON[hourZhi];
+    const profile = SASI_SEASON_PROFILE[season];
+    return {
+      branchLabel: JIJI[hourZhi] + "(" + JIJI_HANJA[hourZhi] + ")",
+      season: season,
+      title: profile.title,
+      copy: profile.copy,
+      hidden: profile.hidden
+    };
+  }
+
+  // ===== 사계(四季) · 행동과 결과 풀이 =====
+  // 월지(月支)는 태어난 계절 그 자체로, 평소 어떻게 행동하고 그 행동이 어떤 식으로
+  // 결과로 이어지는지의 '겉으로 드러나는 패턴'을 보는 자리.
+  const SAGYE_SEASON_PROFILE = {
+    "봄": {
+      title: "행동은 봄 — 일단 벌이고 보는 사람",
+      action: "고민하는 시간보다 시작하는 속도가 빠른 편입니다. 완벽한 계획이 없어도 일단 움직이면서 길을 찾는 쪽이라, 추진력 있다는 평가를 자주 듣습니다.",
+      result: "다만 끝까지 마무리하는 힘은 따로 챙겨야 합니다. 벌여놓은 일이 쌓이기 전에, 하나를 끝내고 다음을 시작하는 규칙을 정해두면 결과가 훨씬 단단해집니다."
+    },
+    "여름": {
+      title: "행동은 여름 — 분위기로 사람을 움직이는 사람",
+      action: "말과 표현으로 주변 분위기를 띄우는 데 강합니다. 사람을 모으고, 설득하고, 에너지를 전달하는 일에서 두각을 보입니다.",
+      result: "다만 그 열기가 오래 못 가는 게 변수입니다. 초반 텐션이 식은 뒤에도 같은 강도로 끌고 갈 장치(체크리스트, 마감일)를 따로 만들어두는 게 좋습니다."
+    },
+    "가을": {
+      title: "행동은 가을 — 정리하고 거두는 사람",
+      action: "벌어진 일을 정리하고, 결과물을 깔끔하게 마무리하는 역할에서 강점을 보입니다. 마감을 지키고 디테일을 챙기는 사람으로 신뢰를 얻습니다.",
+      result: "다만 새로운 걸 먼저 시작하는 데는 망설임이 있는 편입니다. 완벽하게 준비된 다음에 움직이려다 타이밍을 놓치지 않도록, 70% 준비됐을 때 일단 움직이는 연습이 필요합니다."
+    },
+    "겨울": {
+      title: "행동은 겨울 — 조용히 쌓아서 한 번에 터뜨리는 사람",
+      action: "겉으로는 느긋해 보여도 속으로는 꾸준히 준비하다가, 결정적인 순간에 한 번에 결과를 내는 패턴입니다. 장기전에서 진짜 힘을 발휘합니다.",
+      result: "다만 그 준비 과정이 너무 길어지면 기회를 놓치는 경우가 있습니다. '언제까지는 결정한다'는 데드라인을 스스로 정해두는 게 도움이 됩니다."
+    }
+  };
+
+  function buildSagyeProfile(saju) {
+    const monthProfile = buildMonthBranchProfile(saju);
+    const profile = SAGYE_SEASON_PROFILE[monthProfile.season];
+    return {
+      branchLabel: monthProfile.branchLabel,
+      season: monthProfile.season,
+      title: profile.title,
+      action: profile.action,
+      result: profile.result
+    };
+  }
+
+  // 사시(내면) × 사계(행동)의 조합이 같은 계절인지 다른 계절인지에 따라
+  // "겉과 속이 일치하는 사람"인지 "겉과 속이 다른 사람"인지를 짚어준다.
+  function buildInnerOuterGap(sasi, sagye) {
+    if (!sasi) {
+      return {
+        match: null,
+        copy: "출생 시간이 없어 속마음(시지) 풀이는 정확히 보기 어렵습니다. 시간을 알게 되시면 더 정밀하게 봐드릴 수 있어요."
+      };
+    }
+    if (sasi.season === sagye.season) {
+      return {
+        match: true,
+        copy: "겉으로 드러나는 행동(" + sagye.season + ")과 속마음(" + sasi.season + ")이 같은 결입니다. 보이는 모습과 실제 마음이 크게 다르지 않은, 비교적 솔직하게 읽히는 타입입니다."
+      };
+    }
+    return {
+      match: false,
+      copy: "겉으로 드러나는 행동(" + sagye.season + ")과 속마음(" + sasi.season + ")이 서로 다른 결입니다. 주변 사람들이 보는 모습과 스스로 느끼는 마음 사이에 거리가 있는 편이라, '저 사람 의외로 그런 면이 있었네' 라는 말을 종종 듣는 타입입니다."
+    };
+  }
+
   function renderInsight(saju) {
     const target = document.getElementById("resultInsight");
     if (!target || !saju || !saju.day) return;
@@ -3941,9 +3067,12 @@ window.Manseryeok = Manseryeok;
     const monthProfile = buildMonthBranchProfile(saju);
     const jaomyoyu = buildJaOMyoYuNote(saju);
     const formulaRows = buildSajuFormula(saju, support, balance);
+    const sasi = buildSasiProfile(saju);
+    const sagye = buildSagyeProfile(saju);
+    const gap = buildInnerOuterGap(sasi, sagye);
 
     const headHTML =
-      '<div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div><div class="method-chip">자평명리(子平命理) 기준</div></div><div class="analysis-score"><span>균형도</span><b>' + balance.score + '</b></div></div>';
+      '<div class="analysis-head"><div><div class="analysis-kicker">SAJU BRIEF</div><div class="analysis-title">원국 요약 리포트</div><div class="method-chip">자평명리(子平命理) 기준</div></div><div class="analysis-score"><span>균형도</span><b class="score-count" data-target="' + balance.score + '">0</b></div></div>';
 
     const coreHTML =
       '<div class="analysis-core"><div class="analysis-section-label">핵심 분석</div>' +
@@ -3954,7 +3083,7 @@ window.Manseryeok = Manseryeok;
 
     const balanceHTML =
       '<div class="analysis-balance"><div class="analysis-section-label">오행 밸런스</div><div class="balance-list">' +
-      balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" style="width:' + row.percent + '%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') +
+      balance.rows.map(function (row) { return '<div class="balance-row"><div class="balance-name element-' + row.key + '">' + row.meta.label + '(' + row.meta.hanja + ')</div><div class="balance-bar"><div class="balance-fill bg-' + row.key + '" data-target-width="' + row.percent + '" style="width:0%"></div></div><div class="balance-percent">' + row.percent + '%</div></div>'; }).join('') +
       '</div><div class="remedy-box"><div class="remedy-head"><div class="remedy-title">오늘의 오행 처방</div><div class="remedy-chip">보완: ' + remedy.meta.label + '</div></div><div class="remedy-orbit"><div class="remedy-mark element-' + remedy.key + '"><span>' + remedy.meta.hanja + '</span></div><div class="remedy-list">' + remedy.items.map(function (item) { return '<div class="remedy-item"><span class="remedy-dot"></span>' + item + '</div>'; }).join('') + '</div></div></div></div>';
 
     const plainHTML =
@@ -3978,6 +3107,37 @@ window.Manseryeok = Manseryeok;
       formulaRows.map(function (row) { return '<div class="formula-row"><div class="f-left">' + row.left + '</div><div class="f-right">' + row.right + '</div></div>'; }).join('') +
       '</div></div>';
 
+    // ===== 이 사람의 속마음이 궁금하세요? — 사시(내면) / 사계(행동) 비교 카드 =====
+    const mindHTML =
+      '<div class="mind-card">' +
+      '<button type="button" class="mind-toggle" id="mindToggleBtn" aria-expanded="false">' +
+      '<span class="mind-toggle-icon">心</span>' +
+      '<span class="mind-toggle-text"><b>이 사람의 속마음이 궁금하세요?</b><span>겉으로 보이는 행동과 진짜 속내, 둘을 나란히 비교해드려요</span></span>' +
+      '<span class="mind-toggle-arrow">▾</span>' +
+      '</button>' +
+      '<div class="mind-body" id="mindBody" hidden>' +
+      '<div class="mind-grid">' +
+      '<div class="mind-pane mind-outer">' +
+      '<div class="mind-pane-label">겉모습 · 사계(四季)</div>' +
+      '<div class="mind-pane-season">' + sagye.season + ' · ' + sagye.branchLabel + '</div>' +
+      '<div class="mind-pane-title">' + sagye.title + '</div>' +
+      '<p class="mind-pane-copy"><b>평소 행동</b> — ' + sagye.action + '</p>' +
+      '<p class="mind-pane-copy"><b>결과로 이어지는 방식</b> — ' + sagye.result + '</p>' +
+      '</div>' +
+      '<div class="mind-pane mind-inner">' +
+      '<div class="mind-pane-label">속마음 · 사시(四時)</div>' +
+      (sasi
+        ? '<div class="mind-pane-season">' + sasi.season + ' · ' + sasi.branchLabel + '</div><div class="mind-pane-title">' + sasi.title + '</div><p class="mind-pane-copy">' + sasi.copy + '</p><p class="mind-pane-copy"><b>마음의 동력</b> — ' + sasi.hidden + '</p>'
+        : '<div class="mind-pane-season">시간 미입력</div><div class="mind-pane-title">출생 시간이 있어야 정확히 볼 수 있어요</div><p class="mind-pane-copy">속마음(시지) 풀이는 태어난 시간을 기준으로 봅니다. 정밀풀이에서 출생 시간을 입력하시면 이 부분까지 짚어드려요.</p>')
+      + '</div>' +
+      '</div>' +
+      '<div class="mind-gap">' +
+      '<div class="mind-gap-label">' + (gap.match === true ? "겉과 속이 같은 결" : gap.match === false ? "겉과 속이 다른 결" : "참고") + '</div>' +
+      '<p>' + gap.copy + '</p>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
     const specialHTML =
       '<div class="special-card"><div class="special-head"><h4>특수 지표</h4><div class="special-legend"><span class="note">주의</span><span class="good">강점</span></div></div><div class="special-tags">' +
       tags.map(function (tag) { return '<span class="special-tag ' + tag.type + '">' + tag.label + '</span>'; }).join('') +
@@ -3991,39 +3151,98 @@ window.Manseryeok = Manseryeok;
       monthHTML +
       jaomyoyuHTML +
       formulaHTML +
+      mindHTML +
       specialHTML +
       '</div>';
+
+    animateInsightReveal(target);
+    bindMindToggle(target);
   }
 
-  var STYLE_PERSONAS = {
-    "dokseol": {
-      label: "🗡️ 독설가",
-      systemPrompt: "너는 팩트를 직설적으로 말하는 사주 상담가다. 위로하지 않고 반복되는 실수 패턴을 정확히 찌른다. 장점보다 단점과 함정을 먼저 나열한다.",
-      tone: "반말 섞인 직설체. '이거 계속 반복되면 인생 꼬인다. 특히...' 식으로 시작. 800자 내외."
-    },
-    "hyeonja": {
-      label: "📜 현자",
-      systemPrompt: "너는 동양철학에 정통한 현자형 사주 상담가다. 오행과 주역의 원리를 인용하며 논리적으로 풀어낸다. 감정보다 원리를 먼저 설명한다.",
-      tone: "격식 있는 존댓말. '목(木) 기운이 과하면... 지금 사주에서 그 패턴이 보이는군요.' 식으로 원리를 먼저 말하고 개인에게 적용. 800자 내외."
-    },
-    "friend": {
-      label: "🤝 친구",
-      systemPrompt: "너는 편한 친구 같은 사주 상담가다. 반말을 섞어가며 공감해준다. 인생 선배처럼 조언하지만 설교하지 않는다.",
-      tone: "반말 중심, 가벼운 유머 섞음. '야, 너 원래 이런 스타일이잖아. 사주 보니까 딱 나오더라. 근데 이 부분은 진짜 조심해야 돼...' 800자 내외."
-    },
-    "coach": {
-      label: "🎯 코치",
-      systemPrompt: "너는 실행 지향적인 코치형 사주 상담가다. 진단은 짧게, 액션 플랜은 구체적으로 제시한다. '언제까지 무엇을 어떻게'가 분명한 조언을 한다.",
-      tone: "짧고 간결한 문장. '진단 끝. 당장 할 3가지: 1) ... 2) ... 3) ...' 식. 800자 내외."
-    },
-    "simri": {
-      label: "🌿 심리상담",
-      systemPrompt: "너는 심리상담사 겸 사주 상담가다. 사주 구조와 정서적 패턴의 연결을 깊이 짚어준다. 단정하지 않고 이해와 수용을 먼저 보여준다.",
-      tone: "부드럽고 수용적인 존댓말. '이런 감정이 올라오는 건 당연해요. 사주 구조를 보면... 그래서 지금 느끼는 그 마음은 타고난 기질과도 연결되어 있어요.' 800자 내외."
-    }
-  };
+  // 속마음 카드 펼치기/접기 (부드럽게)
+  function bindMindToggle(scope) {
+    const btn = scope.querySelector("#mindToggleBtn");
+    const body = scope.querySelector("#mindBody");
+    if (!btn || !body) return;
+    btn.addEventListener("click", function () {
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function buildPrompt(name, gender, year, month, day, hour, question, saju, style) {
+      if (isOpen) {
+        btn.setAttribute("aria-expanded", "false");
+        if (reduceMotion) {
+          body.hidden = true;
+          return;
+        }
+        body.style.maxHeight = body.scrollHeight + "px";
+        requestAnimationFrame(function () {
+          body.style.maxHeight = "0px";
+          body.style.opacity = "0";
+        });
+        setTimeout(function () { body.hidden = true; }, 420);
+      } else {
+        body.hidden = false;
+        btn.setAttribute("aria-expanded", "true");
+        if (reduceMotion) {
+          body.style.maxHeight = "none";
+          body.style.opacity = "1";
+          return;
+        }
+        body.style.maxHeight = "0px";
+        body.style.opacity = "0";
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            body.style.maxHeight = body.scrollHeight + "px";
+            body.style.opacity = "1";
+          });
+        });
+        body.addEventListener("transitionend", function handler() {
+          if (btn.getAttribute("aria-expanded") === "true") {
+            body.style.maxHeight = "none";
+          }
+          body.removeEventListener("transitionend", handler);
+        });
+      }
+    });
+  }
+
+  function animateInsightReveal(target) {
+    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const scoreEl = target.querySelector(".score-count");
+    const barEls = target.querySelectorAll(".balance-fill[data-target-width]");
+
+    if (reduceMotion) {
+      if (scoreEl) scoreEl.textContent = scoreEl.getAttribute("data-target");
+      barEls.forEach(function (bar) { bar.style.width = bar.getAttribute("data-target-width") + "%"; });
+      return;
+    }
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (scoreEl) {
+          const targetVal = parseInt(scoreEl.getAttribute("data-target"), 10) || 0;
+          const duration = 900;
+          const start = performance.now();
+          function tick(now) {
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            scoreEl.textContent = Math.round(targetVal * eased);
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+        barEls.forEach(function (bar, i) {
+          const w = bar.getAttribute("data-target-width");
+          bar.style.transition = "width 1.1s cubic-bezier(0.16, 1, 0.3, 1)";
+          bar.style.transitionDelay = (i * 0.08) + "s";
+          requestAnimationFrame(function () { bar.style.width = w + "%"; });
+        });
+      });
+    });
+  }
+
+
+  function buildPrompt(name, gender, year, month, day, hour, question, saju) {
     const hourText = (hour === null || hour === undefined) ? "미상" : hour + "시";
     const pillarsText = [
       "년주 " + pillarReadingKR(saju.year),
@@ -4077,12 +3296,12 @@ window.Manseryeok = Manseryeok;
       throw e;
     }
 
-    const headers = { "Content-Type": "application/json" };
-    if (SAJU_CONFIG.apiKey) {
-      headers["Authorization"] = "Bearer " + SAJU_CONFIG.apiKey;
-      headers["HTTP-Referer"] = location.origin;
-      headers["X-Title"] = "Saju Free Consult";
-    }
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + SAJU_CONFIG.apiKey,
+      "HTTP-Referer": location.origin,
+      "X-Title": "Saju Free Consult"
+    };
 
     const controller = new AbortController();
     const timeoutId = setTimeout(function () { controller.abort(); }, 30000);
@@ -4268,9 +3487,7 @@ window.Manseryeok = Manseryeok;
       return;
     }
 
-    const styleEl = document.querySelector('input[name="sajuStyle"]:checked');
-    const style = styleEl ? styleEl.value : "dokseol";
-    const prompt = buildPrompt(payload.name, gender, payload.year, payload.month, payload.day, hour, question, saju, style);
+    const prompt = buildPrompt(payload.name, gender, payload.year, payload.month, payload.day, hour, question, saju);
 
     try {
       const content = await callAI(prompt);
@@ -4295,7 +3512,7 @@ window.Manseryeok = Manseryeok;
       showOnly(aiResult);
     } catch (err) {
       console.error(err);
-      if (err && err.code === "NO_API_KEY") {
+      if (err && (err.code === "NO_API_KEY" || err.code === "NO_BACKEND")) {
         aiErrorMsg.textContent = "AI 맛보기 기능이 아직 연결되지 않았어요. 대신 아래 신청 내용을 그대로 접수해드릴게요 — 상담가가 직접 풀이해서 연락드립니다.";
       } else if (err && err.code === "TIMEOUT") {
         aiErrorMsg.textContent = "응답이 너무 오래 걸려서 멈췄어요. 다시 시도해주시거나, 신청서로 접수해주시면 직접 풀이해서 연락드릴게요.";
@@ -4306,79 +3523,17 @@ window.Manseryeok = Manseryeok;
     }
   }
 
-  // ===== 일간(日干)별 재미있는 일상 사용법 카피 풀 =====
-  // 같은 항목이라도 일간 10가지에 따라 완전히 다른 톤의 멘트가 나가도록 구성.
   const DAILY_USE_BY_GAN = [
-    { // 갑(甲) - 큰 나무
-      morning: "눈뜨자마자 오늘의 '제일 큰 일'부터 들이받는 타입. 작은 일은 미루고 큰 산부터 넘으세요.",
-      work: "회의에서 방향을 정하는 사람이 바로 당신. 결정을 미루면 팀 전체가 같이 멈춥니다.",
-      people: "직진하는 말투 때문에 가끔 세게 들릴 수 있어요. '근데'를 한 번만 붙여도 훨씬 부드러워져요.",
-      money: "큰 그림에 투자하는 건 잘하는데 잔돈 관리가 헐렁해요. 자동이체 하나만 걸어두면 평생 편합니다.",
-      rest: "가만히 쉬는 걸 제일 못 견디는 타입. 몸은 눕히고 머리만 굴리는 산책이 진짜 휴식입니다."
-    },
-    { // 을(乙) - 덩굴풀
-      morning: "직진보다 옆으로 슬쩍 돌아가는 게 더 빠른 날도 있어요. 오늘 안 풀리면 각도를 바꿔보세요.",
-      work: "혼자 다 짜기보다 누군가에 잘 엮여 들어갈 때 일이 술술 풀립니다. 협업 제안, 먼저 던져보세요.",
-      people: "상대 기분을 먼저 읽는 센서가 좋은 편. 다만 내 의견은 한 번 더 늦게 나와요. 타이밍 한 박자만 당기세요.",
-      money: "이것저것 조금씩 손대다 흩어지기 쉬운 스타일. 통장을 3개로 쪼개두면 새는 돈이 확 줄어요.",
-      rest: "꼬여있던 생각이 산책길에서 풀리는 타입. 책상 앞보다 걸으면서 정리하세요."
-    },
-    { // 병(丙) - 태양
-      morning: "에너지가 켜지면 주변까지 같이 밝아지는 타입. 아침 텐션이 곧 오늘 분위기를 결정합니다.",
-      work: "발표, 설득, 분위기 띄우기에서 진짜 실력이 나옵니다. 혼자 조용히 처리하는 일은 의외로 답답해요.",
-      people: "먼저 다가가고 먼저 웃는 쪽. 다만 다 받아주다 보면 스스로 방전되니, '오늘은 패스'도 가끔 필요해요.",
-      money: "한턱 쏘는 걸 좋아하는 타입이라 의외로 지출이 큼. 결제 전에 3초만 멈추는 습관, 그게 답입니다.",
-      rest: "불 끄고 조용히 있는 게 제일 안 맞는 스타일. 사람 없는 데서 햇빛 쬐는 정도가 딱 맞는 휴식입니다."
-    },
-    { // 정(丁) - 촛불·별빛
-      morning: "조용히 타오르는 스타일이라 아침엔 잘 안 보여도, 시간이 갈수록 존재감이 짙어집니다.",
-      work: "넓게 벌이기보다 한 가지를 깊게 파는 쪽이 잘 맞아요. 멀티태스킹보다 원씽(one thing)으로 가세요.",
-      people: "겉으론 무던해 보여도 속으론 꽤 섬세하게 다 기억하는 타입. 서운한 건 그날 바로 말해야 쌓이지 않아요.",
-      money: "눈에 안 보이는 작은 구독료들이 줄줄 새는 스타일. 한 달에 한 번 결제 목록만 훑어도 큰 도움이 됩니다.",
-      rest: "조명 어둡고 조용한 공간에서 제일 빨리 회복돼요. 밝고 시끄러운 휴식은 오히려 더 피곤하게 만듭니다."
-    },
-    { // 무(戊) - 큰 산
-      morning: "일단 자리에 앉으면 잘 안 흔들리는 타입. 다만 시작 버튼을 누르기까지가 오래 걸려요.",
-      work: "묵직하게 버텨주는 존재라 사람들이 은근히 의지해요. 책임을 너무 다 끌어안진 마세요.",
-      people: "말을 아끼는 편이라 가끔 무뚝뚝해 보일 수 있어요. 의외로 한마디 칭찬에 약한 편이기도 합니다.",
-      money: "큰 자산엔 강하지만 소소한 지출 체크는 약한 편. 월말에 한 번씩 가계부만 훑어도 충분해요.",
-      rest: "몸을 움직이지 않고 가만히 있는 게 회복이라 생각하기 쉬운데, 사실 적당한 운동이 더 잘 맞습니다."
-    },
-    { // 기(己) - 논밭·옥토
-      morning: "루틴이 깨지면 하루 전체가 흔들리는 타입. 작은 의식 하나만 지켜도 컨디션이 안정됩니다.",
-      work: "묵묵히 디테일을 채우는 역할에서 빛나요. 화려한 발표보다 꼼꼼한 마무리가 당신의 무기입니다.",
-      people: "다른 사람 챙기는 게 습관이 되어 본인 욕구는 뒷전이 되기 쉬워요. 오늘 하나는 내 몫부터 챙기세요.",
-      money: "절약은 잘하는데 가끔 스트레스성 지출이 한 번에 터지는 편. 그 패턴만 알아둬도 절반은 막아집니다.",
-      rest: "정리된 공간에서야 진짜로 쉬어지는 타입. 어수선한 방에서는 누워도 쉬는 게 아니에요."
-    },
-    { // 경(庚) - 강철
-      morning: "할까 말까 재는 시간이 짧은 타입. 결정하면 바로 행동으로 옮기는 쪽이 훨씬 편합니다.",
-      work: "기준이 명확해서 일을 깔끔하게 끝내는 스타일. 다만 너무 날카로운 피드백은 한 번 다듬어서 전달하세요.",
-      people: "겉바속바처럼 보여도 의리는 확실한 타입. 친해지는 데 시간이 걸릴 뿐, 한 번 믹스되면 오래 갑니다.",
-      money: "필요한 데는 과감히 쓰고 불필요한 데는 칼같이 끊는 편. 가끔 그 기준이 너무 빡빡해서 스스로 피곤해요.",
-      rest: "몸을 써서 땀 흘리는 게 의외로 진짜 휴식인 타입. 가만히 누워있는 건 오히려 답답함을 키워요."
-    },
-    { // 신(辛) - 보석
-      morning: "디테일이 살짜기 안 맞으면 하루 종일 신경쓰이는 타입. 아침에 거울 한 번 더 보고 나가세요.",
-      work: "정교하게 다듬는 작업에서 두각을 보여요. 거칠게 빨리 가는 일보다 꼼꼼한 일을 맡아보세요.",
-      people: "예의를 갖춘 만큼 상대에게도 같은 걸 기대하는 편. 기대와 다를 때 서운함이 꽤 오래 갑니다.",
-      money: "안목이 좋아서 좋은 물건 보는 눈은 확실한데, 그만큼 지출 단가도 높아지는 편. 예산선 하나만 정해두세요.",
-      rest: "예쁘고 정돈된 공간이 곧 회복력입니다. 환경을 먼저 정리하면 마음이 따라 정리돼요."
-    },
-    { // 임(壬) - 큰 강물
-      morning: "스케일이 큰 생각으로 하루를 여는 타입. 다만 너무 멀리 보다가 오늘 할 일을 놓치기 쉬워요.",
-      work: "큰 흐름을 읽고 판을 짜는 데 강해요. 디테일은 따로 체크리스트로 보완하면 완벽해집니다.",
-      people: "포용력이 넓어서 누구든 잘 받아주는 편. 정작 내 속마음은 잘 안 꺼내는 타입이라 가끔 외로워요.",
-      money: "큰 흐름(투자, 큰 지출)엔 감이 좋은데 일상 소비는 의외로 헐렁한 편. 일상 지출만 따로 체크해보세요.",
-      rest: "물 가까운 곳, 또는 그냥 흐르는 음악 하나로도 빠르게 회복되는 타입입니다."
-    },
-    { // 계(癸) - 옹달샘·이슬
-      morning: "예민한 센서가 일찍 켜지는 타입이라 아침 컨디션 차이가 꽤 큽니다. 잠을 못 채우면 그날 티가 나요.",
-      work: "남들이 못 보는 디테일을 짚어내는 게 강점. 다만 너무 깊이 파다가 결정이 늦어질 수 있어요.",
-      people: "눈치가 빠르고 공감을 잘해서 의지가 되는 타입. 다 받아주다 본인 감정은 늦게 알아채는 게 함정.",
-      money: "작은 새는 돈에 예민하면서도 한 번씩 감정적으로 크게 쓰는 양면이 있어요. 그 타이밍만 스스로 체크하세요.",
-      rest: "혼자 조용히 흘러가는 시간이 진짜 충전입니다. 사람 많은 곳에서의 휴식은 오히려 소모전이에요."
-    }
+    { morning: "눈뜨자마자 오늘의 '제일 큰 일'부터 들이받는 타입. 작은 일은 미루고 큰 산부터 넘으세요.", work: "회의에서 방향을 정하는 사람이 바로 당신. 결정을 미루면 팀 전체가 같이 멈춥니다.", people: "직진하는 말투 때문에 가끔 세게 들릴 수 있어요. '근데'를 한 번만 붙여도 훨씬 부드러워져요.", money: "큰 그림에 투자하는 건 잘하는데 잔돈 관리가 헐렁해요. 자동이체 하나만 걸어두면 평생 편합니다.", rest: "가만히 쉬는 걸 제일 못 견디는 타입. 몸은 눕히고 머리만 굴리는 산책이 진짜 휴식입니다." },
+    { morning: "직진보다 옆으로 슬쩍 돌아가는 게 더 빠른 날도 있어요. 오늘 안 풀리면 각도를 바꿔보세요.", work: "혼자 다 짜기보다 누군가에 잘 엮여 들어갈 때 일이 술술 풀립니다. 협업 제안, 먼저 던져보세요.", people: "상대 기분을 먼저 읽는 센서가 좋은 편. 다만 내 의견은 한 번 더 늦게 나와요. 타이밍 한 박자만 당기세요.", money: "이것저것 조금씩 손대다 흩어지기 쉬운 스타일. 통장을 3개로 쪼개두면 새는 돈이 확 줄어요.", rest: "꼬여있던 생각이 산책길에서 풀리는 타입. 책상 앞보다 걸으면서 정리하세요." },
+    { morning: "에너지가 켜지면 주변까지 같이 밝아지는 타입. 아침 텐션이 곧 오늘 분위기를 결정합니다.", work: "발표, 설득, 분위기 띄우기에서 진짜 실력이 나옵니다. 혼자 조용히 처리하는 일은 의외로 답답해요.", people: "먼저 다가가고 먼저 웃는 쪽. 다만 다 받아주다 보면 스스로 방전되니, '오늘은 패스'도 가끔 필요해요.", money: "한턱 쏘는 걸 좋아하는 타입이라 의외로 지출이 큼. 결제 전에 3초만 멈추는 습관, 그게 답입니다.", rest: "불 끄고 조용히 있는 게 제일 안 맞는 스타일. 사람 없는 데서 햇빛 쬐는 정도가 딱 맞는 휴식입니다." },
+    { morning: "조용히 타오르는 스타일이라 아침엔 잘 안 보여도, 시간이 갈수록 존재감이 짙어집니다.", work: "넓게 벌이기보다 한 가지를 깊게 파는 쪽이 잘 맞아요. 멀티태스킹보다 원씽(one thing)으로 가세요.", people: "겉으론 무던해 보여도 속으론 꽤 섬세하게 다 기억하는 타입. 서운한 건 그날 바로 말해야 쌓이지 않아요.", money: "눈에 안 보이는 작은 구독료들이 줄줄 새는 스타일. 한 달에 한 번 결제 목록만 훑어도 큰 도움이 됩니다.", rest: "조명 어둡고 조용한 공간에서 제일 빨리 회복돼요. 밝고 시끄러운 휴식은 오히려 더 피곤하게 만듭니다." },
+    { morning: "일단 자리에 앉으면 잘 안 흔들리는 타입. 다만 시작 버튼을 누르기까지가 오래 걸려요.", work: "묵직하게 버텨주는 존재라 사람들이 은근히 의지해요. 책임을 너무 다 끌어안진 마세요.", people: "말을 아끼는 편이라 가끔 무뚝뚝해 보일 수 있어요. 의외로 한마디 칭찬에 약한 편이기도 합니다.", money: "큰 자산엔 강하지만 소소한 지출 체크는 약한 편. 월말에 한 번씩 가계부만 훑어도 충분해요.", rest: "몸을 움직이지 않고 가만히 있는 게 회복이라 생각하기 쉬운데, 사실 적당한 운동이 더 잘 맞습니다." },
+    { morning: "루틴이 깨지면 하루 전체가 흔들리는 타입. 작은 의식 하나만 지켜도 컨디션이 안정됩니다.", work: "묵묵히 디테일을 채우는 역할에서 빛나요. 화려한 발표보다 꼼꼼한 마무리가 당신의 무기입니다.", people: "다른 사람 챙기는 게 습관이 되어 본인 욕구는 뒷전이 되기 쉬워요. 오늘 하나는 내 몫부터 챙기세요.", money: "절약은 잘하는데 가끔 스트레스성 지출이 한 번에 터지는 편. 그 패턴만 알아둬도 절반은 막아집니다.", rest: "정리된 공간에서야 진짜로 쉬어지는 타입. 어수선한 방에서는 누워도 쉬는 게 아니에요." },
+    { morning: "할까 말까 재는 시간이 짧은 타입. 결정하면 바로 행동으로 옮기는 쪽이 훨씬 편합니다.", work: "기준이 명확해서 일을 깔끔하게 끝내는 스타일. 다만 너무 날카로운 피드백은 한 번 다듬어서 전달하세요.", people: "겉바속바처럼 보여도 의리는 확실한 타입. 친해지는 데 시간이 걸릴 뿐, 한 번 믹스되면 오래 갑니다.", money: "필요한 데는 과감히 쓰고 불필요한 데는 칼같이 끊는 편. 가끔 그 기준이 너무 빡빡해서 스스로 피곤해요.", rest: "몸을 써서 땀 흘리는 게 의외로 진짜 휴식인 타입. 가만히 누워있는 건 오히려 답답함을 키워요." },
+    { morning: "디테일이 살짜기 안 맞으면 하루 종일 신경쓰이는 타입. 아침에 거울 한 번 더 보고 나가세요.", work: "정교하게 다듬는 작업에서 두각을 보여요. 거칠게 빨리 가는 일보다 꼼꼼한 일을 맡아보세요.", people: "예의를 갖춘 만큼 상대에게도 같은 걸 기대하는 편. 기대와 다를 때 서운함이 꽤 오래 갑니다.", money: "안목이 좋아서 좋은 물건 보는 눈은 확실한데, 그만큼 지출 단가도 높아지는 편. 예산선 하나만 정해두세요.", rest: "예쁘고 정돈된 공간이 곧 회복력입니다. 환경을 먼저 정리하면 마음이 따라 정리돼요." },
+    { morning: "스케일이 큰 생각으로 하루를 여는 타입. 다만 너무 멀리 보다가 오늘 할 일을 놓치기 쉬워요.", work: "큰 흐름을 읽고 판을 짜는 데 강해요. 디테일은 따로 체크리스트로 보완하면 완벽해집니다.", people: "포용력이 넓어서 누구든 잘 받아주는 편. 정작 내 속마음은 잘 안 꺼내는 타입이라 가끔 외로워요.", money: "큰 흐름(투자, 큰 지출)엔 감이 좋은데 일상 소비는 의외로 헐렁한 편. 일상 지출만 따로 체크해보세요.", rest: "물 가까운 곳, 또는 그냥 흐르는 음악 하나로도 빠르게 회복되는 타입입니다." },
+    { morning: "예민한 센서가 일찍 켜지는 타입이라 아침 컨디션 차이가 꽤 큽니다. 잠을 못 채우면 그날 티가 나요.", work: "남들이 못 보는 디테일을 짚어내는 게 강점. 다만 너무 깊이 파다가 결정이 늦어질 수 있어요.", people: "눈치가 빠르고 공감을 잘해서 의지가 되는 타입. 다 받아주다 본인 감정은 늦게 알아채는 게 함정.", money: "작은 새는 돈에 예민하면서도 한 번씩 감정적으로 크게 쓰는 양면이 있어요. 그 타이밍만 스스로 체크하세요.", rest: "혼자 조용히 흘러가는 시간이 진짜 충전입니다. 사람 많은 곳에서의 휴식은 오히려 소모전이에요." }
   ];
 
   function renderReadingVisual(content, saju) {
@@ -4386,8 +3541,6 @@ window.Manseryeok = Manseryeok;
     if (!target) return;
     const dayElement = elementOfGan(saju.day.gan);
     const balance = buildBalance([saju.year, saju.month, saju.day, saju.hour]);
-    const low = balance.rows.slice().sort(function (a, b) { return a.percent - b.percent; })[0];
-    const strong = balance.rows.slice().sort(function (a, b) { return b.percent - a.percent; })[0];
     const copy = DAILY_USE_BY_GAN[saju.day.gan];
     const powerSeed = (saju.day.gan * 7 + saju.month.zhi * 11 + saju.year.zhi * 13) % 21;
     const powers = [68, 74, 80, 65, 77].map(function (base, i) { return Math.max(58, Math.min(92, base + ((powerSeed + i * 5) % 15) - 7)); });
@@ -4411,21 +3564,15 @@ window.Manseryeok = Manseryeok;
     return div.innerHTML;
   }
 
-  // ===== 궁합 맛보기 (자평명리 기준 간단 버전) =====
-  // 일간 오행의 상생상극(相生相剋) 관계와 일지의 합/충(合/沖) 관계로
-  // 두 사람의 기본 합을 가볍게 보여주는 맛보기 기능입니다. (정식 합충형파해는 정밀풀이에서 제공)
-  const SAENG_NEXT = { wood: "fire", fire: "earth", earth: "metal", metal: "water", water: "wood" }; // 상생(내가 낳는 쪽)
-  const GEUK_NEXT = { wood: "earth", earth: "water", water: "fire", fire: "metal", metal: "wood" };   // 상극(내가 누르는 쪽)
-
-  // 지지 육합(六合): 서로 합이 되는 짝
+  const SAENG_NEXT = { wood: "fire", fire: "earth", earth: "metal", metal: "water", water: "wood" };
+  const GEUK_NEXT = { wood: "earth", earth: "water", water: "fire", fire: "metal", metal: "wood" };
   const JIJI_YUKHAP = { 0: 1, 1: 0, 2: 11, 11: 2, 3: 10, 10: 3, 4: 9, 9: 4, 5: 8, 8: 5, 6: 7, 7: 6 };
-  // 지지 충(沖): 서로 마주쳐 부딪히는 짝
   const JIJI_CHUNG = { 0: 6, 6: 0, 1: 7, 7: 1, 2: 8, 8: 2, 3: 9, 9: 3, 4: 10, 10: 4, 5: 11, 11: 5 };
 
   function elementRelation(elA, elB) {
     if (elA === elB) return "same";
-    if (SAENG_NEXT[elA] === elB) return "aGivesB"; // A가 B를 생함
-    if (SAENG_NEXT[elB] === elA) return "bGivesA"; // B가 A를 생함
+    if (SAENG_NEXT[elA] === elB) return "aGivesB";
+    if (SAENG_NEXT[elB] === elA) return "bGivesA";
     if (GEUK_NEXT[elA] === elB) return "aControlsB";
     if (GEUK_NEXT[elB] === elA) return "bControlsA";
     return "neutral";
@@ -4541,43 +3688,6 @@ window.Manseryeok = Manseryeok;
     }
   });
 
-
-  // ===== 독립 궁합 섹션 핸들러 =====
-  var compatCalcBtn = document.getElementById("compatCalcBtn");
-  var compatResultEl = document.getElementById("compatResult");
-  if (compatCalcBtn) {
-    compatCalcBtn.addEventListener("click", function () {
-      var myYear = parseInt(document.getElementById("myYear").value, 10);
-      var myMonth = parseInt(document.getElementById("myMonth").value, 10);
-      var myDay = parseInt(document.getElementById("myDay").value, 10);
-      var otherYear = parseInt(document.getElementById("otherYear").value, 10);
-      var otherMonth = parseInt(document.getElementById("otherMonth").value, 10);
-      var otherDay = parseInt(document.getElementById("otherDay").value, 10);
-
-      var daysInMonth = function (y, m) { return new Date(y, m, 0).getDate(); };
-      if (!(myYear >= 1920 && myYear <= 2026 && myMonth >= 1 && myMonth <= 12 && myDay >= 1 && myDay <= daysInMonth(myYear, myMonth) &&
-            otherYear >= 1920 && otherYear <= 2026 && otherMonth >= 1 && otherMonth <= 12 && otherDay >= 1 && otherDay <= daysInMonth(otherYear, otherMonth))) {
-        compatResultEl.style.display = "block";
-        compatResultEl.innerHTML = '<div style="text-align:center;color:var(--ink-soft);padding:20px;">생년월일을 정확히 입력해주세요.</div>';
-        return;
-      }
-
-      var mySaju, otherSaju;
-      try {
-        mySaju = computeSaju(myYear, myMonth, myDay, null, 0, false);
-        otherSaju = computeSaju(otherYear, otherMonth, otherDay, null, 0, false);
-      } catch (err) {
-        compatResultEl.style.display = "block";
-        compatResultEl.innerHTML = '<div style="text-align:center;color:var(--ink-soft);padding:20px;">계산 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.</div>';
-        return;
-      }
-
-      compatResultEl.style.display = "block";
-      renderCompatibilityResult(mySaju, otherSaju, compatResultEl);
-    });
-  }
-
-
   document.querySelectorAll(".price-cta[data-product]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       const select = document.getElementById("productSelect");
@@ -4585,31 +3695,36 @@ window.Manseryeok = Manseryeok;
     });
   });
 })();
+</script>
 
-  // ===== SCROLL REVEAL OBSERVER =====
-  (function () {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
-      });
-    }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+<script>
+// ===== 모션: no-js 제거, 스크롤 reveal 제어 =====
+(function () {
+  "use strict";
+  document.documentElement.classList.remove("no-js");
 
-    document.querySelectorAll(".reveal, .reveal-up").forEach(function (el) {
-      observer.observe(el);
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      el.classList.add("is-visible");
     });
+    return;
+  }
 
-    // Navbar scroll effect
-    var nav = document.getElementById("navbar");
-    window.addEventListener("scroll", function () {
-      if (window.scrollY > 60) {
-        nav.classList.add("scrolled");
-      } else {
-        nav.classList.remove("scrolled");
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
       }
-    }, { passive: true });
-  })();
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+  document.querySelectorAll(".reveal").forEach(function (el) {
+    observer.observe(el);
+  });
+})();
 </script>
 
 </body>
