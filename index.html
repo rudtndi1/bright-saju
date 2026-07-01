@@ -960,6 +960,729 @@
     .mind-outer { border-right: 0; border-bottom: 1px solid var(--line); }
   }
 
+
+  /* ============================================================
+     VISUAL UPGRADE — 점신 스타일 참조, 한지/먹색+골드 강화
+  ============================================================ */
+
+  /* 전체 배경에 미묘한 한지 질감 노이즈 레이어 */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ---- NAV 업그레이드: 골드 라인 하단 강조 ---- */
+  nav {
+    border-bottom: 1px solid rgba(176,140,63,0.25) !important;
+    background: rgba(243, 237, 226, 0.88) !important;
+  }
+  nav::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(176,140,63,0.5) 30%, rgba(176,140,63,0.5) 70%, transparent);
+  }
+
+  /* ---- HERO 업그레이드 ---- */
+  .hero {
+    background:
+      radial-gradient(ellipse at 60% 0%, rgba(176,140,63,0.09) 0, transparent 60%),
+      radial-gradient(ellipse at 100% 80%, rgba(140,59,46,0.07) 0, transparent 50%),
+      var(--paper);
+  }
+
+  /* H1 accent에 골드 언더라인 글로우 */
+  .hero h1 .accent {
+    background: linear-gradient(180deg, var(--jujube) 60%, rgba(176,140,63,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* 버튼 업그레이드 */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--jujube) 0%, #a84530 100%) !important;
+    box-shadow: 0 8px 32px -8px rgba(140,59,46,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 14px 36px -8px rgba(140,59,46,0.6), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+  }
+  .btn-ghost {
+    background: rgba(250,246,236,0.6);
+    backdrop-filter: blur(4px);
+    border-color: rgba(176,140,63,0.35) !important;
+    color: var(--ink) !important;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(176,140,63,0.1);
+    border-color: rgba(176,140,63,0.6) !important;
+  }
+
+  /* ---- EYEBROW 업그레이드 ---- */
+  .eyebrow {
+    background: linear-gradient(90deg, rgba(140,59,46,0.1), rgba(176,140,63,0.08));
+    padding: 6px 14px 6px 10px;
+    border-radius: 100px;
+    border: 1px solid rgba(176,140,63,0.25);
+  }
+
+  /* ---- PILLAR 업그레이드: 골드 테두리 글로우 ---- */
+  .pillar {
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.9) 100%) !important;
+    border: 1px solid rgba(176,140,63,0.22) !important;
+    box-shadow:
+      0 18px 40px -16px rgba(43,37,33,0.3),
+      inset 0 1px 0 rgba(176,140,63,0.15) !important;
+  }
+  .pillar:hover {
+    border-color: rgba(176,140,63,0.5) !important;
+    box-shadow:
+      0 24px 50px -16px rgba(43,37,33,0.35),
+      0 0 0 1px rgba(176,140,63,0.2),
+      inset 0 1px 0 rgba(176,140,63,0.2) !important;
+  }
+  .pillar .label {
+    font-family: 'Noto Serif KR', serif;
+    color: var(--gold) !important;
+    font-size: 12px !important;
+    letter-spacing: 0.15em !important;
+  }
+  .pillar .tag {
+    color: rgba(176,140,63,0.7) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.08em;
+  }
+
+  /* ---- KICKER 업그레이드: 골드 라인 장식 ---- */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.18em !important;
+  }
+  .kicker::before {
+    content: "";
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .kicker::after {
+    content: "";
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  /* ---- SECTION TITLE 업그레이드 ---- */
+  .section-title {
+    position: relative;
+  }
+
+  /* ---- ABOUT 섹션 업그레이드 ---- */
+  .about {
+    background: linear-gradient(180deg, var(--paper-deep) 0%, #e5d9c0 100%) !important;
+    position: relative;
+  }
+  .about::before {
+    content: "命";
+    position: absolute;
+    right: 5%;
+    top: 40px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(43,37,33,0.025);
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+  .about-grid {
+    border: 1px solid rgba(176,140,63,0.25) !important;
+    box-shadow: 0 8px 40px -20px rgba(43,37,33,0.2);
+  }
+  .about-cell {
+    position: relative;
+    overflow: hidden;
+  }
+  .about-cell::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(176,140,63,0.35), transparent);
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+  }
+  .about-cell:hover::before { transform: scaleX(1); }
+  .about-cell .num {
+    font-size: 22px !important;
+    color: rgba(176,140,63,0.35) !important;
+  }
+  .about-cell:hover .num { color: var(--gold) !important; }
+  .about-cell h3 { font-size: 16px !important; }
+
+  /* ---- MINDMODEL 섹션 업그레이드 ---- */
+  .mindmodel {
+    position: relative;
+    background: linear-gradient(135deg, var(--paper) 0%, rgba(176,140,63,0.04) 100%) !important;
+  }
+  .mv-card {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.7) 100%) !important;
+    box-shadow: 0 8px 32px -16px rgba(43,37,33,0.18), inset 0 1px 0 rgba(176,140,63,0.12) !important;
+  }
+  .mv-card:hover {
+    border-color: rgba(176,140,63,0.45) !important;
+    box-shadow: 0 16px 40px -16px rgba(43,37,33,0.22), inset 0 1px 0 rgba(176,140,63,0.18) !important;
+  }
+  .mv-icon { font-size: 36px !important; }
+
+  /* ---- WHO 섹션 업그레이드 ---- */
+  .who { background: linear-gradient(180deg, var(--paper) 0%, rgba(243,237,226,0.6) 100%) !important; }
+  .who-row { overflow: hidden; }
+  .who-row .when {
+    font-size: 13px !important;
+    letter-spacing: 0.06em;
+    position: relative;
+    padding: 4px 10px;
+    background: rgba(140,59,46,0.07);
+    border-radius: 4px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .who-row .what { font-size: 17px !important; }
+
+  /* ---- CHANNEL 섹션 업그레이드 ---- */
+  .channels { background: linear-gradient(180deg, var(--paper-deep) 0%, #e3d7bc 100%) !important; }
+  .channel-card {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: linear-gradient(135deg, var(--paper-card) 0%, rgba(250,246,236,0.8) 100%) !important;
+    box-shadow: 0 4px 24px -12px rgba(43,37,33,0.15), inset 0 1px 0 rgba(176,140,63,0.1) !important;
+  }
+  .channel-card:hover {
+    box-shadow: 0 16px 40px -16px rgba(43,37,33,0.25), inset 0 1px 0 rgba(176,140,63,0.15) !important;
+  }
+  .yt-card:hover { border-color: rgba(196,48,43,0.5) !important; }
+  .kakao-card:hover { border-color: rgba(254,229,0,0.6) !important; }
+
+  /* ---- PROCESS 섹션 업그레이드 ---- */
+  .process {
+    background: linear-gradient(150deg, #1e1a17 0%, #2b2521 40%, #1a2130 100%) !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .process::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(176,140,63,0.12) 0, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(140,59,46,0.1) 0, transparent 45%);
+    pointer-events: none;
+  }
+  .step {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .step:hover {
+    border-color: rgba(176,140,63,0.45) !important;
+    background: rgba(176,140,63,0.06);
+    transform: translateY(-3px);
+  }
+  .step .step-num {
+    font-size: 32px !important;
+    background: linear-gradient(135deg, var(--gold), #d4a94e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .free-note {
+    border-color: rgba(176,140,63,0.5) !important;
+    background: rgba(176,140,63,0.08);
+  }
+  .free-note .badge {
+    background: linear-gradient(135deg, var(--gold), #c9a040) !important;
+    box-shadow: 0 2px 8px rgba(176,140,63,0.4);
+  }
+
+  /* ---- PRICING 업그레이드 ---- */
+  .pricing { background: linear-gradient(180deg, var(--paper) 0%, rgba(243,237,226,0.8) 100%) !important; }
+  .price-card {
+    border: 1px solid rgba(176,140,63,0.18) !important;
+    box-shadow: 0 4px 24px -12px rgba(43,37,33,0.12), inset 0 1px 0 rgba(176,140,63,0.08) !important;
+  }
+  .price-card:hover {
+    box-shadow: 0 20px 48px -20px rgba(43,37,33,0.22), inset 0 1px 0 rgba(176,140,63,0.12) !important;
+  }
+  .price-card.highlight {
+    background: linear-gradient(160deg, #241f1c 0%, #2b2521 60%, #1f2530 100%) !important;
+    border: 1px solid rgba(176,140,63,0.4) !important;
+    box-shadow:
+      0 20px 60px -20px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(176,140,63,0.2) !important;
+  }
+  .price-pop {
+    background: linear-gradient(135deg, var(--jujube), #a84530) !important;
+    box-shadow: 0 4px 12px rgba(140,59,46,0.4);
+  }
+  .price-amount {
+    background: linear-gradient(135deg, var(--ink) 0%, #3d3530 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .price-card.highlight .price-amount {
+    background: linear-gradient(135deg, #fff 0%, rgba(243,237,226,0.85) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---- COUNSELOR 업그레이드 ---- */
+  .counselor { background: linear-gradient(180deg, var(--paper-deep) 0%, #e5d9c0 100%) !important; }
+  .counselor-card {
+    border: 1px solid rgba(176,140,63,0.25) !important;
+    box-shadow: 0 12px 48px -20px rgba(43,37,33,0.2), inset 0 1px 0 rgba(176,140,63,0.12) !important;
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.9) 100%) !important;
+  }
+  .counselor-quote {
+    border-left: 3px solid transparent !important;
+    border-image: linear-gradient(180deg, var(--gold), rgba(176,140,63,0.3)) 1 !important;
+    background: rgba(176,140,63,0.05);
+    padding: 14px 18px !important;
+    border-radius: 0 6px 6px 0;
+  }
+  .c-badge {
+    background: rgba(176,140,63,0.08) !important;
+    border-color: rgba(176,140,63,0.3) !important;
+    color: var(--ink) !important;
+  }
+
+  /* ---- APPLY 섹션 업그레이드 ---- */
+  .apply { background: linear-gradient(180deg, var(--paper-deep) 0%, #e0d5bb 100%) !important; }
+  form {
+    border: 1px solid rgba(176,140,63,0.22) !important;
+    box-shadow: 0 20px 60px -24px rgba(43,37,33,0.2), inset 0 1px 0 rgba(176,140,63,0.1) !important;
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.95) 100%) !important;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(176,140,63,0.12);
+  }
+  .submit-btn {
+    background: linear-gradient(135deg, var(--jujube) 0%, #a84530 100%) !important;
+    box-shadow: 0 8px 24px -8px rgba(140,59,46,0.45) !important;
+    letter-spacing: 0.04em;
+  }
+  .submit-btn:hover {
+    box-shadow: 0 12px 30px -8px rgba(140,59,46,0.55) !important;
+  }
+
+  /* ---- AI 결과 카드 업그레이드 ---- */
+  .analysis-report {
+    border: 1px solid rgba(176,140,63,0.22) !important;
+    box-shadow: 0 16px 48px -20px rgba(43,37,33,0.25) !important;
+  }
+  .analysis-head {
+    background: linear-gradient(90deg, rgba(140,59,46,0.1), rgba(176,140,63,0.1)) !important;
+    border-bottom: 1px solid rgba(176,140,63,0.2) !important;
+  }
+  .analysis-score {
+    border: 1px solid rgba(176,140,63,0.45) !important;
+    background: radial-gradient(circle, rgba(176,140,63,0.1), var(--paper)) !important;
+  }
+  .analysis-score b { font-size: 26px !important; }
+
+  /* 오행 밸런스 바 업그레이드 */
+  .balance-bar { border-radius: 4px !important; height: 12px !important; }
+  .balance-fill { border-radius: 4px !important; height: 100% !important; }
+  .bg-wood { background: linear-gradient(90deg, #1f8f5f, #2dbe82) !important; }
+  .bg-fire { background: linear-gradient(90deg, #bf3f35, #e05a4e) !important; }
+  .bg-earth { background: linear-gradient(90deg, #c28a22, #e8b040) !important; }
+  .bg-metal { background: linear-gradient(90deg, #8a909a, #b0b8c4) !important; }
+  .bg-water { background: linear-gradient(90deg, #2b2521, #4a4038) !important; }
+
+  /* ---- AI 결과 텍스트 박스 업그레이드 ---- */
+  .ai-result-body {
+    border: 1px solid rgba(176,140,63,0.18) !important;
+    background: linear-gradient(180deg, var(--paper) 0%, rgba(243,237,226,0.85) 100%) !important;
+    font-size: 15px !important;
+    line-height: 2 !important;
+  }
+
+  /* ---- LIFE MAP 카드 업그레이드 ---- */
+  .life-map {
+    border: 1px solid rgba(176,140,63,0.22) !important;
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.85) 100%) !important;
+    box-shadow: 0 8px 32px -16px rgba(43,37,33,0.2) !important;
+  }
+  .life-step {
+    border: 1px solid rgba(176,140,63,0.15) !important;
+    background: rgba(250,246,236,0.7) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .life-step:hover {
+    border-color: rgba(176,140,63,0.38) !important;
+    box-shadow: 0 6px 20px -8px rgba(43,37,33,0.15);
+  }
+  .life-orb {
+    box-shadow: 0 0 20px rgba(176,140,63,0.3);
+    font-size: 16px !important;
+  }
+
+  /* ---- RESULT PILLARS 업그레이드 ---- */
+  .ai-result-pillars .rp {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: linear-gradient(180deg, var(--paper) 0%, rgba(243,237,226,0.8) 100%) !important;
+    transition: border-color 0.3s ease;
+  }
+  .ai-result-pillars .rp:hover { border-color: rgba(176,140,63,0.45) !important; }
+
+  /* ---- FOOTER 업그레이드 ---- */
+  footer {
+    border-top: 1px solid rgba(176,140,63,0.25) !important;
+    background: linear-gradient(180deg, var(--paper) 0%, #ede4d0 100%) !important;
+  }
+  footer::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(176,140,63,0.4) 30%, rgba(176,140,63,0.4) 70%, transparent);
+    margin-bottom: 0;
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+  }
+  footer { position: relative; }
+
+  /* ---- PREMIUM CARD 업그레이드 ---- */
+  .premium-card {
+    box-shadow:
+      0 30px 80px -28px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(176,140,63,0.2) !important;
+  }
+  .premium-cta {
+    background: linear-gradient(135deg, var(--gold) 0%, #c9a040 100%) !important;
+    box-shadow: 0 8px 28px -8px rgba(176,140,63,0.55) !important;
+  }
+
+  /* ---- COMPAT TEASER 업그레이드 ---- */
+  .compat-teaser {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: linear-gradient(180deg, var(--paper-card) 0%, rgba(250,246,236,0.85) 100%) !important;
+  }
+
+  /* ---- MIND CARD 업그레이드 ---- */
+  .mind-toggle:hover { background: rgba(176,140,63,0.08) !important; }
+  .mind-toggle-icon {
+    background: linear-gradient(135deg, rgba(140,59,46,0.12), rgba(176,140,63,0.1)) !important;
+    border-color: rgba(176,140,63,0.3) !important;
+    box-shadow: 0 0 12px rgba(176,140,63,0.2);
+  }
+
+  /* ---- SUPPORT NOTE 카드 업그레이드 ---- */
+  .support-note {
+    border: 1px solid rgba(176,140,63,0.18) !important;
+    background: linear-gradient(180deg, rgba(250,246,236,0.8) 0%, rgba(250,246,236,0.5) 100%) !important;
+  }
+  .plain-item {
+    border: 1px solid rgba(176,140,63,0.14) !important;
+    background: rgba(250,246,236,0.6) !important;
+    transition: border-color 0.3s ease;
+  }
+  .plain-item:hover { border-color: rgba(176,140,63,0.32) !important; }
+
+  /* ---- 특수 지표 태그 업그레이드 ---- */
+  .special-tag.good {
+    background: linear-gradient(135deg, rgba(45,168,115,0.1), rgba(45,168,115,0.05)) !important;
+    box-shadow: inset 0 1px 0 rgba(45,168,115,0.15);
+  }
+  .special-tag.note {
+    background: linear-gradient(135deg, rgba(211,154,46,0.1), rgba(211,154,46,0.05)) !important;
+    box-shadow: inset 0 1px 0 rgba(211,154,46,0.15);
+  }
+
+  /* ---- AI 로딩 업그레이드 ---- */
+  .ai-loading .saju-spin span {
+    background: linear-gradient(180deg, var(--paper-card), rgba(250,246,236,0.8)) !important;
+    border-color: rgba(176,140,63,0.3) !important;
+    box-shadow: 0 4px 12px -4px rgba(43,37,33,0.15);
+  }
+
+  /* ---- 데모 배지 ---- */
+  .demo-badge {
+    background: linear-gradient(135deg, rgba(140,59,46,0.12), rgba(176,140,63,0.08)) !important;
+    border: 1px solid rgba(176,140,63,0.25) !important;
+    color: var(--jujube) !important;
+  }
+
+  /* ---- REMEDY BOX 업그레이드 ---- */
+  .remedy-box {
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    background: linear-gradient(180deg, rgba(250,246,236,0.7), rgba(250,246,236,0.5)) !important;
+  }
+  .remedy-dot { background: linear-gradient(135deg, var(--gold), #c9a040) !important; }
+
+  /* ---- FORMULA CARD 업그레이드 ---- */
+  .formula-row {
+    border: 1px solid rgba(176,140,63,0.14) !important;
+    background: rgba(250,246,236,0.5) !important;
+    transition: border-color 0.3s ease;
+  }
+  .formula-row:hover { border-color: rgba(176,140,63,0.3) !important; }
+
+  /* ---- SPECIAL NOTE CARD 업그레이드 ---- */
+  .special-note-card {
+    background: linear-gradient(120deg, rgba(176,140,63,0.12), rgba(140,59,46,0.08)) !important;
+    border-top: 1px solid rgba(176,140,63,0.2) !important;
+  }
+  .special-note-card .sn-title {
+    color: var(--gold) !important;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- AI RESULT FOOT 업그레이드 ---- */
+  .ai-result-foot {
+    background: linear-gradient(135deg, rgba(176,140,63,0.1), rgba(176,140,63,0.06)) !important;
+    border: 1px solid rgba(176,140,63,0.3) !important;
+  }
+
+  /* ---- NAV CTA 업그레이드 ---- */
+  .nav-cta {
+    border-color: rgba(176,140,63,0.4) !important;
+    color: var(--ink) !important;
+    background: rgba(176,140,63,0.06) !important;
+  }
+  .nav-cta:hover {
+    background: var(--ink) !important;
+    border-color: var(--ink) !important;
+    color: var(--paper) !important;
+  }
+
+  /* ---- CORE SEAL 업그레이드 ---- */
+  .core-seal {
+    background: linear-gradient(180deg, rgba(250,246,236,0.9), rgba(243,237,226,0.7)) !important;
+    border: 1px solid rgba(176,140,63,0.2) !important;
+    box-shadow: inset 0 1px 0 rgba(176,140,63,0.12);
+  }
+
+  /* ---- MONTH ITEM / COMPAT ITEM 업그레이드 ---- */
+  .month-item, .compat-item {
+    border: 1px solid rgba(176,140,63,0.14) !important;
+    background: linear-gradient(180deg, rgba(250,246,236,0.8), rgba(250,246,236,0.5)) !important;
+  }
+
+  /* 스크롤바 스타일링 (웹킷) */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(176,140,63,0.4), rgba(140,59,46,0.3));
+    border-radius: 3px;
+  }
+
+
+
+  /* ===== HERO 전면 업그레이드 ===== */
+  .hero {
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 65% 10%, rgba(176,140,63,0.13) 0, transparent 55%),
+      radial-gradient(ellipse at 5% 80%, rgba(140,59,46,0.09) 0, transparent 50%),
+      var(--paper) !important;
+  }
+
+  /* 히어로 배경 한자 파티클 */
+  .hero-hanja-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .hero-hanja-bg span {
+    position: absolute;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    color: rgba(43,37,33,0.04);
+    user-select: none;
+    animation: hanjaFloat linear infinite;
+  }
+
+  @keyframes hanjaFloat {
+    0%   { transform: translateY(0)   rotate(0deg);   opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-120px) rotate(8deg); opacity: 0; }
+  }
+
+  /* 히어로 골드 구분선 */
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(176,140,63,0.4), transparent);
+    z-index: 3;
+  }
+
+  /* H1 크기·자간 강화 */
+  .hero h1 {
+    font-size: 56px !important;
+    letter-spacing: -0.02em !important;
+  }
+  @media (max-width: 860px) {
+    .hero h1 { font-size: 36px !important; }
+  }
+
+  /* 사주패 배경 orb 강화 */
+  .sajupae::before {
+    background:
+      radial-gradient(circle at 38% 42%, rgba(140,59,46,0.22) 0, transparent 48%),
+      radial-gradient(circle at 65% 55%, rgba(176,140,63,0.2)  0, transparent 50%),
+      radial-gradient(circle at 52% 30%, rgba(47,59,76,0.12)   0, transparent 55%) !important;
+    filter: blur(3px) !important;
+  }
+
+  /* 기둥 골드 상단 highlight */
+  .pillar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(90deg, transparent, rgba(176,140,63,0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .pillar:hover::before { opacity: 1; }
+
+  /* 사주패 캡션 골드 처리 */
+  .sajupae-caption {
+    color: rgba(176,140,63,0.7) !important;
+    letter-spacing: 0.1em;
+    font-size: 11px !important;
+  }
+
+  /* ===== 오행 에너지 배지 (히어로 하단) ===== */
+  .hero-elements {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-el {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 100px;
+    border: 1px solid;
+    opacity: 0.82;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .hero-el:hover { opacity: 1; transform: translateY(-1px); }
+  .hero-el-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+  .hero-el.wood  { border-color: rgba(45,168,115,0.4);  color: #1a7a50;  background: rgba(45,168,115,0.07);  }
+  .hero-el.fire  { border-color: rgba(217,77,66,0.4);   color: #a83228;  background: rgba(217,77,66,0.07);   }
+  .hero-el.earth { border-color: rgba(211,154,46,0.45); color: #8a6210;  background: rgba(211,154,46,0.08);  }
+  .hero-el.metal { border-color: rgba(157,164,174,0.5); color: #5a6070;  background: rgba(157,164,174,0.08); }
+  .hero-el.water { border-color: rgba(43,37,33,0.3);    color: #2b2521;  background: rgba(43,37,33,0.05);    }
+  .hero-el-dot.wood  { background: #2da873; }
+  .hero-el-dot.fire  { background: #d94d42; }
+  .hero-el-dot.earth { background: #d39a2e; }
+  .hero-el-dot.metal { background: #9da4ae; }
+  .hero-el-dot.water { background: #2b2521; }
+
+  /* ===== 결과 섹션 탭 레이아웃 ===== */
+  .result-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid rgba(176,140,63,0.2);
+    margin-bottom: 22px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .result-tabs::-webkit-scrollbar { display: none; }
+  .result-tab {
+    flex-shrink: 0;
+    padding: 11px 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+    white-space: nowrap;
+  }
+  .result-tab.active {
+    color: var(--jujube);
+    border-bottom-color: var(--gold);
+  }
+  .result-tab:hover { color: var(--ink); }
+  .result-panel { display: none; }
+  .result-panel.active { display: block; }
+
+  /* ===== 통계/수치 강조 배지 ===== */
+  .stat-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 20px;
+    background: linear-gradient(180deg, rgba(176,140,63,0.08), rgba(176,140,63,0.04));
+    border: 1px solid rgba(176,140,63,0.25);
+    border-radius: 14px;
+    box-shadow: inset 0 1px 0 rgba(176,140,63,0.15);
+  }
+  .stat-badge b {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--jujube);
+    line-height: 1;
+  }
+  .stat-badge span { font-size: 11px; color: var(--ink-soft); margin-top: 4px; letter-spacing: 0.06em; }
+
+  /* ===== SECTION 장식 한자 배경 ===== */
+  .about::before { font-size: 240px !important; opacity: 0.018 !important; }
+
+  .process-deco {
+    position: absolute;
+    left: -20px; bottom: 20px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(243,237,226,0.04);
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* ===== PREMIUM CARD 한자 데코 크기 강화 ===== */
+  .premium-deco {
+    font-size: 200px !important;
+    color: rgba(243,237,226,0.07) !important;
+  }
+
+
 </style>
 </head>
 <body>
@@ -980,6 +1703,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
+      <div class="hero-hanja-bg" aria-hidden="true" id="hanjaParticles"></div>
       <div class="eyebrow hero-enter" style="--he:0.05s">지금은 무료로 열어두었습니다</div>
       <h1 class="serif hero-enter" style="--he:0.18s">
         태어난 네 글자를,<br>
@@ -993,6 +1717,13 @@
       <div class="hero-ctas hero-enter" style="--he:0.5s">
         <a href="#apply" class="btn-primary">무료로 풀이 받기 →</a>
         <a href="#process" class="btn-ghost">어떻게 진행되나요</a>
+      </div>
+      <div class="hero-elements hero-enter" style="--he:0.65s">
+        <span class="hero-el wood"><span class="hero-el-dot wood"></span>목(木)</span>
+        <span class="hero-el fire"><span class="hero-el-dot fire"></span>화(火)</span>
+        <span class="hero-el earth"><span class="hero-el-dot earth"></span>토(土)</span>
+        <span class="hero-el metal"><span class="hero-el-dot metal"></span>금(金)</span>
+        <span class="hero-el water"><span class="hero-el-dot water"></span>수(水)</span>
       </div>
     </div>
 
@@ -1189,6 +1920,7 @@
 <!-- ============ PROCESS ============ -->
 <section class="process section-pad" id="process">
   <div class="wrap">
+    <div class="process-deco" aria-hidden="true">四</div>
     <div class="kicker">HOW IT WORKS</div>
     <h2 class="section-title serif reveal">신청부터 결과까지, 이렇게 진행됩니다</h2>
     <p class="section-sub reveal">사람이 직접 확인하는 만큼, 결과는 바로 나오지 않습니다. 대신 정성껏 살펴보고 보내드립니다.</p>
@@ -1419,15 +2151,23 @@
         </div>
 
         <div class="ai-result" id="aiResult">
+          <div class="result-tabs" id="resultTabBar">
+            <button class="result-tab active" data-tab="summary">📋 종합풀이</button>
+            <button class="result-tab" data-tab="insight">⚖️ 원국분석</button>
+            <button class="result-tab" data-tab="daily">🌅 일상활용</button>
+            <button class="result-tab" data-tab="compat">💫 궁합</button>
+          </div>
           <div class="ai-result-head">
             <div class="ai-result-name" id="resultName">님의 사주 <span>무료 맛보기 풀이</span></div>
             <div class="demo-badge">AI 데모 · 맛보기</div>
           </div>
           <div class="ai-result-pillars" id="resultPillars"></div>
           <div class="ai-insight" id="resultInsight"></div>
-          <div class="ai-result-body" id="resultBody"></div>
-          <div class="reading-visual" id="readingVisual"></div>
-          <div class="compat-teaser" id="compatTeaser"></div>
+          <div class="result-panel active" id="panelSummary"><div class="ai-result-body" id="resultBody"></div></div><!-- /panelSummary -->
+          <div class="result-panel" id="panelInsight"><div class="ai-insight" id="resultInsight"></div></div>
+          <div class="result-panel" id="panelDaily"><div class="reading-visual" id="readingVisual"></div></div><!-- /panelDaily -->
+          <div class="result-panel" id="panelCompat"><div class="compat-teaser" id="compatTeaser"></div>
+          </div></div><!-- /panelCompat -->
           <div class="ai-result-foot">
             이 풀이는 무료 맛보기를 위해 AI가 간단히 생성한 데모입니다. 절기와 정확한 출생 시간을 반영한 정식 사주 원국, 그리고 상담가의 직접 검토는 정밀풀이에서 제공됩니다.
           </div>
@@ -3729,3 +4469,68 @@ window.Manseryeok = Manseryeok;
 
 </body>
 </html>
+<script>
+// ===== 한자 파티클 배경 =====
+(function(){
+  var container = document.getElementById('hanjaParticles');
+  if (!container) return;
+  var chars = ['命','心','運','緣','氣','甲','乙','丙','丁','戊','己','庚','辛','壬','癸','木','火','土','金','水','天','地','人','道','福'];
+  var count = 18;
+  for (var i = 0; i < count; i++) {
+    var span = document.createElement('span');
+    span.textContent = chars[Math.floor(Math.random() * chars.length)];
+    var size = 24 + Math.random() * 60;
+    span.style.cssText = [
+      'font-size:' + size + 'px',
+      'left:' + (Math.random() * 100) + '%',
+      'top:' + (20 + Math.random() * 70) + '%',
+      'animation-duration:' + (12 + Math.random() * 20) + 's',
+      'animation-delay:' + (Math.random() * 10) + 's',
+      'opacity:0'
+    ].join(';');
+    container.appendChild(span);
+  }
+})();
+
+// ===== 결과 탭 전환 =====
+(function(){
+  var tabBar = document.getElementById('resultTabBar');
+  if (!tabBar) return;
+
+  var tabMap = {
+    summary: 'panelSummary',
+    insight: 'panelInsight',
+    daily:   'panelDaily',
+    compat:  'panelCompat'
+  };
+
+  function activateTab(key) {
+    tabBar.querySelectorAll('.result-tab').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.tab === key);
+    });
+    Object.keys(tabMap).forEach(function(k){
+      var panel = document.getElementById(tabMap[k]);
+      if (panel) panel.classList.toggle('active', k === key);
+    });
+  }
+
+  tabBar.addEventListener('click', function(e){
+    var btn = e.target.closest('.result-tab');
+    if (!btn) return;
+    activateTab(btn.dataset.tab);
+  });
+
+  // renderInsight 완료 후 insight 패널로 이동 가능하도록 옵저버
+  var insightTarget = document.getElementById('resultInsight');
+  if (insightTarget) {
+    var obs = new MutationObserver(function(){
+      // insight에 내용 생기면 탭 배지에 표시
+      var tab = tabBar.querySelector('[data-tab="insight"]');
+      if (tab && insightTarget.innerHTML.trim()) {
+        tab.textContent = '⚖️ 원국분석';
+      }
+    });
+    obs.observe(insightTarget, { childList: true });
+  }
+})();
+</script>
