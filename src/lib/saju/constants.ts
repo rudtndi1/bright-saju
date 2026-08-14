@@ -77,10 +77,3 @@ export interface SajuResult {
   day: Pillar;
   time: Pillar;
 }
-
-export interface DaewoonItem {
-  startAge: number;
-  endAge: number;
-  pillar: Pillar;
-  year: number;
-}

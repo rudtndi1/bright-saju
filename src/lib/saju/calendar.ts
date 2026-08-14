@@ -3,7 +3,7 @@
  */
 
 import { HEAVENLY_STEMS, EARTHLY_BRANCHES, MONTH_BRANCHES, BRANCH_MAIN_STEM, type Pillar, type HeavenlyStem, type EarthlyBranch } from './constants';
-import { getLeapMonth, getLunarMonthDays, getLunarYearDays, LUNAR_BASE_UTC_MS } from './lunar-data';
+import { getLeapMonth, getLeapMonthDays, getLunarMonthDays, getLunarYearDays, LUNAR_BASE_UTC_MS } from './lunar-data';
 import { assertIntegerInRange, assertFiniteNumber, assertHeavenlyStem, assertEarthlyBranch, assertGender, assertDayBoundary } from './validation';
 
 export type DayBoundary = 'midnight' | 'jasi' | 'splitJasi';
@@ -179,7 +179,7 @@ export function getYearPillar(year: number): Pillar {
 
 export function getMonthPillar(year: number, month: number): Pillar {
   const yearStemIndex = (year - 4) % 10;
-  const monthBranch = MONTH_BRANCHES[month];
+  const monthBranch = MONTH_BRANCHES[month] as EarthlyBranch;
   const monthBranchIndex = EARTHLY_BRANCHES.indexOf(monthBranch);
 
   // 월간 계산: 연간 기준 + 월지 인��스 * 2 (60갑자 순환)
@@ -211,7 +211,6 @@ export function getTimePillar(dayStem: HeavenlyStem, hour: number, minute: numbe
   let adjustedHour = hour;
   if (dayBoundary === 'jasi' || dayBoundary === 'splitJasi') {
     if (hour === 23) adjustedHour = 0; // 23시를 자시(0시)로
-    else if (hour === 0 && dayBoundary === 'midnight') adjustedHour = 0;
   }
 
   // 2시간 단위 12지지

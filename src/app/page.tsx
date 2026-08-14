@@ -432,8 +432,6 @@ export default function HomePage() {
                                 border: '1px solid var(--color-line)',
                                 borderRadius: 'var(--radius-md)',
                                 fontSize: 'var(--fs-md)',
-                                fontWeight: 500,
-                                color: 'var(--color-ink-soft)',
                                 cursor: 'pointer',
                                 transition: 'all var(--transition-fast)',
                                 background: formData.gender === g ? 'var(--color-jujube)' : 'transparent',

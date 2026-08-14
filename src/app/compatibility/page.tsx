@@ -34,9 +34,21 @@ function getElementOfDayStem(dayStem: string): string {
   return STEM_ELEMENTS[dayStem] || '목';
 }
 
-function analyzeCompatibility(p1: SajuInput, p2: SajuInput): CompatibilityResult {
-  const saju1 = getCompleteSaju(p1);
-  const saju2 = getCompleteSaju(p2);
+function analyzeCompatibility(p1: Person, p2: Person): CompatibilityResult {
+  const saju1 = getCompleteSaju({
+    year: parseInt(p1.year),
+    month: parseInt(p1.month),
+    day: parseInt(p1.day),
+    hour: parseInt(p1.hour),
+    gender: p1.gender,
+  });
+  const saju2 = getCompleteSaju({
+    year: parseInt(p2.year),
+    month: parseInt(p2.month),
+    day: parseInt(p2.day),
+    hour: parseInt(p2.hour),
+    gender: p2.gender,
+  });
 
   const el1 = getElementOfDayStem(saju1.saju.day.heavenlyStem);
   const el2 = getElementOfDayStem(saju2.saju.day.heavenlyStem);
@@ -179,10 +191,7 @@ export default function CompatibilityPage() {
     }
 
     setTimeout(() => {
-      const res = analyzeCompatibility(
-        { year: parseInt(person1.year), month: parseInt(person1.month), day: parseInt(person1.day), hour: parseInt(person1.hour), gender: person1.gender },
-        { year: parseInt(person2.year), month: parseInt(person2.month), day: parseInt(person2.day), hour: parseInt(person2.hour), gender: person2.gender }
-      );
+      const res = analyzeCompatibility(person1, person2);
       setResult(res);
       setLoading(false);
     }, 1500);

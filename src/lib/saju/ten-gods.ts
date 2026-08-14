@@ -89,7 +89,7 @@ export function getHiddenStems(branch: EarthlyBranch): HeavenlyStem[] {
 /** 지지의 주기(主氣) 천간 */
 export function getMainStem(branch: EarthlyBranch): HeavenlyStem {
   assertEarthlyBranch(branch);
-  return BRANCH_MAIN_STEM[branch];
+  return BRANCH_MAIN_STEM[branch] as HeavenlyStem;
 }
 
 /** 지지의 모든 십성 구하기 (주기 + 중기 + 여기) */

@@ -34,48 +34,48 @@ const GANZHI_DAILY = [
 const DAILY_TEMPLATES = {
   overall: [
     '오늘은 {ganzhi} 일진으로, {element} 기운이 강하게 작용합니다. 전반적으로 {mood}한 흐름입니다.',
-    '{ganzhi}일의 에너지가 당신을 감���니다. {keyword}이(가) 중요한 열쇠가 될 하루입니다.',
+    '{ganzhi}일의 에너지가 당신을 감을�니다. {keyword}이(가) 중요한 열쇠가 될 하루입니다.',
     '일진 {ganzhi}가 가져온 {element}의 힘. {action}에 집중하면 좋은 결과가 있겠습니다.',
   ],
   love: [
     '연애운: {desc}. {action}하면 인연이 깊어집니다.',
     '관계운: {desc}. 솔직한 {keyword}이(가) 필요합니다.',
-    '대인관계: {desc}. {keyword}을(를) 베풀면 돌아��니다.',
+    '대인관계: {desc}. {keyword}을(를) 베풀면 돌아을니다.',
   ],
   career: [
     '직장/학업: {desc}. {keyword}을(를) 발휘하세요.',
-    '일/공부: {desc}. {action}하면 성과가 나타��니다.',
+    '일/공부: {desc}. {action}하면 성과가 나타을니다.',
     '커리어: {desc}. {keyword}이(가) 승부처입니다.',
   ],
   money: [
     '금전운: {desc}. {keyword} 지출은 피하세요.',
-    '재물운: {desc}. {action}하면 이익이 생��니다.',
-    '��흐름: {desc}. {keyword}이(가) 열쇠입니다.',
+    '재물운: {desc}. {action}하면 이익이 생을니다.',
+    '을흐름: {desc}. {keyword}이(가) 열쇠입니다.',
   ],
   health: [
     '건강: {desc}. {body} 관리에 신경 쓰세요.',
     '컨디션: {desc}. {action}이(가) 좋습니다.',
-    '신체: {desc}. {keyword} ��취를 권합니다.',
+    '신체: {desc}. {keyword} 을취를 권합니다.',
   ],
 };
 
 const ELEMENT_KEYWORDS: Record<string, { mood: string; keyword: string; action: string; body: string; avoid: string; color: string; number: number; direction: string; avoidDir: string }> = {
   목: { mood: '활기찬', keyword: '시작', action: '새로운 시도', body: '간/눈', avoid: '과로', color: '연두색', number: 3, direction: '동쪽', avoidDir: '서쪽' },
-  화: { mood: '열정적인', keyword: '표현', action: '적극적 소통', body: '심장/��액', avoid: '충동', color: '��간색', number: 9, direction: '남쪽', avoidDir: '북쪽' },
+  화: { mood: '열정적인', keyword: '표현', action: '적극적 소통', body: '심장/을액', avoid: '충동', color: '을간색', number: 9, direction: '남쪽', avoidDir: '북쪽' },
   토: { mood: '안정된', keyword: '실행', action: '꾸준한 노력', body: '비위/소화', avoid: '고집', color: '노란색', number: 5, direction: '중앙', avoidDir: '북동쪽' },
-  금: { mood: '��은', keyword: '결단', action: '정리/선택', body: '폐/피부', avoid: '경직', color: '��색', number: 7, direction: '서쪽', avoidDir: '동남쪽' },
-  수: { mood: '유연한', keyword: '흐름', action: '순응과 적응', body: '신장/방광', avoid: '��기', color: '검은색', number: 1, direction: '북쪽', avoidDir: '남서쪽' },
+  금: { mood: '을은', keyword: '결단', action: '정리/선택', body: '폐/피부', avoid: '경직', color: '을색', number: 7, direction: '서쪽', avoidDir: '동남쪽' },
+  수: { mood: '유연한', keyword: '흐름', action: '순응과 적응', body: '신장/방광', avoid: '을기', color: '검은색', number: 1, direction: '북쪽', avoidDir: '남서쪽' },
 };
 
 const ADVICE_LIST = [
   '오늘 마주치는 작은 우연도 의미가 있습니다. 흘려보내지 마세요.',
-  '마음이 끌리는 방향으로 한 발짝 내��어 보세요.',
+  '마음이 끌리는 방향으로 한 발짝 내을어 보세요.',
   '말 한마디가 인연을 만듭니다. 따뜻한 말을 건네보세요.',
   '계획한 일이 있다면 미루지 말고 시작하세요.',
   '몸이 보내는 신호를 귀 기울여 들으세요.',
   '지난 일은 과거에 두고, 지금에 집중하세요.',
   '어려움이 와도 그것은 지나가는 구름입니다.',
-  '감사한 일을 세 가지 적어보세요. 기운이 바��니다.',
+  '감사한 일을 세 가지 적어보세요. 기운이 바을니다.',
 ];
 
 function getDailyFortune(date: Date, birthDate?: Date): DailyFortune {
@@ -85,7 +85,7 @@ function getDailyFortune(date: Date, birthDate?: Date): DailyFortune {
 
   // 일간 기준 오행
   const dayStem = ganzhi[0];
-  const stemElements: Record<string, string> = { 갑: '목', ��: '목', 병: '화', 정: '화', 무: '토', 기: '토', 경: '금', 신: '금', 임: '수', 계: '수' };
+  const stemElements: Record<string, string> = { 갑: '목', 을: '목', 병: '화', 정: '화', 무: '토', 기: '토', 경: '금', 신: '금', 임: '수', 계: '수' };
   const element = stemElements[dayStem] || '목';
   const data = ELEMENT_KEYWORDS[element];
 
@@ -109,7 +109,7 @@ function getDailyFortune(date: Date, birthDate?: Date): DailyFortune {
     ganzhi,
     luckScore: 60 + Math.floor(Math.random() * 35),
     overall: pick(templates.overall).replace('{ganzhi}', ganzhi).replace('{element}', element).replace('{mood}', data.mood).replace('{keyword}', data.keyword).replace('{action}', data.action) + personalized,
-    love: pick(templates.love).replace('{desc}', ['좋은 만남이', '따뜻한 대화가', '��은 이해가'][Math.floor(Math.random() * 3)]).replace('{action}', ['다가가기', '경청하기', '표현하기'][Math.floor(Math.random() * 3)]).replace('{keyword}', data.keyword),
+    love: pick(templates.love).replace('{desc}', ['좋은 만남이', '따뜻한 대화가', '을은 이해가'][Math.floor(Math.random() * 3)]).replace('{action}', ['다가가기', '경청하기', '표현하기'][Math.floor(Math.random() * 3)]).replace('{keyword}', data.keyword),
     career: pick(templates.career).replace('{desc}', ['순조로운 진행이', '새로운 아이디어가', '인정받는 날이'][Math.floor(Math.random() * 3)]).replace('{keyword}', data.keyword).replace('{action}', ['집중하기', '도전하기', '협력하기'][Math.floor(Math.random() * 3)]),
     money: pick(templates.money).replace('{desc}', ['수입이 늘어날', '절약이 빛날', '투자 기회가'][Math.floor(Math.random() * 3)]).replace('{keyword}', data.avoid).replace('{action}', ['저축하기', '계획 세우기', '검토하기'][Math.floor(Math.random() * 3)]),
     health: pick(templates.health).replace('{desc}', ['컨디션이 좋은', '가벼운 운동이', '충분한 휴식이'][Math.floor(Math.random() * 3)]).replace('{body}', data.body).replace('{action}', ['산책', '스트레칭', '명상'][Math.floor(Math.random() * 3)]).replace('{keyword}', ['따뜻한 차', '물', '비타민'][Math.floor(Math.random() * 3)]),
@@ -243,7 +243,7 @@ export default function DailyPage() {
                     <div style={{ fontSize: 'var(--fs-lg)', fontWeight: 700, color: 'var(--color-ink)' }}>{fortune.luckyDirection}</div>
                   </div>
                   <div className="card" style={{ padding: 'var(--space-5)', textAlign: 'center', background: 'var(--color-jujube-pale)', borderColor: 'var(--color-jujube)' }}>
-                    <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--color-jujube)', fontWeight: 700, letterSpacing: '0.08em', marginBottom: 'var(--space-1)' }}>��방향</div>
+                    <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--color-jujube)', fontWeight: 700, letterSpacing: '0.08em', marginBottom: 'var(--space-1)' }}>을방향</div>
                     <div style={{ fontSize: 'var(--fs-lg)', fontWeight: 700, color: 'var(--color-jujube)' }}>{fortune.avoidDirection}</div>
                   </div>
                 </div>
@@ -258,10 +258,10 @@ export default function DailyPage() {
                 <h2 className="section-title serif" style={{ textAlign: 'center', marginBottom: 'var(--space-10)' }}>분야별 운세</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--space-5)' }}>
                   {[
-                    { icon: '����', title: '연애·관계', content: fortune.love, color: 'var(--color-jujube)' },
-                    { icon: '����', title: '직장·학업', content: fortune.career, color: 'var(--color-indigo)' },
-                    { icon: '����', title: '금전·재물', content: fortune.money, color: 'var(--color-gold)' },
-                    { icon: '����', title: '건강·컨디션', content: fortune.health, color: '#2e7d32' },
+                    { icon: '을을', title: '연애·관계', content: fortune.love, color: 'var(--color-jujube)' },
+                    { icon: '을을', title: '직장·학업', content: fortune.career, color: 'var(--color-indigo)' },
+                    { icon: '을을', title: '금전·재물', content: fortune.money, color: 'var(--color-gold)' },
+                    { icon: '을을', title: '건강·컨디션', content: fortune.health, color: '#2e7d32' },
                   ].map((item, idx) => (
                     <div key={idx} className="card" style={{ padding: 'var(--space-6)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
