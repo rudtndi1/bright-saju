@@ -1,0 +1,40 @@
+# 환경 변수 (API 키, 계정 정보)
+.env
+
+# 가상환경
+venv/
+.env/
+
+# Chrome 프로필 (로그인 세션 포함)
+chrome_profile/
+chrome_profile_login/
+chrome_profile_uc/
+
+# 네이버 쿠키
+naver_cookies.pkl
+naver_cookies.json
+
+# 로그
+logs/
+
+# 이미지 폴더
+images/
+after_publish.png
+blog_*.png
+edit_*.png
+login_check.png
+publish_error.png
+
+# 캐시/임시 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS 파일
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
